@@ -1,0 +1,48 @@
+<script setup>
+import { timeAgo } from '@/util/time-utils';
+import { defineProps, computed } from 'vue';
+
+const props = defineProps({ article: Object });
+const timeSincePosted = computed(() => timeAgo(props.article.registerTime));
+
+</script>
+
+<template>
+  <v-card
+    class="mx-auto my-5"
+    width="600"
+    height="560"
+  > 
+    <router-link
+      :to="{ name: 'article-view', params: { articleno: article.articleNo } }"
+      class="article-title link-dark"
+    >
+    <v-img
+      height="450px"
+      src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
+      cover
+    ></v-img>
+    </router-link>
+    <v-card-title class="mb-4 mt-4">
+      {{ article.subject }}
+    </v-card-title>
+
+    <v-card-subtitle class="d-flex justify-space-between">
+      <div>{{ article.userName }}</div>
+      <div>{{ timeSincePosted }}</div>
+    </v-card-subtitle>
+  </v-card>
+</template>
+
+<style scoped>
+a {
+  text-decoration: none;
+}
+.v-card-subtitle > div:first-child {
+  margin-right: auto; 
+}
+
+.v-card-subtitle > div:last-child {
+  margin-left: auto;
+}
+</style>
