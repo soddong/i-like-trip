@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.ssafy.attraction.model.mapper.AttractionMapper">
+
+	<resultMap type="AttractionDto" id="attraction">
+		<id column="attraction_id" property="attractionId" />
+		<result column="type_id" property="attractionType" />
+		<result column="title" property="title" />
+		<result column="addr" property="addr" />
+		<result column="zipcode" property="zipcode" />
+		<result column="tel" property="tel" />
+		<result column="img_small" property="imgSmall" />
+		<result column="img_big" property="imgBig" />
+		<result column="latitude" property="lat" />
+		<result column="longitude" property="lng" />
+	</resultMap>
+
+	<select id="list" parameterType="AttractionSearchDto"
+		resultMap="attraction">
+		select
+		attraction_id,type_id,title,addr,zipcode,tel,img_small,img_big,latitude,longitude
+		from attraction_info
+		<where>
+			<if test="sidoCode != null and sidoCode != 0">
+				and sido_code = #{sidoCode}
+				<if test="gugunCode != null and gugunCode != 0">
+					and gugun_code = #{gugunCode}
+				</if>
+			</if>
+			<if test="contentType != null and contentType != 0">
+				and type_id = #{contentType}
+			</if>
+			<if test='keyword != null and keyword != ""'>
+				and title = concat('%',#{keyword},'%')
+			</if>
+		</where>
+	</select>
+</mapper>

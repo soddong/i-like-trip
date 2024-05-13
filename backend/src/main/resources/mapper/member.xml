@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.member.model.mapper.MemberMapper">
+	<resultMap type="memberDto" id="member">
+		<result column="user_id" property="userId"/>
+		<result column="name" property="userName"/>
+		<result column="password" property="userPassword"/>
+		<result column="tel" property="tel"/>
+		<result column="location" property="location"/>
+		<result column="join_date" property="joinDate"/>
+	</resultMap>
+	
+	<select id="idCheck" parameterType="String" resultType="int">
+		select count(user_id)
+		from member
+		where user_id = #{userId}
+	</select>
+
+	<insert id="joinMember" parameterType="memberDto">
+		insert into member (user_id, password, name, tel, location, join_date)
+		values (#{userId}, #{userPassword}, #{userName}, #{tel}, #{location}, now())
+	</insert>
+
+	<select id="loginMember" parameterType="memberLoginDto" resultMap="member">
+		select user_id, password, name, tel, location, join_date
+		from member
+		where user_id = #{userId} and password = #{userPassword}
+	</select>
+	
+	<select id="getMember" parameterType="string" resultMap="member">
+		select user_id, name, password, email_id, email_domain, join_date
+		from member
+		where user_id = #{userId}
+	</select>
+	
+	<update id="updateMember" parameterType="memberDto">
+		update member
+		<trim prefix="set" suffixOverrides=",">
+			<if test="userId != null">user_id = #{userId},</if>
+			<if test="userPassword != null">password = #{userPassword},</if>
+			<if test="userName != null">name = #{userName},</if>
+			<if test="tel != null">tel = #{tel},</if>
+			<if test="location != null">location = #{location},</if>
+			<if test="joinDate != null">join_date = #{joinDate},</if>
+		</trim>
+		where user_id = #{userId}
+	</update>
+	
+	<delete id="deleteMember" parameterType="String">
+		delete from member
+		where user_id = #{userId}
+	</delete>
+	
+</mapper>

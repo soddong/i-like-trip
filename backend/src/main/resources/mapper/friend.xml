@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.friend.model.mapper.FriendMapper">
+	<resultMap type="friendRelationDto" id="friend">
+		<result column="s_user_id" property="userId"/>
+		<result column="r_user_id" property="friendId"/>
+		<result column="type" property="relation"/>
+	</resultMap>
+
+	<insert id="addFriend" parameterType="friendRelationDto">
+		insert into relation (s_user_id, r_user_id, type)
+		values (#{userId}, #{friendId}, #{relation})
+	</insert>
+
+	<update id="updateRelation" parameterType="friendRelationDto">
+		update relation
+		set s_user_id = #{userId}, r_user_id = #{friendId}, type = #{relation}
+	</update>
+
+	<select id="getRelation" parameterType="friendDto" resultType="Integer">
+		select type
+		from relation
+		where s_user_id = #{userId} and r_user_id = #{friendId}
+	</select>
+	
+	<select id="getMembers" parameterType="string" resultMap="friend">
+		select s_user_id, r_user_id, type
+		from relation
+		where s_user_id = #{userId}
+	</select>
+	
+	<delete id="deleteMember" parameterType="friendDto">
+		delete from relation
+		where s_user_id = #{userId} and r_user_id = #{friendId}
+	</delete>
+	
+</mapper>
