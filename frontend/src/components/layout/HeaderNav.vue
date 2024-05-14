@@ -29,12 +29,12 @@ const tempLoginStatus=ref(true)
 </script>
 
 <template>
-    <v-app-bar>
+    <v-app-bar color="#178ca4">
         <v-app-bar-title>
             <RouterLink :to="{name:'Home'}">
                 <v-sheet class="d-inline-flex align-center">
-                    <v-img :width="40" src="src/assets/logo.png" inline class="rounded-pill mr-2"></v-img>
-                    조아요행
+                    <v-img :width="40" src="src/assets/logo2.png" inline class="rounded-pill mr-2"></v-img>
+                    <span class="logo ">조아요행</span>
                 </v-sheet>
             </RouterLink>
         </v-app-bar-title>
@@ -43,10 +43,10 @@ const tempLoginStatus=ref(true)
         <!-- Automatically collapses into dropdown menu -->
         <v-spacer></v-spacer>
         <v-app-bar-nav-icon @click="toggleDrawer" v-show="!mdAndUp"></v-app-bar-nav-icon>
-        <v-btn-group v-show="mdAndUp">
+        <v-btn-group color="#f9f7f0" v-show="mdAndUp">
             <v-btn v-for="menu in menuList" :key="menu.title" :to="menu.to">{{ menu.title }}</v-btn>
         </v-btn-group>
-        <v-spacer></v-spacer>
+        <!-- <v-spacer></v-spacer> -->
         <v-btn v-if="tempLoginStatus" :to="{name:'sign-in'}">로그인</v-btn>
         <v-menu v-else min-width="120px"  rounded>
             <template v-slot:activator="{ props }">
@@ -86,4 +86,29 @@ const tempLoginStatus=ref(true)
     </v-navigation-drawer>
 </template>
 
-<style scoped></style>
+<style scoped>
+.v-sheet {
+  background-color: #178ca4;
+  align-items: center; 
+  display: flex; 
+  height: 100%; 
+}
+
+.router-link-active {
+  color: #f9f7f0;
+  font-weight: bold;
+}
+
+.logo {
+  color: #f9f7f0;
+}
+
+.v-app-bar {
+  height: 70px; /* 메뉴바의 높이를 조정 */
+}
+
+.v-btn {
+  font-size: 1.1rem; /* 글씨 크기 조절 */
+}
+
+</style>

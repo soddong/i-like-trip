@@ -12,16 +12,19 @@ const router = useRouter();
   <v-container>
     <v-row justify="center">
       <v-col cols="12" md="10">
-        <v-carousel cycle>
+        <!-- <v-carousel cycle>
           <v-carousel-item src="https://cdn.vuetifyjs.com/images/cards/docks.jpg" cover></v-carousel-item>
-          <v-carousel-item src="https://cdn.vuetifyjs.com/images/cards/hotel.jpg" cover></v-carousel-item>
           <v-carousel-item src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" cover></v-carousel-item>
         </v-carousel>
         <div class="main-comment-overlay">
-          <span>Enjoy Your Trip</span>
+          <span>인조이, 유얼 트립</span>
+        </div> -->
+        <div>
+          
         </div>
         <div class="search-overlay">
-          <VSearchInput @input="handleInput" />
+          <!-- <VSearchInput @input="handleInput" /> -->
+          
         </div>
       </v-col>
     </v-row>
@@ -62,7 +65,7 @@ const router = useRouter();
   left: 20%;
   width: 60%; 
   z-index: 2;
-  font-size: 100px;
+  font-size: 90px;
   color: white;
   /* font-family: bold; */
 }

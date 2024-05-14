@@ -1,28 +1,26 @@
 <script setup>
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';  // useRouter를 임포트합니다.
+import { useRouter } from 'vue-router';
 
-const router = useRouter();  // useRouter를 사용하여 라우터 인스턴스를 가져옵니다.
-const keyword = ref('');  // 사용자 입력을 반응형으로 관리할 ref.
+const router = useRouter();
+const keyword = ref(''); 
 
 const handleSearch = () => {
-  // 검색 키워드를 query로 전달하며 article-list 라우트로 이동합니다.
   router.push({ name: 'article-list', query: { keyword: keyword.value } });
 };
 </script>
 
 <template>
   <div class="search-input-container">
-    <button class="icon-button" @click="handleSearch">
-      <i class="fa fa-solid fa-3x fa-search"></i>
-    </button>
-
     <input
       type="text"
       placeholder="여행지 키워드를 검색하세요"
       v-model="keyword"
       class="search-input"
     />
+    <button class="icon-button" @click="handleSearch">
+      <i class="fa fa-solid fa-3x fa-search"></i>
+    </button>
   </div>
     <link
     rel="stylesheet"
