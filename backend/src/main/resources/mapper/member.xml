@@ -23,12 +23,6 @@
 		insert into member (user_id, role, password, email, name, join_date, location)
 		values (#{id}, #{role}, #{password}, #{email}, #{name}, now(), #{location})
 	</insert>
-
-	<select id="loginMember" parameterType="memberLoginDto" resultMap="member">
-		select user_id, role, email, name, join_date, location, profile_no
-		from member
-		where user_id = #{id} and password = #{password}
-	</select>
 	
 	<select id="getMember" parameterType="string" resultMap="member">
 		select user_id, role, password, email, name, join_date, location, profile_no

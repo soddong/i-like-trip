@@ -31,6 +31,8 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class JwtTokenProvider {
     private final Key key;
+    @Value("${jwt.expire-ms}")
+    private int expireTime;
 
     // application.yml에서 secret 값 가져와서 key에 저장
     public JwtTokenProvider(@Value("${jwt.secret}") String secretKey) {
@@ -48,7 +50,7 @@ public class JwtTokenProvider {
         long now = (new Date()).getTime();
 
         // Access Token 생성
-        Date accessTokenExpiresIn = new Date(now + 86400000);
+        Date accessTokenExpiresIn = new Date(now + expireTime);
         String accessToken = Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim("auth", authorities)
@@ -57,7 +59,7 @@ public class JwtTokenProvider {
                 .compact();
         // Refresh Token 생성
         String refreshToken = Jwts.builder()
-                .setExpiration(new Date(now + 86400000))
+                .setExpiration(new Date(now + expireTime*7))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 

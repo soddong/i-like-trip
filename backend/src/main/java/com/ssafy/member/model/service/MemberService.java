@@ -2,6 +2,7 @@ package com.ssafy.member.model.service;
 
 import java.sql.SQLException;
 
+import com.ssafy.member.model.JwtTokenDto;
 import com.ssafy.member.model.MemberDto;
 import com.ssafy.member.model.MemberLoginDto;
 
@@ -15,5 +16,5 @@ public interface MemberService {
 	
 	int deleteMember(String memberDto) throws SQLException;
 
-	MemberDto loginMember(MemberLoginDto loginDto) throws Exception;
+	JwtTokenDto loginMember(MemberLoginDto loginDto) throws Exception;
 }
