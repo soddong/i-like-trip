@@ -13,10 +13,7 @@ public interface MemberService {
 	
 	int updateMember(MemberDto memberDto) throws SQLException;
 	
-	int deleteMember(MemberDto memberDto) throws SQLException;
+	int deleteMember(String memberDto) throws SQLException;
 
 	MemberDto loginMember(MemberLoginDto loginDto) throws Exception;
-	
-//	MemberDto findPassword(MemberDto memberDto) throws SQLException;
-	
 }

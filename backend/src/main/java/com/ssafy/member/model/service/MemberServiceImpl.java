@@ -2,26 +2,21 @@ package com.ssafy.member.model.service;
 
 import java.sql.SQLException;
 
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.member.model.MemberDto;
 import com.ssafy.member.model.MemberLoginDto;
 import com.ssafy.member.model.mapper.MemberMapper;
 
+import lombok.AllArgsConstructor;
+
 @Service
-public class MemberServiceImpl implements MemberService {
-	
-	private static MemberService memberService;
-
+@AllArgsConstructor
+public class MemberServiceImpl implements MemberService, UserDetailsService  {
 	private MemberMapper memberMapper;
-	
-	public MemberServiceImpl(MemberMapper memberMapper) {
-		this.memberMapper = memberMapper;
-	}
-
-	public static MemberService getMemberService() {
-		return memberService;
-	}
 
 	@Override
 	public int idCheck(String userId) throws Exception {
@@ -45,8 +40,18 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public int deleteMember(MemberDto memberDto) throws SQLException {
-		return memberMapper.deleteMember(memberDto);
+	public int deleteMember(String userId) throws SQLException {
+		return memberMapper.deleteMember(userId);
 	}
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        try {
+			return memberMapper.getMember(username);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new UsernameNotFoundException(username);
+		}
+    }
 
 }

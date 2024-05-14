@@ -62,9 +62,7 @@ public class MemberController {
 	@DeleteMapping("/{userId}")
 	public ResponseEntity<?> delete(@PathVariable("userId") String userId, HttpSession session) {
 		try {
-			MemberDto memberDto = new MemberDto();
-			memberDto.setUserId(userId);
-			memberService.deleteMember(memberDto);
+			memberService.deleteMember(userId);
 			session.removeAttribute("userinfo");
 			session.invalidate();
 			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
@@ -77,34 +75,12 @@ public class MemberController {
 	public ResponseEntity<?> login(MemberLoginDto loginDto,
 			@RequestParam(name = "saveid", required = false) String idsave, HttpServletRequest request,
 			HttpServletResponse response) {
-		
-		String userId = loginDto.getUserId();
 
 		try {  
 			MemberDto memberDto = memberService.loginMember(loginDto);
+			System.out.println(memberDto);
 
 			if (memberDto != null) {
-				System.out.println(memberDto.toString());
-				HttpSession session = request.getSession();
-				session.setAttribute("userinfo", memberDto);
-
-				if ("ok".equals(idsave)) {
-					Cookie cookie = new Cookie("ssafy_id", userId);
-					cookie.setPath(request.getContextPath());
-					cookie.setMaxAge(60 * 60 * 24 * 365 * 40);
-					response.addCookie(cookie);
-				} else {
-					Cookie cookies[] = request.getCookies();
-					if (cookies != null) {
-						for (Cookie cookie : cookies) {
-							if ("ssafy_id".equals(cookie.getName())) {
-								cookie.setMaxAge(0);
-								response.addCookie(cookie);
-								break;
-							}
-						}
-					}
-				}
 				return new ResponseEntity<>(HttpStatus.OK);
 			} else {
 				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -113,12 +89,4 @@ public class MemberController {
 			return exceptionHandling(e);
 		}
 	}
-
-	@GetMapping("/logout")
-	public ResponseEntity<?> logout(HttpSession session) {
-		session.removeAttribute("userinfo");
-		session.invalidate();
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
-
 }

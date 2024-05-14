@@ -1,83 +1,73 @@
 package com.ssafy.member.model;
 
-public class MemberDto {
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
-	private String userId;
-	private String userName;
-	private String userPassword;
-	private String tel;
-	private String location;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+public class MemberDto implements UserDetails{
+
+	private String id;
+	private int role;
+	private String password;
+	private String email;
+	private String name;
 	private String joinDate;
-
-	public MemberDto() {
-		
-	}
+	private String location;
+	private int profileNo;
 	
-	public MemberDto(String userId, String userName, String userPassword, String tel, String location, String joinDate) {
-		super();
-		this.userId = userId;
-		this.userName = userName;
-		this.userPassword = userPassword;
-		this.tel = tel;
-		this.location = location;
-		this.joinDate = joinDate;
-	}
 
-	public String getUserId() {
-		return userId;
-	}
-
-	public void setUserPassword(String userPassword) {
-		this.userPassword = userPassword;
-	}
-
-	public String getUserPassword() {
-		return userPassword;
-	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
-	public String getLocation() {
-		return location;
-	}
-
-	public void setLocation(String location) {
-		this.location = location;
-	}
-	
-	public String getTel() {
-		return tel;
-	}
-
-	public void setTel(String tel) {
-		this.tel = tel;
-	}
-
-
-	public String getJoinDate() {
-		return joinDate;
-	}
-
-	public void setJoinDate(String joinDate) {
-		this.joinDate = joinDate;
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		SimpleGrantedAuthority simpleGrantedAuthority=new SimpleGrantedAuthority(MemberRole.getRole(role).name());
+		List<GrantedAuthority> list = new ArrayList<>();
+		list.add(simpleGrantedAuthority);
+		return list; 
 	}
 
 	@Override
-	public String toString() {
-		// TODO Auto-generated method stub
-		return "[" + userName + ", " + tel + ", " + location + ", " + joinDate + "]";
+	public String getPassword() {
+		return password;
 	}
-	
-	
 
+	@Override
+	public String getUsername() {
+		return name;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
 }

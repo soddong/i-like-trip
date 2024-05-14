@@ -16,10 +16,9 @@ public interface MemberMapper {
 	
 	MemberDto loginMember(MemberLoginDto loginDto) throws SQLException;
 	
+	MemberDto getMember(String userId) throws SQLException;
+	
 	int updateMember(MemberDto memberDto) throws SQLException;
 	
-	int deleteMember(MemberDto memberDto) throws SQLException;
-	
-	MemberDto findPassword(MemberDto memberDto) throws SQLException;
-	
+	int deleteMember(String userId) throws SQLException;
 }
