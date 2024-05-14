@@ -91,4 +91,12 @@ public class MemberController {
 			return exceptionHandling(e);
 		}
 	}
+	
+	@PostMapping("/forget")
+	public ResponseEntity<?> forgetPassWord(String email) {
+		memberService.forgetPassword(email);
+		
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
 }
