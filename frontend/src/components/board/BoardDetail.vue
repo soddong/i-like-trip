@@ -3,6 +3,8 @@ import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { detailArticle, deleteArticle } from "@/api/board";
 
+import BoardViewerItem from '@/components/board/item/BoardViewerItem.vue'; 
+
 const route = useRoute();
 const router = useRouter();
 
@@ -71,28 +73,11 @@ function onDeleteArticle() {
             </v-col>
           </v-row>
         </div>
-        <div class="content">
-          <v-row>
-            <v-col cols="3"></v-col>
-            <v-col cols="6">
-              <v-img
-                src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
-                cover
-                class="img"
-              ></v-img>
-              <v-row class="text-content">
-                {{ article.content }}
-              </v-row>
-            </v-col>
-            <v-col cols="3"></v-col>
-          </v-row>
-        </div>
+        <BoardViewerItem :content="article.content" />
+        
           <v-row>
           <v-col cols="5"></v-col>
             <v-col>
-              <!-- <v-btn @click="moveList" variant="outlined" class="mr-2">
-                글목록
-              </v-btn> -->
               <v-btn @click="moveModify" variant="outlined" class="mr-2">
                 글수정
               </v-btn>

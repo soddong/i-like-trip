@@ -2,6 +2,7 @@
 import { ref, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { registArticle, getModifyArticle, modifyArticle } from "@/api/board"
+import BoardEditorItem from '@/components/board/item/BoardEditorItem.vue'; 
 
 const router = useRouter()
 const route = useRoute()
@@ -126,17 +127,11 @@ function moveList() {
         ></v-text-field>
       </v-row>
       <v-row>
-        내용 
+        제목 
       </v-row>
       <v-row>
-        <v-textarea
-          filled
-          variant="outlined"
-          v-model="article.content"
-          :counter="1000"
-          maxlength="1000"
-          rows="20"
-        ></v-textarea>
+        <BoardEditorItem v-if="article.content !== ''" v-model="article.content"></BoardEditorItem>
+        <BoardEditorItem v-else-if="props.type === 'regist'" v-model="article.content"></BoardEditorItem>
       </v-row>
       <v-row>
         <v-col>
@@ -145,9 +140,6 @@ function moveList() {
           </v-btn>
           <v-btn @click="onSubmit" variant="outlined" v-else class="mr-2">
             글수정
-          </v-btn>
-          <v-btn @click="onSubmit" variant="outlined" class="mr-2">
-            목록
           </v-btn>
         </v-col>
       </v-row>
