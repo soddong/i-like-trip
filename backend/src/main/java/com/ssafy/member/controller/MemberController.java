@@ -3,6 +3,7 @@ package com.ssafy.member.controller;
 import java.sql.SQLException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -82,7 +83,10 @@ public class MemberController {
 			} else {
 				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 			}
-		} catch (Exception e) {
+		}catch (BadCredentialsException e) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
+		catch (Exception e) {
 			return exceptionHandling(e);
 		}
 	}

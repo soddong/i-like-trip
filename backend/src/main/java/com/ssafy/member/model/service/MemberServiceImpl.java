@@ -89,7 +89,12 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		try {
-			return memberMapper.getMember(username);
+			MemberDto memberDto = memberMapper.getMember(username);
+			if(memberDto!=null) {
+				return memberDto;
+			}else {
+				throw new UsernameNotFoundException(username);
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new UsernameNotFoundException(username);
