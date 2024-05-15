@@ -2,6 +2,7 @@
 import { ref, watch, onMounted } from 'vue';
 import Editor from '@toast-ui/editor';
 import '@toast-ui/editor/dist/toastui-editor.css';
+import { uploadImage } from "@/api/image.js";
 
 const props = defineProps({
   modelValue: String,
@@ -10,21 +11,24 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue']);
 const editorRef = ref(null);
 
-async function uploadImage(blob) {
+async function handleUploadImage(blob) {
   const formData = new FormData();
   formData.append('image', blob);
 
-  try {
-    const response = await fetch('http://localhost:8080/upload', {
-      method: 'POST',
-      body: formData,
-    });
-    if (!response.ok) throw new Error('Server error occurred');
-    return await response.json();
-  } catch (error) {
-    console.error('Upload failed:', error);
-    return null;
-  }
+  return new Promise((resolve, reject) => {
+    uploadImage(formData, 
+      (response) => {
+        if (response.data) {
+          resolve(response.data);
+        } else {
+          reject(new Error('No data in response'));
+        }
+      }, 
+      (error) => {
+        console.error('Upload failed:', error);
+        reject(error);
+      });
+  });
 }
 
 onMounted(() => {
@@ -36,7 +40,7 @@ onMounted(() => {
     theme: 'dark',
     hooks: {
       addImageBlobHook: async (blob, callback) => {
-        const uploadResult = await uploadImage(blob);
+        const uploadResult = await handleUploadImage(blob);
         if (uploadResult) {
           callback(uploadResult.imageAccessUrl, 'alt text optional');
         }

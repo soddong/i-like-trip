@@ -1,11 +1,12 @@
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, reactive, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { listArticle } from '@/api/board.js';
+import { getMainImageUrl } from '@/api/image.js';
 import BoardListItem from '@/components/board/item/BoardListItem.vue';
 import BoardListEmptyItem from '@/components/board/item/BoardListEmptyItem.vue';
-
-import '@/assets/styles.css'; 
+import { localAxios } from '@/util/http-commons';
+const { VITE_VUE_API_URL } = import.meta.env;
 
 const router = useRouter();
 const route = useRoute();
@@ -15,24 +16,38 @@ const param = ref({
   key: "subject",
   word: "",
 });
+const articleImages = ref({}); 
+
+const loadArticles = (params) => {
+  listArticle(params, ({ data }) => {
+    articles.value = data.articles;
+    hasError.value = false;
+    articles.value.forEach(article => {
+      getMainImageUrl(article.articleNo, (blob) => {
+        const imageUrl = URL.createObjectURL(blob);
+        articleImages.value[article.articleNo] = imageUrl;
+      }, error => {
+        console.error(error);
+      });
+    });
+  }, error => {
+    console.error(error);
+    hasError.value = true;
+  });
+};
 
 watch(() => route.query.keyword, (newKeyword) => {
   if (newKeyword) {
-    listArticle({ key: 'subject', word: newKeyword }, ({ data }) => {
-      articles.value = data.articles;
-      hasError.value = false;
-    }, error => console.error(error));
+    loadArticles({ key: 'subject', word: newKeyword });
   } else {
-    listArticle(param.value, ({ data }) => {
-      articles.value = data.articles;
-      hasError.value = true;
-    }, error => console.error(error));
+    loadArticles(param.value);
   }
-}, { immediate: true }); 
+}, { immediate: true });
 
 const moveWrite = () => {
   router.push({ name: 'article-write' });
 };
+
 </script>
 
 <template>
@@ -48,7 +63,7 @@ const moveWrite = () => {
           <v-card class="common-card">
             <template v-if="articles.length > 0">
               <v-col v-for="article in articles" :key="article.articleNo" class="py-2">
-                <BoardListItem :article="article"/>
+                <BoardListItem :article="article" :image="articleImages[article.articleNo]" />
               </v-col>
             </template>
             <template v-else-if="hasError">

@@ -2,8 +2,16 @@
 import { timeAgo } from '@/util/time-utils';
 import { defineProps, computed } from 'vue';
 
-const props = defineProps({ article: Object });
+const props = defineProps({
+   article: Object,
+   image: String 
+});
+
 const timeSincePosted = computed(() => timeAgo(props.article.registerTime));
+
+const imageUrl = computed(() => {
+  return props.image || 'https://cdn.vuetifyjs.com/images/cards/sunshine.jpg';
+});
 
 </script>
 
@@ -19,7 +27,7 @@ const timeSincePosted = computed(() => timeAgo(props.article.registerTime));
     >
     <v-img
       height="350px"
-      src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
+      :src="imageUrl"
       cover
     ></v-img>
     </router-link>
