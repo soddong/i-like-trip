@@ -5,10 +5,11 @@ import { detailArticle, deleteArticle } from "@/api/board";
 
 import BoardViewerItem from '@/components/board/item/BoardViewerItem.vue'; 
 
+import '@/assets/styles.css'; 
+
 const route = useRoute();
 const router = useRouter();
 
-// const articleno = ref(route.params.articleno);
 const { articleno } = route.params;
 
 const article = ref({});
@@ -53,89 +54,73 @@ function onDeleteArticle() {
 <template>
   <v-container>
     <v-row justify="center">
-      <v-col cols="12"> 
-        <div class="header">
-          <v-row>
-            <v-col>
-              <span class="title">{{ article.subject }}</span>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="8">
-              <v-avatar color="brown" size="large">
-                <span class="text-h5">사용</span>
-              </v-avatar>
-              <span class="user-name">{{ article.userName }}</span>
-              <span class="register-time">{{ article.registerTime }}</span>
-            </v-col>
-            <v-col cols="1">
-              <span class="hit">조회수  {{ article.hit }} 회</span>
-            </v-col>
-          </v-row>
-        </div>
-        <BoardViewerItem :content="article.content" />
-        
-          <v-row>
-          <v-col cols="5"></v-col>
-            <v-col>
-              <v-btn @click="moveModify" variant="outlined" class="mr-2">
-                글수정
-              </v-btn>
-              <v-btn @click="onDeleteArticle" variant="outlined" class="mr-2">
-                글삭제
-              </v-btn>
-            </v-col>
-          </v-row>
+      <v-col cols="12">
+        <v-card class="common-card">
+          <div class="article-header">
+            <h2 class="article-title">{{ article.subject }}</h2>
+          </div>
+          <div class="article-details">
+            <v-avatar color="brown" size="large">
+              <span class="text-h5">사용</span>
+            </v-avatar>
+            <span class="user-name">{{ article.userName }}</span>
+            <span class="register-time">{{ article.registerTime }}</span>
+            <span class="hit">조회수 {{ article.hit }}회</span>
+          </div>
+          <div class="article-content">
+            <BoardViewerItem :content="article.content" />
+          </div>
+          <div class="article-actions">
+            <v-btn @click="moveModify" variant="outlined" class="mr-2">글수정</v-btn>
+            <v-btn @click="onDeleteArticle" variant="outlined" class="mr-2">글삭제</v-btn>
+          </div>
+        </v-card>
       </v-col>
     </v-row>
   </v-container>
-
-
 </template>
 
+
+
 <style scoped>
-  .img {
-    margin-bottom:20px;
-    border-radius: 1%;
-    max-height: 400px;
-    width: 100%;
-  }
+.common-card {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
 
-  .header {
-    margin: 20px;
-    width: 100%;
-  }
+.article-header {
+  margin-top: 50px;
+  margin-bottom: 20px;
+}
 
-  .content {
-    margin: 50px;
-    display: left ;
-    align-items: center;
-     width: 100%;
-  }
+.article-title {
+  font-size: 32px;
+  font-weight: bold;
+  color: #424242;
+}
 
-  .text-content {
-    font-size: 25px;
-    padding: 20px;
-    text-align: left; 
-    width: 100%; 
-  }
+.article-details {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
 
-  .title {
-    font-size: 40px;
-    font-weight: bold;
-  }
+.article-content {
+  margin-top: 50px;
+  margin-bottom: 30px;
+  width: 100%;
+}
 
-.register-time, .hit {
+.article-actions {
+  margin-top: auto;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.user-name, .register-time, .hit {
   margin-left: 20px;
-  font-size: 18px;
-  color: gray;
-}  
-
-.user-name{
-  margin-left: 20px;
-  font-size: 18px;
-  color: rgb(0, 0, 0);
-}  
-
-
+  font-size: 16px;
+  color: #666;
+}
 </style>

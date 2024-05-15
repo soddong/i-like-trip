@@ -14,9 +14,6 @@ import VSearchInput from '@/components/common/VSearchInput.vue';
         <v-row justify="center">
         <VSearchInput></VSearchInput>
         </v-row>
-        <!-- <v-row><v-col><v-sheet  class="bg-surface-variant">검색 결과
-
-        </v-sheet></v-col></v-row> -->
     </v-container>
 </template>
 

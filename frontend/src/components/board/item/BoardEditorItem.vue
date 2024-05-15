@@ -6,9 +6,8 @@ import '@toast-ui/editor/dist/toastui-editor.css';
 const props = defineProps({
   modelValue: String,
 });
-console.log(props.modelValue)
-const emit = defineEmits(['update:modelValue']);
 
+const emit = defineEmits(['update:modelValue']);
 const editorRef = ref(null);
 
 async function uploadImage(blob) {

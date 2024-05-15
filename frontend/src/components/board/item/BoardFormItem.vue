@@ -79,7 +79,11 @@ function writeArticle() {
       alert(msg)
       moveList()
     },
-    (error) => console.log(error)
+    (error) => {
+      let msg = "글등록 처리시 문제 발생했습니다."
+      console.log(error)
+      alert(msg)
+    }
   )
 }
 
@@ -104,7 +108,7 @@ function moveList() {
 
 <template>
   <v-form>
-   <v-container class="form-container">
+   <v-container>
     <v-row class="mb-3">
       <label for="userid">작성자 ID (임시) : </label>
       <input
@@ -127,13 +131,13 @@ function moveList() {
         ></v-text-field>
       </v-row>
       <v-row>
-        제목 
+        내용
       </v-row>
       <v-row>
         <BoardEditorItem v-if="article.content !== ''" v-model="article.content"></BoardEditorItem>
         <BoardEditorItem v-else-if="props.type === 'regist'" v-model="article.content"></BoardEditorItem>
       </v-row>
-      <v-row>
+      <v-row style="margin-top: 100px;">
         <v-col>
           <v-btn @click="onSubmit" variant="outlined" v-if="type === 'regist'" class="mr-2">
             글작성
@@ -148,8 +152,4 @@ function moveList() {
 </template>
 
 <style scoped>
-.form-container {
-  margin-left: 13%; 
-  margin-top: 50px; 
-}
 </style>

@@ -10,15 +10,15 @@ const timeSincePosted = computed(() => timeAgo(props.article.registerTime));
 <template>
   <v-card
     class="mx-auto my-5"
-    width="600"
-    height="560"
+    width="500"
+    height="460"
   > 
     <router-link
       :to="{ name: 'article-view', params: { articleno: article.articleNo } }"
       class="article-title link-dark"
     >
     <v-img
-      height="450px"
+      height="350px"
       src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
       cover
     ></v-img>
