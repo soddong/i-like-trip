@@ -56,12 +56,7 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 
 		// 3. 인증 정보를 기반으로 JWT 토큰 생성
 		JwtTokenDto jwtToken = jwtTokenProvider.generateToken(authentication);
-
-		MemberDto loginResult = memberMapper.getMember(loginDto.getId());
-		if (passwordEncoder.matches(loginDto.getPassword(), loginResult.getPassword()))
-			return jwtToken;
-		else
-			return null;
+		return jwtToken;
 	}
 
 	@Override

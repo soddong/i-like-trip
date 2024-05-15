@@ -78,7 +78,7 @@ public class MemberController {
 		try { 
 			JwtTokenDto jwtTokenDto = memberService.loginMember(loginDto);
 			if (jwtTokenDto != null) {
-				return new ResponseEntity<JwtTokenDto>(jwtTokenDto,HttpStatus.OK);
+				return new ResponseEntity<JwtTokenDto>(jwtTokenDto,HttpStatus.CREATED);
 			} else {
 				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 			}
@@ -87,7 +87,7 @@ public class MemberController {
 		}
 	}
 	
-	@GetMapping("/refresh")
+	@PostMapping("/refresh")
 	public ResponseEntity<?> refreshAccessToken(HttpServletRequest request) {
 		String bearerToken = request.getHeader("Authorization");
 		String refreshToken = "";
