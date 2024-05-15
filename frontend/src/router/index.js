@@ -1,5 +1,6 @@
 import AccountView from "@/views/AccountView.vue"
 import HomeView from "@/views/HomeView.vue"
+import MypageView from "@/views/MypageView.vue"
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
@@ -17,22 +18,22 @@ const router = createRouter({
       redirect: { name: "article-list" },
       children: [
         {
-          path: "list",
+          path: "/board",
           name: "article-list",
           component: () => import("@/components/board/BoardList.vue"),
         },
         {
-          path: "view/:articleno",
+          path: "/board/:articleno",
           name: "article-view",
           component: () => import("@/components/board/BoardDetail.vue"),
         },
         {
-          path: "write",
+          path: "/board",
           name: "article-write",
           component: () => import("@/components/board/BoardWrite.vue"),
         },
         {
-          path: "modify/:articleno",
+          path: "/board/:articleno",
           name: "article-modify",
           component: () => import("@/components/board/BoardModify.vue"),
         },
@@ -55,6 +56,12 @@ const router = createRouter({
           component:() => import("@/components/account/AccountSignUp.vue"),
         }
       ]
+    },
+    {
+      path:"/mypage",
+      name:"Mypage",
+      component:MypageView,
+
     }
   ]
 })
