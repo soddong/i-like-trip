@@ -14,9 +14,9 @@
 		<result column="register_time" property="registerTime"/>
 	</resultMap>
 	
-	<resultMap type="boardDto" id="viewArticle" extends="article">
-		<collection property="fileInfos" column="article_no" javaType="list" ofType="fileInfoDto" select="fileInfoList"/>
-	</resultMap>
+<!--	<resultMap type="boardDto" id="viewArticle" extends="article">-->
+<!--		<collection property="fileInfos" column="article_no" javaType="list" ofType="fileInfoDto" select="fileInfoList"/>-->
+<!--	</resultMap>-->
 	
 	<resultMap type="fileInfoDto" id="file">
 		<result column="save_folder" property="saveFolder"/>
@@ -68,7 +68,7 @@
 		</where>
 	</select>
 	
-	<select id="getArticle" parameterType="int" resultMap="viewArticle">
+	<select id="getArticle" parameterType="int" resultMap="article">
 		select b.article_no, b.user_id, b.subject, b.content, b.hit, b.register_time, m.name 
 		from board b, member m
 		where b.user_id = m.user_id

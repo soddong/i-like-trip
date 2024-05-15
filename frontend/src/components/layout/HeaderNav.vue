@@ -20,8 +20,8 @@ const menuList = ref([
         to: { name: "Board" }
     },
     {
-        title: '또다른 메뉴',
-        to: { name: "Board" } // Other 에러나서 임시로
+        title: '마이페이지',
+        to: { name: "Mypage" } 
     }
 ])
 

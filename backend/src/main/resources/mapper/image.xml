@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.image.model.mapper.ImageMapper">
+
+    <resultMap id="ImageInfoDto" type="ImageInfoDto">
+        <result column="file_no" property="fileNo"/>
+        <result column="ref_no" property="refNo"/>
+        <result column="save_folder" property="saveFolder"/>
+        <result column="original_file" property="originalFile"/>
+        <result column="save_file" property="saveFile"/>
+        <result column="type" property="type"/>
+    </resultMap>
+
+    <resultMap id="TempImageInfoDto" type="TempImageInfoDto">
+        <result column="file_no" property="fileNo"/>
+        <result column="save_folder" property="saveFolder"/>
+        <result column="original_file" property="originalFile"/>
+        <result column="save_file" property="saveFile"/>
+    </resultMap>
+
+    <resultMap id="imageInfoFetchMap" type="com.ssafy.image.model.ImageInfoDto">
+        <result property="saveFolder" column="save_folder"/>
+        <result property="originalFile" column="original_file"/>
+    </resultMap>
+
+    <resultMap id="imageInfoResultMap" type="com.ssafy.image.model.ImageInfoDto">
+        <result property="saveFolder" column="save_folder"/>
+        <result property="saveFile" column="save_file"/>
+    </resultMap>
+
+    <insert id="saveImage" parameterType="ImageInfoDto" >
+        INSERT INTO file_info (ref_no, save_folder, original_file, save_file, type)
+        VALUES (#{refNo}, #{saveFolder}, #{originalFile}, #{saveFile}, #{type})
+    </insert>
+
+    <select id="getImageBySaveFile" parameterType="string" resultType="imageInfoDto">
+        SELECT * FROM image_metadata WHERE save_file = #{saveFile}
+    </select>
+
+    <insert id="saveImageAtTempStore" parameterType="TempImageInfoDto">
+        INSERT INTO tmp_file_info (save_folder, original_file, save_file)
+        VALUES (#{saveFolder}, #{originalFile}, #{saveFile})
+    </insert>
+
+    <select id="fetchImageInfo" parameterType="string" resultMap="imageInfoFetchMap">
+        SELECT save_folder, original_file
+        FROM tmp_file_info
+        WHERE save_file = #{saveFile}
+    </select>
+
+    <select id="getImageByArticleno" parameterType="int" resultMap="imageInfoResultMap">
+        SELECT save_folder, save_file
+        FROM file_info
+        WHERE ref_no = #{refNo}
+        LIMIT 1
+    </select>
+
+</mapper>

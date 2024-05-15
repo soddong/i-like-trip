@@ -1,60 +1,78 @@
 <script setup>
-import { ref, watch, onMounted } from 'vue';
+import { ref, reactive, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { listArticle } from '@/api/board.js';
-import VSelect from '@/components/common/VSelect.vue';
+import { getMainImageUrl } from '@/api/image.js';
 import BoardListItem from '@/components/board/item/BoardListItem.vue';
+import BoardListEmptyItem from '@/components/board/item/BoardListEmptyItem.vue';
+import { localAxios } from '@/util/http-commons';
+const { VITE_VUE_API_URL } = import.meta.env;
 
 const router = useRouter();
 const route = useRoute();
 const articles = ref([]);
+const hasError = ref(false);
 const param = ref({
   key: "subject",
   word: "",
 });
+const articleImages = ref({}); 
+
+const loadArticles = (params) => {
+  listArticle(params, ({ data }) => {
+    articles.value = data.articles;
+    hasError.value = false;
+    articles.value.forEach(article => {
+      getMainImageUrl(article.articleNo, (blob) => {
+        const imageUrl = URL.createObjectURL(blob);
+        articleImages.value[article.articleNo] = imageUrl;
+      }, error => {
+        console.error(error);
+      });
+    });
+  }, error => {
+    console.error(error);
+    hasError.value = true;
+  });
+};
 
 watch(() => route.query.keyword, (newKeyword) => {
   if (newKeyword) {
-    listArticle({ key: 'subject', word: newKeyword }, ({ data }) => {
-      articles.value = data.articles;
-    }, error => console.error(error));
+    loadArticles({ key: 'subject', word: newKeyword });
   } else {
-    listArticle(param.value, ({ data }) => {
-      articles.value = data.articles;
-    }, error => console.error(error));
+    loadArticles(param.value);
   }
-}, { immediate: true }); 
-
-const changeKey = val => {
-  param.value.key = val;
-};
-
-const getArticleList = () => {
-  listArticle(param.value, ({ data }) => {
-    articles.value = data.articles;
-  }, error => console.error(error));
-};
+}, { immediate: true });
 
 const moveWrite = () => {
   router.push({ name: 'article-write' });
 };
+
 </script>
 
 <template>
   <v-container>
     <v-row justify="center">
-      <v-col cols="12" md="10">
+      <v-col cols="12">
         <v-row>
           <v-col class="text-right"> 
-            <v-btn class="main-button" @click="moveWrite">글쓰기 (임시버튼)</v-btn>
+            <v-btn class="main-button" @click="moveWrite" color="#072a40">게시글 작성하기</v-btn>
           </v-col>
         </v-row>
-        <v-row justify="start">
-          <v-col v-for="article in articles" :key="article.articleNo" class="py-2">
-            <BoardListItem
-              :article="article"
-            />
-          </v-col>
+        <v-row justify="center">
+          <v-card class="common-card">
+            <template v-if="articles.length > 0">
+              <v-col v-for="article in articles" :key="article.articleNo" class="py-2">
+                <BoardListItem :article="article" :image="articleImages[article.articleNo]" />
+              </v-col>
+            </template>
+            <template v-else-if="hasError">
+              <BoardListEmptyItem/>
+            </template>
+            <template v-else>
+              <BoardListEmptyItem/>
+            </template>
+        </v-card>
         </v-row>
       </v-col>
     </v-row>
@@ -62,4 +80,13 @@ const moveWrite = () => {
 </template>
 
 <style scoped>
+.common-card {
+  display: flex;
+  flex-wrap: wrap; 
+  justify-content: flex-start; 
+  align-items: flex-start; 
+  gap: 16px; 
+  padding: 20px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+}
 </style>

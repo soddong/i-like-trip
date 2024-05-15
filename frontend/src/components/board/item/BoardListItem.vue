@@ -2,24 +2,32 @@
 import { timeAgo } from '@/util/time-utils';
 import { defineProps, computed } from 'vue';
 
-const props = defineProps({ article: Object });
+const props = defineProps({
+   article: Object,
+   image: String 
+});
+
 const timeSincePosted = computed(() => timeAgo(props.article.registerTime));
+
+const imageUrl = computed(() => {
+  return props.image || 'https://cdn.vuetifyjs.com/images/cards/sunshine.jpg';
+});
 
 </script>
 
 <template>
   <v-card
     class="mx-auto my-5"
-    width="600"
-    height="560"
+    width="500"
+    height="460"
   > 
     <router-link
       :to="{ name: 'article-view', params: { articleno: article.articleNo } }"
       class="article-title link-dark"
     >
     <v-img
-      height="450px"
-      src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
+      height="350px"
+      :src="imageUrl"
       cover
     ></v-img>
     </router-link>
