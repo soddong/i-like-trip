@@ -1,9 +1,11 @@
 package com.ssafy.util;
 
 import java.security.Key;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.crypto.SecretKey;
@@ -41,25 +43,14 @@ public class JwtTokenProvider {
 
     // Member 정보를 가지고 AccessToken, RefreshToken을 생성하는 메서드
     public JwtTokenDto generateToken(Authentication authentication) {
-        // 권한 가져오기
-        String authorities = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(","));
-
         long now = (new Date()).getTime();
 
         // Access Token 생성
-        Date accessTokenExpiresIn = new Date(now + expireTime);
-        String accessToken = Jwts.builder().issuer("좋아요행")
-        		.subject("access")
-        		.audience().add(authentication.getName()).and()
-        		.expiration(accessTokenExpiresIn)
-                .claim("auth", authorities)
-                .claim("auth", authorities)
-                .signWith(key)
-                .compact();
+        String accessToken = createAccessToken(authentication.getName(), authentication.getAuthorities());
         // Refresh Token 생성
-        String refreshToken = Jwts.builder()
+        String refreshToken = Jwts.builder().issuer("좋아요행")
+        		.subject("refresh")
+        		.audience().add(authentication.getName()).and()
                 .expiration(new Date(now + expireTime*7))
                 .signWith(key)
                 .compact();
@@ -70,14 +61,39 @@ public class JwtTokenProvider {
                 .refreshToken(refreshToken)
                 .build();
     }
+    
+    public String getUserId(String token) {
+    	Claims claims = parseClaims(token);
+    	return claims.getAudience().iterator().next();
+    }
+    
+    public String createAccessToken(String userId, Collection<? extends GrantedAuthority> authorities) {
+        long now = (new Date()).getTime();
+        // Access Token 생성
+        Date accessTokenExpiresIn = new Date(now + expireTime);
+        String authoritiesString = authorities.stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+        String accessToken = Jwts.builder().issuer("좋아요행")
+        		.subject("access")
+        		.audience().add(userId).and()
+        		.expiration(accessTokenExpiresIn)
+                .claim("auth", authoritiesString)
+                .signWith(key)
+                .compact();
+        return accessToken;
+    }
 
     // Jwt 토큰을 복호화하여 토큰에 들어있는 정보를 꺼내는 메서드
     public Authentication getAuthentication(String accessToken) {
         // Jwt 토큰 복호화
         Claims claims = parseClaims(accessToken);
 
+        //auth가 없다면 guest 권한 부여
         if (claims.get("auth") == null) {
-            throw new RuntimeException("권한 정보가 없는 토큰입니다.");
+        	Collection<SimpleGrantedAuthority> guestAuth = new ArrayList<>();
+        	guestAuth.add(new SimpleGrantedAuthority("GUEST"));
+            return new UsernamePasswordAuthenticationToken("", "", guestAuth);
         }
 
         // 클레임에서 권한 정보 가져오기
@@ -110,13 +126,11 @@ public class JwtTokenProvider {
         return false;
     }
 
-
-    // accessToken
-    private Claims parseClaims(String accessToken) {
+    private Claims parseClaims(String token) {
     	return Jwts.parser()
     			.verifyWith((SecretKey)key)
                 .build()
-                .parseSignedClaims(accessToken)
+                .parseSignedClaims(token)
                 .getPayload();
     }
 

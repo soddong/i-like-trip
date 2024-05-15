@@ -36,6 +36,7 @@ public class SecurityConfiguration {
 		http.authorizeHttpRequests()
 				 //해당 API에 대해서는 모든 요청을 허가
 				.requestMatchers("/member/sign-in").permitAll()
+				.requestMatchers("/member/refresh").permitAll()
 				.requestMatchers("/member/sign-up").permitAll()
 				.requestMatchers("/swagger-ui/**").permitAll()
 				.requestMatchers("/v3/api-docs/**").permitAll()

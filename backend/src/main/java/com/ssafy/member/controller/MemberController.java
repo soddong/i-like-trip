@@ -1,28 +1,23 @@
 package com.ssafy.member.controller;
 
 import java.sql.SQLException;
-import java.util.Map;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.member.model.JwtTokenDto;
 import com.ssafy.member.model.MemberDto;
 import com.ssafy.member.model.MemberLoginDto;
 import com.ssafy.member.model.service.MemberService;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -91,6 +86,24 @@ public class MemberController {
 			return exceptionHandling(e);
 		}
 	}
+	
+	@GetMapping("/refresh")
+	public ResponseEntity<?> refreshAccessToken(HttpServletRequest request) {
+		String bearerToken = request.getHeader("Authorization");
+		String refreshToken = "";
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")) {
+        	refreshToken=bearerToken.substring(7);
+        }
+        JwtTokenDto jwtTokenDto;
+		try {
+			jwtTokenDto = memberService.refreshToken(refreshToken);
+			return new ResponseEntity<JwtTokenDto>(jwtTokenDto,HttpStatus.CREATED);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return exceptionHandling(e);
+		}
+	}
+	
 	
 	@PostMapping("/forget")
 	public ResponseEntity<?> forgetPassWord(String email) {

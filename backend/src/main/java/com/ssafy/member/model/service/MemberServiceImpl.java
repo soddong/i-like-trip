@@ -65,6 +65,23 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 	}
 
 	@Override
+	public JwtTokenDto refreshToken(String refreshToken) throws Exception {
+		if(jwtTokenProvider.validateToken(refreshToken)) {
+			String userId = jwtTokenProvider.getUserId(refreshToken);
+			MemberDto member = memberMapper.getMember(userId);
+			String newAccessToken = jwtTokenProvider.createAccessToken(userId, member.getAuthorities());
+			return JwtTokenDto.builder()
+	                .grantType("bearer")
+	                .accessToken(newAccessToken)
+	                .refreshToken(refreshToken)
+	                .build();
+		}else {
+			throw new Exception("유요하지 않은 리프레시 토큰입니다.");
+		}
+	}
+	
+
+	@Override
 	public int updateMember(MemberDto memberDto) throws SQLException {
 		return memberMapper.updateMember(memberDto);
 	}
@@ -117,4 +134,5 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
         
 
     }
+
 }
