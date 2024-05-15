@@ -23,7 +23,6 @@ import { createPinia } from 'pinia'
 
 //router
 import router from './router'
-
 import App from './App.vue'
 
 const app = createApp(App)

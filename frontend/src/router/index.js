@@ -46,12 +46,12 @@ const router = createRouter({
 
       children:[
         {
-          path:"signin",
+          path:"sign-in",
           name:"sign-in",
           component:() => import("@/components/account/AccountSignIn.vue"),
         },
         {
-          path:"signup",
+          path:"sign-up",
           name:"sign-up",
           component:() => import("@/components/account/AccountSignUp.vue"),
         }
@@ -63,7 +63,11 @@ const router = createRouter({
       component:MypageView,
 
     }
-  ]
+  ],
+})
+
+router.beforeEach((to, from)=>{
+  
 })
 
 export default router
