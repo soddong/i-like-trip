@@ -1,8 +1,12 @@
 package com.ssafy.board.controller;
 
+import java.awt.*;
 import java.nio.charset.Charset;
 import java.util.Map;
 
+import com.ssafy.image.model.ImageInfoDto;
+import com.ssafy.image.model.ImageType;
+import com.ssafy.image.model.service.ImageService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -36,10 +40,12 @@ import lombok.extern.slf4j.Slf4j;
 public class BoardController {
 
 	private BoardService boardService;
+	private ImageService imageService;
 
-	public BoardController(BoardService boardService) {
+	public BoardController(BoardService boardService, ImageService imageService) {
 		super();
 		this.boardService = boardService;
+		this.imageService = imageService;
 	}
 
 	@Operation(summary = "게시판 글작성", description = "새로운 게시글 정보를 입력한다.")
@@ -49,7 +55,13 @@ public class BoardController {
 		log.info("writeArticle boardDto - {}", boardDto);
 		try {
 			boardService.writeArticle(boardDto);
-//			return ResponseEntity.ok().build();
+			for (String link : imageService.extractImageLinks(boardDto.getContent())) {
+				ImageInfoDto imageInfoDto = new ImageInfoDto();
+				imageInfoDto.setSaveFile(link);
+				imageInfoDto.setType(ImageType.BOARD_IMAGE_TYPE.toInt());
+				imageInfoDto.setRefNo(boardDto.getArticleNo());
+				imageService.saveImage(imageInfoDto);
+			}
 			return new ResponseEntity<Void>(HttpStatus.CREATED);
 		} catch (Exception e) {
 			return exceptionHandling(e);
