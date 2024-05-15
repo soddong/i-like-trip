@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Collectors;
 
+import javax.crypto.SecretKey;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,12 +19,9 @@ import org.springframework.stereotype.Component;
 
 
 import com.ssafy.member.model.JwtTokenDto;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureAlgorithm;
-
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
@@ -51,20 +50,22 @@ public class JwtTokenProvider {
 
         // Access Token 생성
         Date accessTokenExpiresIn = new Date(now + expireTime);
-        String accessToken = Jwts.builder()
-                .setSubject(authentication.getName())
+        String accessToken = Jwts.builder().issuer("좋아요행")
+        		.subject("access")
+        		.audience().add(authentication.getName()).and()
+        		.expiration(accessTokenExpiresIn)
                 .claim("auth", authorities)
-                .setExpiration(accessTokenExpiresIn)
-                .signWith(key, SignatureAlgorithm.HS256)
+                .claim("auth", authorities)
+                .signWith(key)
                 .compact();
         // Refresh Token 생성
         String refreshToken = Jwts.builder()
-                .setExpiration(new Date(now + expireTime*7))
-                .signWith(key, SignatureAlgorithm.HS256)
+                .expiration(new Date(now + expireTime*7))
+                .signWith(key)
                 .compact();
 
         return JwtTokenDto.builder()
-                .grantType("Bearer")
+                .grantType("bearer")
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
@@ -86,7 +87,10 @@ public class JwtTokenProvider {
 
         // UserDetails 객체를 만들어서 Authentication return
         // UserDetails: interface, User: UserDetails를 구현한 class
-        UserDetails principal = new User(claims.getSubject(), "", authorities);
+        if(claims.getAudience().isEmpty()) {
+        	throw new RuntimeException("대상이 없는 토근입니다.");
+        }
+        UserDetails principal = new User(claims.getAudience().iterator().next(), "", authorities);
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
 
@@ -94,9 +98,9 @@ public class JwtTokenProvider {
     public boolean validateToken(String token) {
         try {
         	Jwts.parser()
-                    .setSigningKey(key)
+        			.verifyWith((SecretKey)key)
                     .build()
-                    .parseClaimsJws(token);
+                    .parseSignedClaims(token);
             return true;
         } catch (SecurityException | MalformedJwtException e) {
             log.info("Invalid JWT Token", e);
@@ -110,10 +114,10 @@ public class JwtTokenProvider {
     // accessToken
     private Claims parseClaims(String accessToken) {
     	return Jwts.parser()
-                .setSigningKey(key)
+    			.verifyWith((SecretKey)key)
                 .build()
-                .parseClaimsJws(accessToken)
-                .getBody();
+                .parseSignedClaims(accessToken)
+                .getPayload();
     }
 
 }

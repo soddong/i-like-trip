@@ -48,7 +48,7 @@ public class MemberDto implements UserDetails{
 
 	@Override
 	public String getUsername() {
-		return name;
+		return id;
 	}
 
 	@Override
