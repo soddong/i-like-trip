@@ -52,9 +52,7 @@ function localAxios() {
         try {
           const userStore = useUserStore();
           userStore.refreshToken();
-          const newAccessToken = userStore.jwt;
           originalRequest._retry = true;
-          instance.defaults.headers["Authorization"] = `Bearer ${newAccessToken}`;
           return instance(originalRequest);
         } catch (error) {
           return Promise.reject(error);

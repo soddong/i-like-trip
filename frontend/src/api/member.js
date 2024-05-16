@@ -21,6 +21,7 @@ async function refreshTokenReq(refreshToken) {
       { headers: { Authorization: `Bearer ${refreshToken}` } }
     );
     if (res.status === 201) {
+      local.defaults.headers["Authorization"] = `Bearer ${res.data.accessToken}`;
       return res.data.accessToken;
     }
   } catch (e) {

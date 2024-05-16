@@ -66,10 +66,14 @@ const router = createRouter({
   ],
 });
 
-router.beforeEach((to) => {
+router.beforeEach(async (to) => {
   if (!(to.name === "sign-in" || to.name === "sign-up")) {
     const userStore = useUserStore();
-    userStore.refreshToken();
+    if (!userStore.isSignIn) {
+      console.log("액세스 토큰 재발급");
+      await userStore.refreshToken();
+      userStore.getUserInfo();
+    }
   }
 });
 
