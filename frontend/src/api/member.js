@@ -37,4 +37,12 @@ async function getUserInfoReq(userId, success, fail) {
   await local.get(`/member/${userId}`).then(success).catch(fail);
 }
 
-export { signIn, refreshTokenReq, signUp, getUserInfoReq };
+async function updateUserInfo(userInfo, id, success, fail) {
+  console.log(userInfo)
+  await local
+    .put(`/member/${id}`, JSON.stringify(userInfo))
+    .then(success)
+    .catch(fail);
+}
+
+export { signIn, refreshTokenReq, signUp, getUserInfoReq, updateUserInfo };
