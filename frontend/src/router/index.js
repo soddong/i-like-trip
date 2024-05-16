@@ -66,9 +66,11 @@ const router = createRouter({
   ],
 });
 
-router.beforeEach(() => {
-  const userStore = useUserStore();
-  userStore.refreshToken();
+router.beforeEach((to) => {
+  if (!(to.name === "sign-in" || to.name === "sign-up")) {
+    const userStore = useUserStore();
+    userStore.refreshToken();
+  }
 });
 
 export default router;
