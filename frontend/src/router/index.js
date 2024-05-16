@@ -1,15 +1,16 @@
-import AccountView from "@/views/AccountView.vue"
-import HomeView from "@/views/HomeView.vue"
-import MypageView from "@/views/MypageView.vue"
-import { createRouter, createWebHistory } from 'vue-router'
+import AccountView from "@/views/AccountView.vue";
+import HomeView from "@/views/HomeView.vue";
+import MypageView from "@/views/MypageView.vue";
+import { createRouter, createWebHistory } from "vue-router";
+import { useUserStore } from "@/stores/user";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '',
-      name: 'Home',
-      component:HomeView
+      path: "",
+      name: "Home",
+      component: HomeView,
     },
     {
       path: "/board",
@@ -40,30 +41,34 @@ const router = createRouter({
       ],
     },
     {
-      path:"/account",
-      name:"account",
-      component:AccountView,
+      path: "/account",
+      name: "account",
+      component: AccountView,
 
-      children:[
+      children: [
         {
-          path:"signin",
-          name:"sign-in",
-          component:() => import("@/components/account/AccountSignIn.vue"),
+          path: "sign-in",
+          name: "sign-in",
+          component: () => import("@/components/account/AccountSignIn.vue"),
         },
         {
-          path:"signup",
-          name:"sign-up",
-          component:() => import("@/components/account/AccountSignUp.vue"),
-        }
-      ]
+          path: "sign-up",
+          name: "sign-up",
+          component: () => import("@/components/account/AccountSignUp.vue"),
+        },
+      ],
     },
     {
-      path:"/mypage",
-      name:"Mypage",
-      component:MypageView,
+      path: "/mypage",
+      name: "Mypage",
+      component: MypageView,
+    },
+  ],
+});
 
-    }
-  ]
-})
+router.beforeEach(() => {
+  const userStore = useUserStore();
+  userStore.refreshToken();
+});
 
-export default router
+export default router;
