@@ -1,6 +1,7 @@
 import AccountView from "@/views/AccountView.vue";
 import HomeView from "@/views/HomeView.vue";
 import MypageView from "@/views/MypageView.vue";
+import PlanView from "@/views/PlanView.vue";
 import { createRouter, createWebHistory } from "vue-router";
 import { useUserStore } from "@/stores/user";
 
@@ -62,6 +63,11 @@ const router = createRouter({
       path: "/mypage",
       name: "Mypage",
       component: MypageView,
+    },
+    {
+      path: "/plan",
+      name: "plan",
+      component: PlanView,
     },
   ],
 });
