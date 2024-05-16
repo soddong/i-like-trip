@@ -12,6 +12,31 @@ function localAxios() {
     },
   });
 
+  // instance.interceptors.request.use(
+  //   (config) => {
+  //     console.log(config);
+  //     let urlValues = config.url.split("/")
+  //     let pathVars = config.pathVariable
+  //     let noMatchVar = [];
+  //     let newUrlValues = urlValues.map((value) => {
+  //       if (value.startsWith(":")) {
+
+  //         value = pathVars[value.]
+  //         if (!value)
+  //         noMatchVar.push(value)
+  //           throw new Error("path variable이 알맞게 지정")
+  //       } else {
+  //         return value;
+  //       }
+  //     })
+
+  //     return config;
+  //   },
+  //   async (error) => {
+  //     return Promise.reject(error);
+  //   }
+  // );
+
   instance.interceptors.response.use(
     (response) => {
       // 2xx 범위에 있는 상태 코드는 이 함수를 트리거 합니다.
@@ -29,7 +54,7 @@ function localAxios() {
           userStore.refreshToken();
           const newAccessToken = userStore.jwt;
           originalRequest._retry = true;
-          originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
+          instance.defaults.headers["Authorization"] = `Bearer ${newAccessToken}`;
           return instance(originalRequest);
         } catch (error) {
           return Promise.reject(error);

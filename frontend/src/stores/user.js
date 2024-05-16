@@ -1,6 +1,6 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
-import { signIn, refreshTokenReq, signUp } from "@/api/member";
+import { signIn, refreshTokenReq, signUp, getUserInfoReq } from "@/api/member";
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "vue-router";
 
@@ -26,6 +26,7 @@ export const useUserStore = defineStore("userStore", () => {
           userId.value = decodeToken.aud.pop();
           isSignIn.value = true;
           router.replace("/");
+          return Promise.resolve(jwt.value);
         }
       },
       (error) => {
@@ -34,6 +35,9 @@ export const useUserStore = defineStore("userStore", () => {
         console.error(error);
       }
     );
+    if (isSignIn.value) {
+      getUserInfo();
+    }
   };
 
   const refreshToken = async () => {
@@ -74,7 +78,24 @@ export const useUserStore = defineStore("userStore", () => {
     );
   };
 
-  const getUserInfo = () => {};
+  const getUserInfo = async () => {
+    await getUserInfoReq(
+      userId.value,
+      (res) => {
+        const { role, email, name, joinDate, location, profileNo, profileImg } = res.data;
+        userInfo.value = {
+          role,
+          email,
+          name,
+          joinDate,
+          location,
+          profileNo,
+          profileImg,
+        };
+      },
+      () => {}
+    );
+  };
   return {
     jwt,
     userId,

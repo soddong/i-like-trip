@@ -4,7 +4,13 @@ const local = localAxios();
 const noneConfiginstance = noneConfigAxios();
 
 async function signIn(signInData, success, fail) {
-  await local.post(`/member/sign-in`, signInData).then(success).catch(fail);
+  await local
+    .post(`/member/sign-in`, signInData)
+    .then(success)
+    .then((jwt) => {
+      local.defaults.headers["Authorization"] = `Bearer ${jwt}`;
+    })
+    .catch(fail);
 }
 
 async function refreshTokenReq(refreshToken) {
@@ -26,4 +32,8 @@ async function signUp(signUpData, success, fail) {
   await noneConfiginstance.post(`/member/sign-up`, signUpData).then(success).catch(fail);
 }
 
-export { signIn, refreshTokenReq, signUp };
+async function getUserInfoReq(userId, success, fail) {
+  await local.get(`/member/${userId}`).then(success).catch(fail);
+}
+
+export { signIn, refreshTokenReq, signUp, getUserInfoReq };

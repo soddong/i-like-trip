@@ -109,16 +109,11 @@ public class MemberController {
 	}
 	
 	@GetMapping("/{user-id}")
-	public ResponseEntity<?> join(HttpServletRequest request,@PathVariable(required = false, name = "user-id") String userId) {
-		System.out.println(request.getUserPrincipal());
+	public ResponseEntity<?> getUserInfo(HttpServletRequest request,@PathVariable(name = "user-id") String userId) {
+		System.out.println("유저 한명");
 		
 		try {
-			MemberDto memberDto=null;
-			if(userId!=null) {
-				memberDto= memberService.getMemberInfo(userId);
-			}else {
-				memberDto= memberService.getMemberInfo(request.getUserPrincipal().getName());
-			}
+			MemberDto memberDto=memberService.getMemberInfo(userId);
 			return new ResponseEntity<MemberDto>(memberDto,HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
