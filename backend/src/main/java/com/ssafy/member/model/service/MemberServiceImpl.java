@@ -85,6 +85,12 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 	public int deleteMember(String userId) throws SQLException {
 		return memberMapper.deleteMember(userId);
 	}
+	
+	public MemberDto getMemberInfo(String userId) throws SQLException {
+		MemberDto memberDto = (MemberDto) loadUserByUsername(userId);
+		memberDto.setPassword(null);
+		return memberDto;
+	}
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

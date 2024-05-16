@@ -11,6 +11,7 @@
 		<result column="join_date" property="joinDate"/>
 		<result column="location" property="location"/>
 		<result column="profile_no" property="profileNo"/>
+		<result column="save_file" property="profileImg"/>
 	</resultMap>
 	
 	<select id="idCheck" parameterType="String" resultType="int">
@@ -25,9 +26,10 @@
 	</insert>
 	
 	<select id="getMember" parameterType="string" resultMap="member">
-		select user_id, role, password, email, name, join_date, location, profile_no
-		from member
-		where user_id = #{id}
+		SELECT user_id, role, password, email, name, join_date, location, profile_no, f.save_file  
+		FROM member left join file_info f 
+		on f.file_no=profile_no 
+		where user_id=#{id};
 	</select>
 	
 	<update id="updateMember" parameterType="memberDto">

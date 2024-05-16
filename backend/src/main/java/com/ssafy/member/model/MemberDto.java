@@ -31,6 +31,7 @@ public class MemberDto implements UserDetails{
 	private String joinDate;
 	private String location;
 	private int profileNo;
+	private String profileImg;
 	
 
 	@Override

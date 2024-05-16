@@ -16,6 +16,8 @@ public interface MemberService {
 	
 	int deleteMember(String memberDto) throws SQLException;
 	
+	MemberDto getMemberInfo(String userId) throws SQLException;
+	
 	JwtTokenDto refreshToken(String refreshToken) throws Exception;
 
 	JwtTokenDto loginMember(MemberLoginDto loginDto) throws Exception;

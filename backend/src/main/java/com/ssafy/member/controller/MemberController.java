@@ -108,6 +108,23 @@ public class MemberController {
 		}
 	}
 	
+	@GetMapping("/{user-id}")
+	public ResponseEntity<?> join(HttpServletRequest request,@PathVariable(required = false, name = "user-id") String userId) {
+		System.out.println(request.getUserPrincipal());
+		
+		try {
+			MemberDto memberDto=null;
+			if(userId!=null) {
+				memberDto= memberService.getMemberInfo(userId);
+			}else {
+				memberDto= memberService.getMemberInfo(request.getUserPrincipal().getName());
+			}
+			return new ResponseEntity<MemberDto>(memberDto,HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return exceptionHandling(e);
+		}
+	}
 	
 	@PostMapping("/forget")
 	public ResponseEntity<?> forgetPassWord(String email) {
