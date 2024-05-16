@@ -2,6 +2,7 @@ package com.ssafy.member.model.service;
 
 import java.sql.SQLException;
 
+import com.ssafy.member.model.MemberUpdateDto;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -77,8 +78,11 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 	
 
 	@Override
-	public int updateMember(MemberDto memberDto) throws SQLException {
-		return memberMapper.updateMember(memberDto);
+	public int updateMember(String userId, MemberUpdateDto memberDto) throws SQLException {
+		if (memberDto.getPassword() != null) {
+			memberDto.setPassword(passwordEncoder.encode(memberDto.getPassword()));
+		}
+		return memberMapper.updateMember(userId, memberDto);
 	}
 
 	@Override

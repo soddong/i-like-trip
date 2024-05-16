@@ -1,6 +1,8 @@
 package com.ssafy.member.controller;
 
 import java.sql.SQLException;
+
+import com.ssafy.member.model.MemberUpdateDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -49,10 +51,11 @@ public class MemberController {
 		}
 	}
 
-	@PutMapping("")
-	public ResponseEntity<?> update(MemberDto memberDto) {
+	@PutMapping("/{userId}")
+	public ResponseEntity<?> update(@PathVariable("userId") String userId, @RequestBody MemberUpdateDto memberDto) {
 		try {
-			memberService.updateMember(memberDto);
+			System.out.println(userId + " : " + memberDto.toString());
+			memberService.updateMember(userId, memberDto);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (SQLException e) {
 			return exceptionHandling(e);

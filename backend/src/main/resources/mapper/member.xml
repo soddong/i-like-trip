@@ -31,17 +31,18 @@
 		on f.file_no=profile_no 
 		where user_id=#{id};
 	</select>
-	
-	<update id="updateMember" parameterType="memberDto">
+
+	<update id="updateMember" parameterType="map">
 		update member
 		<trim prefix="set" suffixOverrides=",">
-			<if test="password != null">password = #{password},</if>
-			<if test="email != null">email = #{email},</if>
-			<if test="name != null">name = #{name},</if>
-			<if test="location != null">location = #{location},</if>
-			<if test="profileNo != 0">profile_no = #{profileNo},</if>
+			<if test="memberDto.password != null">password = #{memberDto.password},</if>
+			<if test="memberDto.email != null">email = #{memberDto.email},</if>
+			<if test="memberDto.name != null">name = #{memberDto.name},</if>
+			<if test="memberDto.location != null">location = #{memberDto.location},</if>
+			<if test="memberDto.profileNo != 0">profile_no = #{memberDto.profileNo},</if>
+			<if test="memberDto.profileImg != null">save_file = #{memberDto.profileImg},</if>
 		</trim>
-		where user_id = #{id}
+		where user_id = #{userId}
 	</update>
 	
 	<delete id="deleteMember" parameterType="String">

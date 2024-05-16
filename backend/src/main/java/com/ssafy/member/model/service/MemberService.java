@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import com.ssafy.member.model.JwtTokenDto;
 import com.ssafy.member.model.MemberDto;
 import com.ssafy.member.model.MemberLoginDto;
+import com.ssafy.member.model.MemberUpdateDto;
 
 public interface MemberService {
 
@@ -12,7 +13,7 @@ public interface MemberService {
 	
 	int joinMember(MemberDto memberDto) throws Exception;
 	
-	int updateMember(MemberDto memberDto) throws SQLException;
+	int updateMember(String userId, MemberUpdateDto memberDto) throws SQLException;
 	
 	int deleteMember(String memberDto) throws SQLException;
 	
