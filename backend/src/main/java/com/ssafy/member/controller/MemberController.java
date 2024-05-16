@@ -39,7 +39,7 @@ public class MemberController {
 	}
 
 	@PostMapping("/sign-up")
-	public ResponseEntity<?> join(MemberDto memberDto) {
+	public ResponseEntity<?> join(@RequestBody MemberDto memberDto) {
 		try {
 			memberService.joinMember(memberDto);
 			return new ResponseEntity<Void>(HttpStatus.CREATED);

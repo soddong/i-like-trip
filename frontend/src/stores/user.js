@@ -1,14 +1,15 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
-import { signIn, refreshTokenReq } from "@/api/member";
+import { signIn, refreshTokenReq, signUp } from "@/api/member";
 import { jwtDecode } from "jwt-decode";
+import { useRouter } from "vue-router";
 
 export const useUserStore = defineStore("userStore", () => {
   const jwt = ref("");
   const userId = ref("");
   const isSignIn = ref(false);
-  const isSignInError = ref(false);
   const userInfo = ref(null);
+  const router = useRouter();
 
   const userSignIn = async (signInData) => {
     await signIn(
@@ -24,13 +25,12 @@ export const useUserStore = defineStore("userStore", () => {
           let decodeToken = jwtDecode(jwt.value);
           userId.value = decodeToken.aud.pop();
           isSignIn.value = true;
-          isSignInError.value = false;
+          router.replace("/");
         }
       },
       (error) => {
         console.log("로그인 실패!!!!");
         isSignIn.value = false;
-        isSignInError.value = true;
         console.error(error);
       }
     );
@@ -42,7 +42,6 @@ export const useUserStore = defineStore("userStore", () => {
       try {
         jwt.value = await refreshTokenReq(refreshToken);
         isSignIn.value = true;
-        isSignInError.value = false;
         let decodeToken = jwtDecode(jwt.value);
         userId.value = decodeToken.aud.pop();
       } catch (error) {
@@ -59,8 +58,20 @@ export const useUserStore = defineStore("userStore", () => {
     jwt.value = "";
     userId.value = "";
     isSignIn.value = false;
-    isSignInError.value = false;
     userInfo.value = null;
+  };
+
+  const userSingUp = async (signUpData) => {
+    await signUp(
+      signUpData,
+      () => {
+        userSignIn({
+          id: signUpData.id,
+          password: signUpData.password,
+        });
+      },
+      () => {}
+    );
   };
 
   const getUserInfo = () => {};
@@ -68,11 +79,11 @@ export const useUserStore = defineStore("userStore", () => {
     jwt,
     userId,
     isSignIn,
-    isSignInError,
     userInfo,
     userSignIn,
     refreshToken,
     userLogout,
     getUserInfo,
+    userSingUp,
   };
 });

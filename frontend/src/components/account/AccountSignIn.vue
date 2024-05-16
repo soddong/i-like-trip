@@ -1,22 +1,22 @@
 <script setup>
 import { ref } from 'vue';
 import { mdiEmailOutline, mdiEyeOff, mdiEye, mdiLockOutline, mdiChevronRight } from '@mdi/js';
-import { RouterLink, useRouter } from 'vue-router'
+import { RouterLink } from 'vue-router'
 import { useUserStore } from "@/stores/user"
 
 const visible = ref(false)
-const router = useRouter();
 const loginData = ref({
   id: "",
   password: ""
 })
+const isLoginError = ref(false)
 const userStore = useUserStore()
 const { userSignIn } = userStore
 
 const login = async () => {
   await userSignIn(loginData.value)
-  if (userStore.isSignIn) {
-    router.replace("/")
+  if (!userStore.isSignIn) {
+    isLoginError.value = true;
   }
 }
 </script>
@@ -39,7 +39,7 @@ const login = async () => {
       density="compact" placeholder="Enter your password" :prepend-inner-icon="mdiLockOutline" variant="outlined"
       @click:append-inner="visible = !visible" v-model="loginData.password"></v-text-field>
 
-    <v-card class="mb-12" color="surface-variant" variant="tonal" v-show="userStore.isSignInError">
+    <v-card class="mb-12" color="surface-variant" variant="tonal" v-show="isLoginError">
       <v-card-text class="text-medium-emphasis text-caption">
         아이디와 비밀번호를 확인해주세요.
       </v-card-text>

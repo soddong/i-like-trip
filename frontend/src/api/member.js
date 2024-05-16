@@ -1,15 +1,15 @@
 import { localAxios, noneConfigAxios } from "@/util/http-commons";
 
 const local = localAxios();
+const noneConfiginstance = noneConfigAxios();
 
 async function signIn(signInData, success, fail) {
   await local.post(`/member/sign-in`, signInData).then(success).catch(fail);
 }
 
 async function refreshTokenReq(refreshToken) {
-  const instance = noneConfigAxios();
   try {
-    const res = await instance.post(
+    const res = await noneConfiginstance.post(
       "/member/refresh",
       {},
       { headers: { Authorization: `Bearer ${refreshToken}` } }
@@ -22,4 +22,8 @@ async function refreshTokenReq(refreshToken) {
   }
 }
 
-export { signIn, refreshTokenReq };
+async function signUp(signUpData, success, fail) {
+  await noneConfiginstance.post(`/member/sign-up`, signUpData).then(success).catch(fail);
+}
+
+export { signIn, refreshTokenReq, signUp };

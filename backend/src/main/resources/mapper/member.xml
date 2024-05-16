@@ -20,8 +20,8 @@
 	</select>
 
 	<insert id="joinMember" parameterType="memberDto">
-		insert into member (user_id, role, password, email, name, join_date, location)
-		values (#{id}, #{role}, #{password}, #{email}, #{name}, now(), #{location})
+		insert into member (user_id, password, email, name, join_date, location)
+		values (#{id}, #{password}, #{email}, #{name}, now(), #{location})
 	</insert>
 	
 	<select id="getMember" parameterType="string" resultMap="member">
