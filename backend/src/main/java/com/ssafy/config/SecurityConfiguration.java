@@ -33,15 +33,12 @@ public class SecurityConfiguration {
 		http.formLogin(form -> form.disable());
 		http.httpBasic(AbstractHttpConfigurer::disable);
 
-		http.authorizeHttpRequests()
-				 //해당 API에 대해서는 모든 요청을 허가
-				.requestMatchers("/member/sign-in").permitAll()
-				.requestMatchers("/member/refresh").permitAll()
-				.requestMatchers("/member/sign-up").permitAll()
-				.requestMatchers("/swagger-ui/**").permitAll()
-				.requestMatchers("/v3/api-docs/**").permitAll()
-				.anyRequest().authenticated();
-		
+		http.authorizeHttpRequests(auth ->
+				auth.requestMatchers("/member/sign-in", "/member/refresh", "/member/sign-up",
+								"/swagger-ui/**", "/v3/api-docs/**")
+						.permitAll()
+						.anyRequest().authenticated()
+		);
 
 		http.addFilterBefore(new JwtRequestFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
 
