@@ -10,6 +10,7 @@ export const useUserStore = defineStore("userStore", () => {
   const isSignIn = ref(false);
   const userInfo = ref(null);
   const router = useRouter();
+  const isInit = ref(false);
 
   const userSignIn = async (signInData) => {
     await signIn(
@@ -42,6 +43,7 @@ export const useUserStore = defineStore("userStore", () => {
 
   const refreshToken = async () => {
     const refreshToken = localStorage.getItem("refresh-token");
+    isInit.value=true;
     if (refreshToken) {
       try {
         jwt.value = await refreshTokenReq(refreshToken);
