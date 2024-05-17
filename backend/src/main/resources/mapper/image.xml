@@ -30,10 +30,15 @@
         <result property="saveFile" column="save_file"/>
     </resultMap>
 
-    <insert id="saveImage" parameterType="ImageInfoDto" >
+    <insert id="saveImage" parameterType="ImageInfoDto" keyProperty="fileNo" useGeneratedKeys="true">
         INSERT INTO file_info (ref_no, save_folder, original_file, save_file, type)
         VALUES (#{refNo}, #{saveFolder}, #{originalFile}, #{saveFile}, #{type})
+
+        <selectKey keyProperty="fileNo" resultType="int" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
     </insert>
+
 
     <select id="getImageBySaveFile" parameterType="string" resultType="imageInfoDto">
         SELECT * FROM image_metadata WHERE save_file = #{saveFile}

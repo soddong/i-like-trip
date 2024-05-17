@@ -6,8 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface ImageMapper {
-    void saveImage(ImageInfoDto imageInfo);
-    void saveImage(String saveFile);
+    int saveImage(ImageInfoDto imageInfo);
     ImageInfoDto getImageBySaveFile(String saveFile);
 
     void saveImageAtTempStore(TempImageInfoDto tempImageInfo);
