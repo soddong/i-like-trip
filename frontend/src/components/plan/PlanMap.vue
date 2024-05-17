@@ -1,7 +1,9 @@
 <script setup>
 import { KakaoMap, KakaoMapMarker } from 'vue3-kakao-maps';
 import PlanPickDate from '@/components/plan/step/PlanPickDate.vue'
-import { mdiNumeric1, mdiNumeric2, mdiNumeric3, mdiDotsVertical } from '@mdi/js';
+import PlanPickTripwith from '@/components/plan/step/PlanPickTripwith.vue'
+import PlanPickPlace from '@/components/plan/step/PlanPickPlace.vue'
+import { mdiDotsVertical } from '@mdi/js';
 import { ref } from 'vue';
 
 const coordinate = {
@@ -10,6 +12,8 @@ const coordinate = {
 };
 
 const rail = ref(true);
+
+const curStep = ref(1);
 </script>
 
 <template>
@@ -19,13 +23,14 @@ const rail = ref(true);
                 <template v-slot:prepend>
                     <v-avatar tile image="src/assets/logo2.png" size="small">
                     </v-avatar>
-                </template></v-list-item>
+                </template>
+            </v-list-item>
         </v-list>
 
         <v-divider></v-divider>
 
         <v-list nav>
-            <v-list-item value="step1">
+            <v-list-item value="step1" @click="curStep = 1">
                 <template #title>
                     <v-sheet class="d-flex flex-column align-center">
                         <h3>STEP 1</h3>
@@ -33,7 +38,7 @@ const rail = ref(true);
                     </v-sheet>
                 </template>
             </v-list-item>
-            <v-list-item value="step2">
+            <v-list-item value="step2" @click="curStep = 2">
                 <template #title>
                     <v-sheet class="d-flex flex-column align-center">
                         <h3>STEP 2</h3>
@@ -41,7 +46,7 @@ const rail = ref(true);
                     </v-sheet>
                 </template>
             </v-list-item>
-            <v-list-item value="step3">
+            <v-list-item value="step3" @click="curStep = 3">
                 <template #title>
                     <v-sheet class="d-flex flex-column align-center">
                         <h3>STEP 3</h3>
@@ -60,18 +65,17 @@ const rail = ref(true);
         </v-list>
     </v-navigation-drawer>
 
-    <v-navigation-drawer :rail="rail" permanent rail-width="30" width="400">
+    <v-navigation-drawer :rail="rail" permanent rail-width="25" width="400">
         <v-list class="fill-height">
-            <v-list-item class="fill-height px-1" :ripple="false">
-                <div @click="rail = !rail" class="fill-height" v-if="rail">
+            <v-list-item class="fill-height px-0">
+                <div @click="rail = !rail" v-if="rail" class="h-screen d-flex flex-column justify-center align-center">
                     <v-icon :icon="mdiDotsVertical" size="small"></v-icon>
                 </div>
 
-                <v-container v-if="!rail" class="fill-height">
-                    <v-row justify="center">
-                        <PlanPickDate />
-                    </v-row>
-
+                <v-container v-if="!rail" class="h-screen d-flex flex-column justify-center">
+                    <PlanPickDate v-if="curStep === 1" />
+                    <PlanPickTripwith v-if="curStep === 2" />
+                    <PlanPickPlace v-if="curStep === 3" />
                 </v-container>
             </v-list-item>
         </v-list>
