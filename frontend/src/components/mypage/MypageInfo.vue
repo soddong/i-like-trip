@@ -108,12 +108,12 @@ export default {
  
     function pushUpdateButton() {
       const updateData = userInfoItems.value.reduce((acc, item) => {
-        // 변경점이 있는 value만 전달하는 방식을 하려다가
-        // userStore.userInfo[item.key] 가 바로 적용이 반영이 안되는 문제로 기각
-        // if (item.value !== userStore.userInfo[item.key]) { 
+        // 변경점이 있는 애들만 update
+        if (item.value !== userStore.userInfo[item.key]) { 
           if ((item.key == 'password' && item.value != '')|| item.key != 'password') {
             acc[item.key] = item.value;
           }
+        }
         return acc;
       }, {});
 
@@ -121,6 +121,7 @@ export default {
         updateUserInfo(updateData, userStore.userId,
           (response) => {
             console.log('Update success', response);
+            userStore.getUserInfo();
             alert('수정을 완료하였습니다.')
           },
           (error) => {
@@ -205,15 +206,6 @@ button {
 
 button:hover {
   background-color: #0056b3;
-}
-
-.disabled-button {
-  padding: 8px 12px;
-  background-color: #ccc;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: not-allowed;
 }
 
 .divider {
