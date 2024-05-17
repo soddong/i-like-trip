@@ -1,9 +1,13 @@
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { RouterLink } from "vue-router";
 import { useDisplay } from 'vuetify'
 import { useUserStore } from "@/stores/user"
+import defaultProfile from '@/assets/default_profile.png';
 
+const VITE_VUE_API_URL = import.meta.env.VITE_VUE_API_URL;
+
+const userProfile = ref(defaultProfile);
 const { mdAndUp } = useDisplay()
 const drawerOpen = ref(false);
 
@@ -19,14 +23,25 @@ const menuList = ref([
     {
         title: '자유게시판',
         to: { name: "Board" }
-    },
-    {
-        title: '마이페이지',
-        to: { name: "Mypage" }
+    // },
+    // {
+    //     title: '마이페이지',
+    //     to: { name: "Mypage" }
     }
 ])
 
 const userStore = useUserStore()
+
+watch(
+  () => userStore.userInfo?.profileImg,
+  (newProfile) => {
+    if (newProfile) {
+      userProfile.value = `${VITE_VUE_API_URL}upload?name=${newProfile}`;
+      console.log("Updated userProfile URL:", userProfile.value);
+    }
+  },
+  { immediate: true }
+);
 </script>
 
 <template>
@@ -50,35 +65,35 @@ const userStore = useUserStore()
         <!-- <v-spacer></v-spacer> -->
         <v-btn v-if="!userStore.isSignIn" :to="{ name: 'sign-in' }">로그인</v-btn>
         <v-menu v-else min-width="120px" rounded>
-            <template v-slot:activator="{ props }">
-                <v-btn icon v-bind="props">
-                    <v-avatar color="brown">
-                        <span class="text-h6">사용</span>
-                    </v-avatar>
-                </v-btn>
-            </template>
-            <v-card>
-                <v-card-text>
-                    <div class="mx-auto text-center">
-                        <v-avatar color="brown">
-                            <span class="text-h7">사용</span>
-                        </v-avatar>
-                        <h3>사용자</h3>
-                        <p class="text-caption mt-1">
-                            이메일@닷.컴
-                        </p>
-                        <v-divider class="my-1"></v-divider>
-                        <v-btn variant="text" rounded>
-                            내정보
-                        </v-btn>
-                        <v-divider class="my-1"></v-divider>
-                        <v-btn variant="text" rounded @click="userStore.userLogout">
-                            로그아웃
-                        </v-btn>
-                    </div>
-                </v-card-text>
-            </v-card>
-        </v-menu>
+    <template v-slot:activator="{ props }">
+      <v-btn icon v-bind="props">
+        <v-avatar color="brown">
+          <img :src="userProfile" alt="Profile Image" class="cover-image">
+        </v-avatar>
+      </v-btn>
+    </template>
+    <v-card>
+      <v-card-text>
+        <div class="mx-auto text-center">
+          <v-avatar color="brown">
+            <img :src="userProfile" alt="Profile Image" class="cover-image">
+          </v-avatar>
+          <h3>사용자</h3>
+          <p class="text-caption mt-1">
+            이메일@닷.컴
+          </p>
+          <v-divider class="my-1"></v-divider>
+          <v-btn variant="text" :to="{ name: 'Mypage' }" rounded>
+            내정보
+          </v-btn>
+          <v-divider class="my-1"></v-divider>
+          <v-btn variant="text" rounded @click="userStore.userLogout">
+            로그아웃
+          </v-btn>
+        </div>
+      </v-card-text>
+    </v-card>
+  </v-menu>
     </v-app-bar>
     <v-navigation-drawer v-model="drawerOpen" location="right" disableResizeWatcher>
         <v-list two-line>
@@ -113,4 +128,13 @@ const userStore = useUserStore()
     font-size: 1.1rem;
     /* 글씨 크기 조절 */
 }
+
+
+.cover-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
 </style>
