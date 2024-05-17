@@ -2,20 +2,16 @@ package com.ssafy.member.controller;
 
 import java.sql.SQLException;
 
+import com.ssafy.image.model.ImageInfoDto;
+import com.ssafy.image.model.ImageType;
+import com.ssafy.image.model.service.ImageService;
 import com.ssafy.member.model.MemberUpdateDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.parameters.P;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.ssafy.member.model.JwtTokenDto;
 import com.ssafy.member.model.MemberDto;
@@ -30,9 +26,11 @@ import jakarta.servlet.http.HttpSession;
 public class MemberController {
 
 	private final MemberService memberService;
+	private final ImageService imageService;
 
-	public MemberController(MemberService memberService) {
+	public MemberController(MemberService memberService, ImageService imageService) {
 		this.memberService = memberService;
+		this.imageService = imageService;
 	}
 
 	private ResponseEntity<String> exceptionHandling(Exception e) {
@@ -51,16 +49,33 @@ public class MemberController {
 		}
 	}
 
+	/**
+	 * User 정보 를 업데이트하기 위한 함수
+	 * @param userId
+	 * @param memberDto
+	 * @return
+	 */
 	@PutMapping("/{userId}")
 	public ResponseEntity<?> update(@PathVariable("userId") String userId, @RequestBody MemberUpdateDto memberDto) {
 		try {
-			System.out.println(userId + " : " + memberDto.toString());
+			System.out.println(memberDto.getProfileImg());
+			if (memberDto.getProfileImg() != null) {
+				// 1. tmp image db에서 받아온 정보를 실제 file_info db에 저장
+				ImageInfoDto imageInfoDto = new ImageInfoDto();
+				String saveFile = imageService.extractImageName(memberDto.getProfileImg());
+				imageInfoDto.setSaveFile(saveFile);
+				System.out.println(saveFile);
+				imageInfoDto.setType(ImageType.PROFILE_IMAGE_TYPE.toInt());
+				int file_no = imageService.saveImage(imageInfoDto);
+				// 2. file_info no를 받아 member db에 저장
+				memberDto.setProfileNo(file_no);
+			}
 			memberService.updateMember(userId, memberDto);
 			return new ResponseEntity<>(HttpStatus.OK);
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			return exceptionHandling(e);
 		}
-	}
+    }
 
 	@DeleteMapping("/{userId}")
 	public ResponseEntity<?> delete(@PathVariable("userId") String userId, HttpSession session) {

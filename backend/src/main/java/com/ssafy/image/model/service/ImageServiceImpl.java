@@ -25,18 +25,13 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     @Transactional
-    public void saveImage(ImageInfoDto searchImage) throws Exception {
+    public int saveImage(ImageInfoDto searchImage) throws Exception {
         ImageInfoDto imageInfo = imageMapper.fetchImageInfo(searchImage.getSaveFile());
         imageInfo.setRefNo(searchImage.getRefNo());
         imageInfo.setSaveFile(searchImage.getSaveFile());
         imageInfo.setType(searchImage.getType());
         imageMapper.saveImage(imageInfo);
-    }
-
-    @Override
-    @Transactional
-    public void saveImage(String saveFile) throws Exception {
-        imageMapper.saveImage(saveFile);
+        return imageInfo.getFileNo();
     }
 
     @Override
@@ -67,6 +62,17 @@ public class ImageServiceImpl implements ImageService {
         }
 
         return names;
+    }
+
+    @Override
+    public String extractImageName(String url) {
+        if (url != null && url.contains("name=")) {
+            String[] parts = url.split("name=");
+            if (parts.length > 1) {
+                return parts[1];
+            }
+        }
+        return null;
     }
 
     @Override
