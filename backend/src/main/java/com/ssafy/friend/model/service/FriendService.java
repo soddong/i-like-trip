@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.ssafy.friend.model.FriendDto;
+import com.ssafy.friend.model.FriendInfoDto;
 import com.ssafy.friend.model.FriendRelationDto;
 
 public interface FriendService {
@@ -12,8 +13,8 @@ public interface FriendService {
 
 	public int getRelation(FriendDto friendDto) throws SQLException ;
 	
-	public List<FriendRelationDto> getMembers(String userId) throws SQLException ;
+	public List<FriendInfoDto> getRelations(String userId) throws SQLException ;
 	
-	public void deleteFriend(FriendDto friendDto) throws SQLException;
+	public void deleteRelation(FriendDto friendDto) throws SQLException;
 
 }

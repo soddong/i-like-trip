@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssafy.friend.model.mapper.FriendMapper">
-	<resultMap type="friendRelationDto" id="friend">
+	<resultMap type="friendInfoDto" id="friend">
 		<result column="s_user_id" property="userId"/>
 		<result column="r_user_id" property="friendId"/>
 		<result column="name" property="friendName"/>
@@ -10,14 +10,15 @@
 		<result column="type" property="relation"/>
 	</resultMap>
 
-	<insert id="addFriend" parameterType="friendRelationDto">
+	<insert id="addRelation" parameterType="friendInfoDto">
 		insert into relation (s_user_id, r_user_id, type)
 		values (#{userId}, #{friendId}, #{relation})
 	</insert>
 
-	<update id="updateRelation" parameterType="friendRelationDto">
+	<update id="updateRelation" parameterType="friendInfoDto">
 		update relation
-		set s_user_id = #{userId}, r_user_id = #{friendId}, type = #{relation}
+		set type = #{relation}
+		where s_user_id = #{userId} and r_user_id = #{friendId}
 	</update>
 
 	<select id="getRelation" parameterType="friendDto" resultType="Integer">
@@ -26,15 +27,15 @@
 		where s_user_id = #{userId} and r_user_id = #{friendId}
 	</select>
 
-	<select id="getMembers" parameterType="string" resultMap="friend">
+	<select id="getRelations" parameterType="string" resultMap="friend">
 		select r.s_user_id, r.r_user_id, m.name, f.save_file, r.type
-		from relation r
-				 join member m on r.r_user_id = m.user_id
-				 left join file_info f on m.profile_no = f.file_no
-		where r.s_user_id = #{userId}
+		 from relation r
+				  join member m on r.r_user_id = m.user_id
+				  left join file_info f on m.profile_no = f.file_no
+		 where r.s_user_id = #{userId}
 	</select>
 	
-	<delete id="deleteMember" parameterType="friendDto">
+	<delete id="deleteRelation" parameterType="friendDto">
 		delete from relation
 		where s_user_id = #{userId} and r_user_id = #{friendId}
 	</delete>

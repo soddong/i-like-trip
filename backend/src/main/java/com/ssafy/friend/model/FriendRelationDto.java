@@ -10,15 +10,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class FriendRelationDto {
-	private String userId;
-	private String friendId;
-	private String friendName;
-	private String friendProfile;
-	private int relation;
-
-	public FriendRelationDto(String id, String friend) {
-		this.userId = id;
-		this.friendId = friend;
-	}
-
+    private String userId;
+    private String friendId;
+    private int relation;
 }

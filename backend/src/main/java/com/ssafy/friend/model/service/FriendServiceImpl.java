@@ -3,48 +3,48 @@ package com.ssafy.friend.model.service;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.ssafy.friend.model.FriendInfoDto;
 import org.springframework.stereotype.Service;
 
-import com.ssafy.exception.TripExeption;
 import com.ssafy.friend.model.FriendDto;
-import com.ssafy.friend.model.FriendRelationDto;
 import com.ssafy.friend.model.mapper.FriendMapper;
+
+import static com.ssafy.friend.model.RelationType.*;
 
 @Service
 public class FriendServiceImpl implements FriendService {
-	
-	private static FriendService friendService;
+
 	private final FriendMapper friendMapper;
 	
 	private FriendServiceImpl(FriendMapper friendMapper) {
 		this.friendMapper = friendMapper;
 	}
-	
-	public static FriendService getFriendService() {
-		return friendService;
-	}
 
 	@Override
-	public void addFriend(FriendDto friendDto) throws SQLException {
-		FriendRelationDto relationDto = new FriendRelationDto(friendDto.getUserId(), friendDto.getFriendId());
+	public void addFriend(FriendDto dto) throws SQLException {
 
-		Integer userRequest = friendMapper.getRelation(friendDto);
-		Integer friendRequest = friendMapper.getRelation(new FriendDto(friendDto.getFriendId(), friendDto.getUserId()));
-		if (userRequest == null && friendRequest == null) {
-			// case1. 서로 친구추가 하지않은 경우, 새로 추가
-			relationDto.setRelation(1);
-			friendMapper.addFriend(relationDto);	
-		} else if (friendRequest != null && friendRequest == 1) {
-			// case2. 상대가 나를 먼저 친구 추가한 경우, 서로친구 맺음
-			relationDto.setRelation(2);
-			relationDto.setUserId(friendDto.getFriendId());
-			relationDto.setFriendId(friendDto.getUserId());
-			friendMapper.updateRelation(relationDto);
-		}  else if (userRequest != null && userRequest == 1) {
-			throw new TripExeption("이미 친구 신청을 한 상대입니다. 상대의 응답을 기다리고 있는 중 입니다.");
-		} else {
-			throw new TripExeption("허가되지 않은 친구 관계를 시도하였습니다.");
+		FriendInfoDto user = new FriendInfoDto(dto.getUserId(), dto.getFriendId());
+		FriendInfoDto friend = new FriendInfoDto(dto.getFriendId(), dto.getUserId());
+
+		Integer relation = friendMapper.getRelation(dto);
+		System.out.println(dto);
+
+		if (relation == null) {
+			// case1. 서로 친구추가 하지않은 경우, 요청 (새로 추가)
+			user.setRelation(REQUEST.toInt());
+			friend.setRelation(PENDING.toInt());
+			System.out.println("case1");
+			friendMapper.addRelation(user);
+			friendMapper.addRelation(friend);
+		} else if (relation == PENDING.toInt()) {
+			// case2. 상대가 나를 친구 추가한 경우, 서로친구 맺음 (관계 업데이트)
+			user.setRelation(FRIEND.toInt());
+			friend.setRelation(FRIEND.toInt());
+			System.out.println("case2");
+			friendMapper.updateRelation(user);
+			friendMapper.updateRelation(friend);
 		}
+
 	}
 	
 	@Override
@@ -55,13 +55,32 @@ public class FriendServiceImpl implements FriendService {
 	}
 
 	@Override
-	public List<FriendRelationDto> getMembers(String userId) throws SQLException {
-		return friendMapper.getMembers(userId);
+	public List<FriendInfoDto> getRelations(String userId) throws SQLException {
+		return friendMapper.getRelations(userId);
 	}
 
 	@Override
-	public void deleteFriend(FriendDto friendDto) throws SQLException {
-		friendMapper.deleteFriend(friendDto);
+	public void deleteRelation(FriendDto dto) throws SQLException {
+
+		FriendInfoDto user = new FriendInfoDto(dto.getUserId(), dto.getFriendId());
+		FriendInfoDto friend = new FriendInfoDto(dto.getFriendId(), dto.getUserId());
+
+		Integer relation = friendMapper.getRelation(dto);
+
+		if (relation == FRIEND.toInt()) {
+			// case1. 서로친구 한 경우, 상대만 요청한 것으로 업데이트
+			user.setRelation(PENDING.toInt());
+			friend.setRelation(REQUEST.toInt());
+			System.out.println("case1");
+			friendMapper.updateRelation(user);
+			friendMapper.updateRelation(friend);
+		} else if (relation == REQUEST.toInt()) {
+			// case2. 나만 요청한 경우, 아무사이도 아닌 것 (삭제)
+			System.out.println("case2");
+			friendMapper.deleteRelation(new FriendDto(dto.getUserId(), dto.getFriendId()));
+			friendMapper.deleteRelation(new FriendDto(dto.getFriendId(), dto.getUserId()));
+		}
+
 	}
 
 }
