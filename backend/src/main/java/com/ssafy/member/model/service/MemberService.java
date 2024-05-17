@@ -1,6 +1,7 @@
 package com.ssafy.member.model.service;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import com.ssafy.member.model.JwtTokenDto;
 import com.ssafy.member.model.MemberDto;
@@ -24,4 +25,6 @@ public interface MemberService {
 	JwtTokenDto loginMember(MemberLoginDto loginDto) throws Exception;
 	
 	public String forgetPassword(String email);
+
+	List<MemberDto> searchMembers(String id) throws Exception;
 }
