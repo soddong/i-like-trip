@@ -1,5 +1,8 @@
 package com.ssafy.friend.model;
 
+import lombok.ToString;
+
+@ToString
 public class FriendDto {
 	
 	private String userId;
