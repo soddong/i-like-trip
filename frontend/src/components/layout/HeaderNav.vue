@@ -78,9 +78,9 @@ watch(
           <v-avatar color="brown">
             <img :src="userProfile" alt="Profile Image" class="cover-image">
           </v-avatar>
-          <h3>사용자</h3>
+          <h3>{{ userStore.userInfo.name }}</h3>
           <p class="text-caption mt-1">
-            이메일@닷.컴
+            {{userStore.userInfo.email}}
           </p>
           <v-divider class="my-1"></v-divider>
           <v-btn variant="text" :to="{ name: 'Mypage' }" rounded>
