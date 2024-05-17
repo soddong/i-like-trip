@@ -6,7 +6,7 @@
           <h3 class="highlight">내 친구 목록</h3>
           <hr class="divider">
           <FriendMemberSearch :existingFriends="friends" :userId="userId" @add-friend="handleAddFriend"/>
-          <FriendList :friends="friends" />
+          <FriendList :friends="friends" @add-friend="handleAddFriend" @remove-friend="handleRemoveFriend"/>
         </v-card>
       </v-col>
     </v-row>
@@ -17,7 +17,7 @@
 import { ref, onMounted } from 'vue';
 import FriendMemberSearch from '@/components/friend/FriendMemberSearch.vue';
 import FriendList from '@/components/friend/FriendList.vue';
-import { fetchFriends, addFriend } from '@/api/friend'; 
+import { fetchFriends, addFriend, removeFriend } from '@/api/friend'; 
 import { useUserStore } from '@/stores/user';
 
 const friends = ref([]);
@@ -47,14 +47,28 @@ onMounted(() => {
 
 function handleAddFriend(friend) {
   addFriend(
-    { userId: userId, friendId: friend.id },
+    friend,
     (data) => {
-      updateFriendsList('${friend.id}님을 친구로 추가하였습니다.');
-      alert('')
       console.log('Friend added successfully:', data);
+      alert(`${friend.friendId}님을 친구로 추가하였습니다.`)
+      updateFriendsList();
     },
     (error) => {
       console.error('Error adding friend:', error);
+    }
+  );
+}
+
+function handleRemoveFriend(friend) {
+  removeFriend(
+    friend,
+    (data) => {
+      console.log('Friend removed successfully:', data);
+      alert(`${friend.friendId}님을 손절하였습니다.`);
+      updateFriendsList();
+    },
+    (error) => {
+      console.error('Error removing friend:', error);
     }
   );
 }

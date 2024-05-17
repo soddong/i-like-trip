@@ -29,7 +29,7 @@
                   </v-list-item-content>
                 </v-col>
                 <v-col cols="4" class="text-center">
-                  <v-btn @click="$emit('add-friend', result)" variant="tonal" color="primary">추가</v-btn>
+                  <v-btn @click="$emit('add-friend', {userId: userStore.userId, friendId: result.id})" variant="tonal" color="primary">추가</v-btn>
                 </v-col>
               </v-row>
             </v-list-item>
