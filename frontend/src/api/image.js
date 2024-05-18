@@ -1,7 +1,7 @@
 // image.js
-import { localAxios } from "@/util/http-commons";
+import { localAxiosInstance } from "@/util/http-commons";
 
-const local = localAxios();
+const local = localAxiosInstance;
 
 function uploadImage(formData, success, fail) {
     local.post('/upload', formData, {

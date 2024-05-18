@@ -63,6 +63,7 @@ function localAxios() {
   );
   return instance;
 }
+const localAxiosInstance = localAxios();
 
 function noneConfigAxios() {
   return axios.create({
@@ -70,4 +71,4 @@ function noneConfigAxios() {
   });
 }
 
-export { localAxios, noneConfigAxios };
+export { localAxios, noneConfigAxios, localAxiosInstance };

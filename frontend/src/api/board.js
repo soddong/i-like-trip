@@ -1,6 +1,6 @@
-import { localAxios } from "@/util/http-commons";
+import { localAxiosInstance } from "@/util/http-commons";
 
-const local = localAxios();
+const local = localAxiosInstance;
 
 function listArticle(param, success, fail) {
   local.get(`/board`, { params: param }).then(success).catch(fail);

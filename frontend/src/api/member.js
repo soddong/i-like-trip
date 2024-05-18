@@ -1,6 +1,6 @@
-import { localAxios, noneConfigAxios } from "@/util/http-commons";
+import { noneConfigAxios, localAxiosInstance } from "@/util/http-commons";
 
-const local = localAxios();
+const local = localAxiosInstance;
 const noneConfiginstance = noneConfigAxios();
 
 async function signIn(signInData, success, fail) {
