@@ -3,6 +3,7 @@ import { KakaoMap, KakaoMapMarker } from 'vue3-kakao-maps';
 import PlanPickDate from '@/components/plan/step/PlanPickDate.vue'
 import PlanPickTripwith from '@/components/plan/step/PlanPickTripwith.vue'
 import PlanPickPlace from '@/components/plan/step/PlanPickPlace.vue'
+import PlanSearchPlace from '@/components/plan/step/PlanSearchPlace.vue'
 import { mdiDotsVertical } from '@mdi/js';
 import { ref } from 'vue';
 
@@ -11,8 +12,8 @@ const coordinate = {
     lng: 126.9786567
 };
 
-const drawerWidth = 150
-const stepDetailwidth = 400
+const drawerWidth = 120
+const stepDetailwidth = 350
 const stepDetailFold = ref(true);
 
 const curStep = ref(1);
@@ -35,10 +36,14 @@ const onLoadKakaoMap = (mapRef) => {
 <template>
     <v-navigation-drawer permanent :width="drawerWidth">
         <v-list>
-            <v-list-item title="조아요행" :to="{ name: 'Home' }">
-                <template v-slot:prepend>
-                    <v-avatar tile image="src/assets/logo2.png" size="small">
-                    </v-avatar>
+            <v-list-item :to="{ name: 'Home' }">
+                <template #title>
+                    <v-sheet class="d-flex align-center justify-center">
+                        <v-avatar tile image="src/assets/logo2.png" size="x-small">
+                        </v-avatar>
+                        <p class="ml-1" style="font-size: small; font-weight: bold">조아요행</p>
+                    </v-sheet>
+
                 </template>
             </v-list-item>
         </v-list>
@@ -105,10 +110,8 @@ const onLoadKakaoMap = (mapRef) => {
         </KakaoMap>
     </v-main>
 
-    <v-navigation-drawer permanent :width="curStep == 3 ? 300 : 1" location="right">
-        <v-sheet>
-
-        </v-sheet>
+    <v-navigation-drawer permanent :width="curStep == 3 ? stepDetailwidth - 100 : 1" location="right">
+        <PlanSearchPlace />
     </v-navigation-drawer>
 </template>
 
