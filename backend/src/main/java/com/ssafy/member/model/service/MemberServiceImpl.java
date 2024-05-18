@@ -1,6 +1,7 @@
 package com.ssafy.member.model.service;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import com.ssafy.member.model.MemberUpdateDto;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -141,8 +142,11 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
             // 이러한 경우 MessagingException이 발생
             e.printStackTrace();//e.printStackTrace()는 예외를 기본 오류 스트림에 출력하는 메서드
         }
-        
-
     }
+
+	@Override
+	public List<MemberDto> searchMembers(String id) throws Exception {
+		return memberMapper.searchMembers(id);
+	}
 
 }

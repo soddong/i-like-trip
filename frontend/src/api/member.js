@@ -45,4 +45,21 @@ async function updateUserInfo(userInfo, id, success, fail) {
     .catch(fail);
 }
 
-export { signIn, refreshTokenReq, signUp, getUserInfoReq, updateUserInfo };
+async function searchFriends(searchQuery) {
+  if (searchQuery === '') {
+    return [];
+  }
+
+  try {
+    const response = await local.get(`/member`, {
+      params: { search: searchQuery }
+    });
+    console.log(response)
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching members:', error);
+    throw error;
+  }
+}
+
+export { signIn, refreshTokenReq, signUp, getUserInfoReq, updateUserInfo, searchFriends };

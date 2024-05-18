@@ -1,6 +1,7 @@
 package com.ssafy.member.controller;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import com.ssafy.image.model.ImageInfoDto;
 import com.ssafy.image.model.ImageType;
@@ -144,6 +145,16 @@ public class MemberController {
 		memberService.forgetPassword(email);
 		
 		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@GetMapping
+	public ResponseEntity<?> searchMembers(@RequestParam(name = "search", required = false) String id) {
+		try {
+			List<MemberDto> members = memberService.searchMembers(id);
+			return new ResponseEntity<>(members, HttpStatus.OK);
+		} catch (Exception e) {
+			return exceptionHandling(e);
+		}
 	}
 	
 }
