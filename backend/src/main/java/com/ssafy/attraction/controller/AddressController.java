@@ -29,7 +29,7 @@ public class AddressController {
 	}
 
 	@GetMapping("/gugun")
-	public ResponseEntity<?> gugunList(@RequestParam(value = "sido") int sidoCode) {
+	public ResponseEntity<?> gugunList(@RequestParam(value = "sido", required = false, defaultValue = "0") int sidoCode) {
 		try {
 			List<AddressDto> list= addressService.gugunList(sidoCode);
 			return new ResponseEntity<List<AddressDto>>(list, HttpStatus.OK);
