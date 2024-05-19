@@ -59,9 +59,9 @@ const activeTab = ref(1); // 기본 활성화된 탭 설정
 const isDataLoaded = ref(false); // 데이터 로드 상태를 추적
 
 const tabs = [
-  { label: '대기', value: 1 },
-  { label: '수락', value: 2 },
-  { label: '서로 친구', value: 3 },
+  { label: '내가 등록한 친구', value: 1 },
+  { label: '나를 등록한 친구', value: 2 },
+  { label: '서로 등록한 친구', value: 3 },
 ];
 
 function loadFriends() {
@@ -88,19 +88,28 @@ onMounted(() => {
 });
 
 const filteredFriends = computed(() => {
-  return friends.value.filter(friend => friend.relation === activeTab.value);
+  let result = [];
+  if (activeTab.value === 1) {
+    result = friends.value.filter(friend => friend.relation === 1 || friend.relation === 3);
+  } else if (activeTab.value === 2) {
+    result = friends.value.filter(friend => friend.relation === 2 || friend.relation === 3);
+    result.sort((a, b) => a.relation - b.relation); // 오름차순 정렬
+  } else if (activeTab.value === 3) {
+    result = friends.value.filter(friend => friend.relation === 3);
+  }
+  return result;
 });
 
 function getRelationText(relation) {
   switch(relation) {
     case 1:
-      return '대기';
+      return '친구 취소';
     case 2:
-      return '수락';
+      return '친구 등록';
     case 3:
-      return '서로 친구';
+      return '친구 취소';
     default:
-      return '친구 요청';
+      return '친구 등록';
   }
 }
 
@@ -115,20 +124,19 @@ function getButtonClass(relation) {
 }
 
 function toggleFriendStatus(friend) {
-  if (friend.relation === 1) { // 대기중
-    friend.relation = 0;       // 보낸 요청 취소
+  if (friend.relation === 1) { // 내가 등록한 친구
+    friend.relation = 0;       // 친구 취소
     emit('remove-friend', {userId: userStore.userId, friendId: friend.id});
-  } else if (friend.relation === 2) { // 수락
+  } else if (friend.relation === 2) { // 나를 등록한 친구
     friend.relation = 3;            // 서로친구
     emit('add-friend', {userId: userStore.userId, friendId: friend.id});
-  } else if (friend.relation === 3) { // 서로친구
-    friend.relation = 2;              // 수락
+  } else if (friend.relation === 3) { // 서로 친구
+    friend.relation = 2;              // 친구 취소
     emit('remove-friend', {userId: userStore.userId, friendId: friend.id});
   }
-  // 친구 상태가 변경된 후 친구 목록 다시 불러오기
-  loadFriends();
 }
 </script>
+
 <style scoped>
 .friend-table {
   width: 100%;
@@ -178,12 +186,12 @@ tr:not(:last-child) td {
 }
 
 .friend-button.accepted {
-  background-color: #f0dd36; /* 진한 노란색 */
-  color: rgb(77, 74, 70);
+  background-color: rgb(7, 42, 64);; /* 진한 노란색 */
+  color: white;
 }
 
 .friend-button.friends {
-  background-color: #4caf50; /* 녹색 */
+  background-color: #e44a4a; /* 녹색 */
   color: white;
 }
 </style>
