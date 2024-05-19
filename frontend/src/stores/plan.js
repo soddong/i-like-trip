@@ -10,8 +10,18 @@ export const usePlanStore = defineStore("planStore", () => {
     return { start, end };
   };
 
+  const getPeriodTime = () => {
+    if(period.value.length<2){
+      return 1;
+    }else{
+      return Math.round((period.value[period.value.length - 1]-period.value[0]+1)/60000/60/24);
+    }
+    
+  };
+
   return {
     period,
     getStartEnd,
+    getPeriodTime
   };
 });

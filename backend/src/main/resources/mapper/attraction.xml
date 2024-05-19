@@ -37,6 +37,6 @@
 				and title = concat('%',#{keyword},'%')
 			</if>
 		</where>
-		limit 100;
+		limit 25;
 	</select>
 </mapper>

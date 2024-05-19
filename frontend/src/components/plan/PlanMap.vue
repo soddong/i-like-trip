@@ -96,7 +96,7 @@ const onLoadKakaoMap = (mapRef) => {
             <v-icon :icon="mdiDotsVertical" size="small"></v-icon>
         </div>
 
-        <v-container v-if="!stepDetailFold" class="h-screen d-flex flex-column justify-center"
+        <v-container class="h-screen d-flex flex-column justify-center"
             :style="{ minWidth: stepDetailwidth + 'px' }">
             <PlanPickDate v-if="curStep === 1" />
             <PlanPickTripwith v-if="curStep === 2" />
@@ -110,7 +110,7 @@ const onLoadKakaoMap = (mapRef) => {
         </KakaoMap>
     </v-main>
 
-    <v-navigation-drawer permanent :width="curStep == 3 ? stepDetailwidth : 1" location="right">
+    <v-navigation-drawer permanent :width="curStep == 3 ? stepDetailwidth-50 : 1" location="right">
         <PlanSearchPlace />
     </v-navigation-drawer>
 </template>
