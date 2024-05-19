@@ -1,12 +1,10 @@
 <script setup>
-import { ref, reactive, watch } from 'vue';
+import { ref, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { listArticle } from '@/api/board.js';
 import { getMainImageUrl } from '@/api/image.js';
 import BoardListItem from '@/components/board/item/BoardListItem.vue';
 import BoardListEmptyItem from '@/components/board/item/BoardListEmptyItem.vue';
-import { localAxios } from '@/util/http-commons';
-const { VITE_VUE_API_URL } = import.meta.env;
 
 const router = useRouter();
 const route = useRoute();
