@@ -169,16 +169,6 @@ export default {
   margin-left: 10%;
 }
 
-h2 {
-  margin-bottom: 20px;
-  color: #333;
-}
-
-h3 {
-  margin-bottom: 20px;
-  color: #4b4747;
-}
-
 .info-item {
   display: flex;
   justify-content: space-between;

@@ -108,14 +108,13 @@ const onLoadKakaoMap = (mapRef) => {
         </KakaoMap>
     </v-main>
 
-    <v-navigation-drawer permanent :width="curStep == 2 ? 400 : 1" location="right">
+    <v-navigation-drawer permanent :width="curStep == 2 ? stepDetailwidth : 1" location="right">
             <v-sheet>
                 <PlanPickTripwithSearch v-if="curStep == 2" v-model="tripwith"/>
             </v-sheet>
         </v-navigation-drawer>
-    <v-navigation-drawer permanent :width="curStep == 3 ? 300 : 1" location="right">
+    <v-navigation-drawer permanent :width="curStep == 3 ? stepDetailwidth : 1" location="right">
         <v-sheet>
-
         </v-sheet>
     </v-navigation-drawer>
 </template>

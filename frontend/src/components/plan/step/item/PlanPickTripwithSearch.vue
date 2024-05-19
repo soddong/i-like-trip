@@ -180,13 +180,14 @@ span {
 }
 
 .add-btn {
-  background-color: #18b7be;
+  background-color: #1cb2b99f;
   color: white;
   border-radius: 50%;
   width: 24px;
   height: 24px;
   min-width: 24px;
   margin-right: 8px;
+  box-shadow: none;
 }
 
 .search-field {

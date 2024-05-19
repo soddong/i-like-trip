@@ -109,12 +109,13 @@ span {
 }
 
 .remove-btn {
-    background-color: #f44336;
+    background-color: #f44336bd;
     color: white;
     border-radius: 50%;
     width: 24px; /* 버튼 크기 조정 */
     height: 24px;
     min-width: 24px;
     margin-right: 8px; /* 추가 마진 */
+    box-shadow: none;
 }
 </style>
