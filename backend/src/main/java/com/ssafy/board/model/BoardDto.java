@@ -21,6 +21,7 @@ public class BoardDto {
 	private String userId;
 	@Schema(description = "작성자 이름")
 	private String userName;
+	private String profile;
 	@Schema(description = "글제목")
 	private String subject;
 	@Schema(description = "글내용")
