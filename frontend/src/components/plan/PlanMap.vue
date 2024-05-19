@@ -1,49 +1,119 @@
 <script setup>
 import { KakaoMap, KakaoMapMarker } from 'vue3-kakao-maps';
-import { mdiFolder, mdiAccountMultiple, mdiStar } from '@mdi/js';
+import PlanPickDate from '@/components/plan/step/PlanPickDate.vue'
+import PlanPickTripwith from '@/components/plan/step/PlanPickTripwith.vue'
+import PlanPickPlace from '@/components/plan/step/PlanPickPlace.vue'
+import { mdiDotsVertical } from '@mdi/js';
+import { ref } from 'vue';
+
 const coordinate = {
     lat: 37.566826,
     lng: 126.9786567
 };
+
+const drawerWidth = 150
+const stepDetailwidth = 400
+const stepDetailFold = ref(true);
+
+const curStep = ref(1);
+
+const map = ref();
+
+const onLoadKakaoMap = (mapRef) => {
+    map.value = mapRef;
+
+    kakao.maps.event.addListener(map.value, 'click', function (mouseEvent) {
+        stepDetailFold.value = true;
+    });
+    kakao.maps.event.addListener(map.value, 'dragstart', function (mouseEvent) {
+        stepDetailFold.value = true;
+    });
+};
+
 </script>
 
 <template>
-    <v-navigation-drawer expand-on-hover rail>
+    <v-navigation-drawer permanent :width="drawerWidth">
         <v-list>
-            <v-list-item prepend-avatar="src/assets/logo2.png" subtitle="sandra_a88@gmailcom" title="Sandra Adams"
-                :to="{ name: 'Home' }"></v-list-item>
+            <v-list-item title="조아요행" :to="{ name: 'Home' }">
+                <template v-slot:prepend>
+                    <v-avatar tile image="src/assets/logo2.png" size="small">
+                    </v-avatar>
+                </template>
+            </v-list-item>
         </v-list>
 
         <v-divider></v-divider>
 
-        <v-list density="compact" nav>
-            <v-list-item :prepend-icon="mdiFolder" title="My Files" value="myfiles"></v-list-item>
-            <v-list-item :prepend-icon="mdiAccountMultiple" title="Shared with me" value="shared"></v-list-item>
-            <v-list-item :prepend-icon="mdiStar" title="Starred" value="starred"></v-list-item>
+        <v-list nav>
+            <v-list-item value="step1" @click="curStep = 1">
+                <template #title>
+                    <v-sheet class="d-flex flex-column align-center">
+                        <h3>STEP 1</h3>
+                        <p>날짜 선택</p>
+                    </v-sheet>
+                </template>
+            </v-list-item>
+            <v-list-item value="step2" @click="curStep = 2">
+                <template #title>
+                    <v-sheet class="d-flex flex-column align-center">
+                        <h3>STEP 2</h3>
+                        <p>동행 선택</p>
+                    </v-sheet>
+                </template>
+            </v-list-item>
+            <v-list-item value="step3" @click="curStep = 3">
+                <template #title>
+                    <v-sheet class="d-flex flex-column align-center">
+                        <h3>STEP 3</h3>
+                        <p>장소 선택</p>
+                    </v-sheet>
+                </template>
+            </v-list-item>
+            <v-list-item value="step4">
+                <template #title>
+                    <v-sheet class="d-flex flex-column align-center">
+                        <h3>STEP 4</h3>
+                        <p>최종 확인</p>
+                    </v-sheet>
+                </template>
+            </v-list-item>
         </v-list>
     </v-navigation-drawer>
+    <v-sheet :width="stepDetailFold ? 25 : stepDetailwidth"
+        class="position-absolute border-e fill-height overflow-hidden" :style="{
+            zIndex: 1004, left: drawerWidth + 'px', transitionProperty: 'width',
+            transitionDuration: '0.2s',
+            transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)'
+        }">
+        <div @click="stepDetailFold = !stepDetailFold" v-if="stepDetailFold"
+            class="h-screen d-flex flex-column justify-center align-center">
+            <v-icon :icon="mdiDotsVertical" size="small"></v-icon>
+        </div>
 
+        <v-container v-if="!stepDetailFold" class="h-screen d-flex flex-column justify-center"
+            :style="{ minWidth: stepDetailwidth + 'px' }">
+            <PlanPickDate v-if="curStep === 1" />
+            <PlanPickTripwith v-if="curStep === 2" />
+            <PlanPickPlace v-if="curStep === 3" />
+        </v-container>
+    </v-sheet>
     <v-main>
-        <KakaoMap :lat="coordinate.lat" :lng="coordinate.lng" :draggable="true" height="100%" width="100%">
+        <KakaoMap @on-load-kakao-map="onLoadKakaoMap" :lat="coordinate.lat" :lng="coordinate.lng" :draggable="true"
+            height="100%" width="100%">
             <KakaoMapMarker :lat="coordinate.lat" :lng="coordinate.lng"></KakaoMapMarker>
         </KakaoMap>
     </v-main>
 
-    <v-navigation-drawer expand-on-hover rail location="right">
-        <v-list>
-            <v-list-item prepend-avatar="https://randomuser.me/api/portraits/women/85.jpg"
-                subtitle="sandra_a88@gmailcom" title="Sandra Adams"></v-list-item>
-        </v-list>
+    <v-navigation-drawer permanent :width="curStep == 3 ? 300 : 1" location="right">
+        <v-sheet>
 
-        <v-divider></v-divider>
-
-        <v-list density="compact" nav>
-            <v-list-item :prepend-icon="mdiFolder" title="My Files" value="myfiles"></v-list-item>
-            <v-list-item :prepend-icon="mdiAccountMultiple" title="Shared with me" value="shared"></v-list-item>
-            <v-list-item :prepend-icon="mdiStar" title="Starred" value="starred"></v-list-item>
-        </v-list>
+        </v-sheet>
     </v-navigation-drawer>
-
 </template>
 
-<style scoped></style>
+<style>
+html {
+    overflow-y: hidden
+}
+</style>
