@@ -2,8 +2,8 @@
 import { KakaoMap, KakaoMapMarker } from 'vue3-kakao-maps';
 import PlanPickDate from '@/components/plan/step/PlanPickDate.vue'
 import PlanPickTripwith from '@/components/plan/step/PlanPickTripwith.vue'
+import PlanPickTripwithSearch from '@/components/plan/step/item/PlanPickTripwithSearch.vue'
 import PlanPickPlace from '@/components/plan/step/PlanPickPlace.vue'
-import PlanSearchPlace from '@/components/plan/step/PlanSearchPlace.vue'
 import { mdiDotsVertical } from '@mdi/js';
 import { ref } from 'vue';
 
@@ -12,13 +12,15 @@ const coordinate = {
     lng: 126.9786567
 };
 
-const drawerWidth = 120
-const stepDetailwidth = 350
+const drawerWidth = 150
+const stepDetailwidth = 400
 const stepDetailFold = ref(true);
 
 const curStep = ref(1);
 
 const map = ref();
+
+const tripwith = ref([]);
 
 const onLoadKakaoMap = (mapRef) => {
     map.value = mapRef;
@@ -36,14 +38,10 @@ const onLoadKakaoMap = (mapRef) => {
 <template>
     <v-navigation-drawer permanent :width="drawerWidth">
         <v-list>
-            <v-list-item :to="{ name: 'Home' }">
-                <template #title>
-                    <v-sheet class="d-flex align-center justify-center">
-                        <v-avatar tile image="src/assets/logo2.png" size="x-small">
-                        </v-avatar>
-                        <p class="ml-1" style="font-size: small; font-weight: bold">조아요행</p>
-                    </v-sheet>
-
+            <v-list-item title="조아요행" :to="{ name: 'Home' }">
+                <template v-slot:prepend>
+                    <v-avatar tile image="src/assets/logo2.png" size="small">
+                    </v-avatar>
                 </template>
             </v-list-item>
         </v-list>
@@ -99,8 +97,8 @@ const onLoadKakaoMap = (mapRef) => {
         <v-container v-if="!stepDetailFold" class="h-screen d-flex flex-column justify-center"
             :style="{ minWidth: stepDetailwidth + 'px' }">
             <PlanPickDate v-if="curStep === 1" />
-            <PlanPickTripwith v-if="curStep === 2" />
-            <PlanPickPlace v-if="curStep === 3" />
+            <PlanPickTripwith v-if="curStep === 2" v-model="tripwith"/>
+            <PlanPickPlace v-if="curStep === 3" />v
         </v-container>
     </v-sheet>
     <v-main>
@@ -110,8 +108,15 @@ const onLoadKakaoMap = (mapRef) => {
         </KakaoMap>
     </v-main>
 
-    <v-navigation-drawer permanent :width="curStep == 3 ? stepDetailwidth : 1" location="right">
-        <PlanSearchPlace />
+    <v-navigation-drawer permanent :width="curStep == 2 ? 400 : 1" location="right">
+            <v-sheet>
+                <PlanPickTripwithSearch v-if="curStep == 2" v-model="tripwith"/>
+            </v-sheet>
+        </v-navigation-drawer>
+    <v-navigation-drawer permanent :width="curStep == 3 ? 300 : 1" location="right">
+        <v-sheet>
+
+        </v-sheet>
     </v-navigation-drawer>
 </template>
 
