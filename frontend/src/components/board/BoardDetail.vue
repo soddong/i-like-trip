@@ -6,10 +6,14 @@ import { detailArticle, deleteArticle } from "@/api/board";
 import BoardViewerItem from '@/components/board/item/BoardViewerItem.vue'; 
 
 import '@/assets/styles.css'; 
+import defaultProfile from '@/assets/default_profile.png';
+
+const VITE_VUE_API_URL = import.meta.env.VITE_VUE_API_URL;
 
 const route = useRoute();
 const router = useRouter();
 
+const articleUserProfile = ref(defaultProfile);
 const { articleno } = route.params;
 
 const article = ref({});
@@ -23,6 +27,14 @@ const getArticle = () => {
     articleno,
     ({ data }) => {
       article.value = data;
+      console.log(article.value.profile)
+      if (article.value.profile) {
+        articleUserProfile.value = `${VITE_VUE_API_URL}upload?name=${article.value.profile}`;
+      } else {
+        articleUserProfile.value = defaultProfile;
+      }
+      console.log("Article Data:", article.value);
+      console.log("Updated userProfile URL:", articleUserProfile.value);
     },
     (error) => {
       console.log(error);
@@ -51,6 +63,7 @@ function onDeleteArticle() {
 }
 </script>
 
+
 <template>
   <v-container>
     <v-row justify="center">
@@ -60,8 +73,8 @@ function onDeleteArticle() {
             <h2 class="article-title">{{ article.subject }}</h2>
           </div>
           <div class="article-details">
-            <v-avatar color="brown" size="large">
-              <span class="text-h5">사용</span>
+            <v-avatar color="brown">
+              <img :src="articleUserProfile" alt="Profile Image" class="cover-image">
             </v-avatar>
             <span class="user-name">{{ article.userName }}</span>
             <span class="register-time">{{ article.registerTime }}</span>
@@ -79,8 +92,6 @@ function onDeleteArticle() {
     </v-row>
   </v-container>
 </template>
-
-
 
 <style scoped>
 .common-card {
