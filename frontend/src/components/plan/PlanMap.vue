@@ -110,7 +110,7 @@ const onLoadKakaoMap = (mapRef) => {
         </KakaoMap>
     </v-main>
 
-    <v-navigation-drawer permanent :width="curStep == 3 ? stepDetailwidth - 100 : 1" location="right">
+    <v-navigation-drawer permanent :width="curStep == 3 ? stepDetailwidth : 1" location="right">
         <PlanSearchPlace />
     </v-navigation-drawer>
 </template>
