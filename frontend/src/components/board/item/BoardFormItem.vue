@@ -3,7 +3,9 @@ import { ref, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { registArticle, getModifyArticle, modifyArticle } from "@/api/board"
 import BoardEditorItem from '@/components/board/item/BoardEditorItem.vue'; 
+import { useUserStore } from '@/stores/user';
 
+const userStore = useUserStore();
 const router = useRouter()
 const route = useRoute()
 
@@ -15,8 +17,8 @@ const article = ref({
   articleNo: 0,
   subject: "",
   content: "",
-  userId: "",
-  userName: "",
+  userId: userStore.userId,
+  userName: userStore.userInfo.name,
   hit: 0,
   registerTime: "",
 })
@@ -109,15 +111,6 @@ function moveList() {
 <template>
   <v-form>
    <v-container>
-    <v-row class="mb-3">
-      <label for="userid">작성자 ID (임시) : </label>
-      <input
-        type="text"
-        v-model="article.userId"
-        :disabled="isUseId"
-        placeholder="입력하슈"
-      />
-    </v-row>
       <v-row>
         제목
       </v-row>
