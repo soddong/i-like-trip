@@ -2,6 +2,7 @@ import AccountView from "@/views/AccountView.vue";
 import HomeView from "@/views/HomeView.vue";
 import MypageView from "@/views/MypageView.vue";
 import PlanView from "@/views/PlanView.vue";
+import FriendView from "@/views/FriendView.vue";
 import { createRouter, createWebHistory } from "vue-router";
 import { useUserStore } from "@/stores/user";
 
@@ -68,6 +69,11 @@ const router = createRouter({
       path: "/plan",
       name: "plan",
       component: PlanView,
+    },
+    {
+      path: "/friend",
+      name: "friend",
+      component: FriendView,
     },
   ],
 });

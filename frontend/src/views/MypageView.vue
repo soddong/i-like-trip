@@ -25,9 +25,9 @@
               <div v-if="selectedMenu === 'about'">
                 <MypageInfo></MypageInfo>
               </div>
-              <div v-if="selectedMenu === 'friend'">
+              <!-- <div v-if="selectedMenu === 'friend'">
                 <MypageFriend></MypageFriend>
-              </div>
+              </div> -->
               <div v-if="selectedMenu === 'plan'">Plan Page Content</div>
             </v-card-text>
           </v-card>
@@ -42,7 +42,7 @@ import { ref } from 'vue';
 import MypageProfileItem from '@/components/mypage/item/MypageProfileItem.vue'
 import MypageMenuItem from '@/components/mypage/item/MypageMenuItem.vue'
 import MypageInfo from '@/components/mypage/MypageInfo.vue'
-import MypageFriend from '@/components/mypage/MypageFriend.vue'
+// import MypageFriend from '@/components/mypage/MypageFriend.vue'
 const selectedMenu = ref('about'); // Default to 'about'
 </script>
 
