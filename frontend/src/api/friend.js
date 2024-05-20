@@ -1,7 +1,7 @@
 // friend.js
-import { localAxios } from "@/util/http-commons";
+import { localAxiosInstance } from "@/util/http-commons";
 
-const local = localAxios();
+const local = localAxiosInstance;
 
 function fetchFriends(userId, success, fail) {
   local.get(`/friend/${userId}`)
@@ -17,6 +17,7 @@ function fetchFriends(userId, success, fail) {
 }
 
 function addFriend(relation, success, fail) {
+    console.log(relation)
     local.post('/friend/relation', relation)
       .then(response => {
         if (response.status === 201) {
