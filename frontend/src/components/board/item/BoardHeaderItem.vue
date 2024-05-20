@@ -1,5 +1,6 @@
 <script setup>
 import { useRouter } from 'vue-router';
+import coverImage from '@/assets/board-cover.jpg';
 
 const router = useRouter();
 
@@ -13,7 +14,7 @@ function goToBoardList() {
   <v-container>
     <v-row justify="center">
       <v-col cols="12">
-        <div class="background-image">
+        <div class="background-image" :style="{ backgroundImage: `url(${coverImage})` }">
           <div class="overlay" @click="goToBoardList">
             <h1 class="header-title">자유게시판</h1>
           </div>
@@ -25,7 +26,6 @@ function goToBoardList() {
 
 <style scoped>
 .background-image {
-  background-image: url('https://cdn.vuetifyjs.com/images/cards/docks.jpg');
   background-size: cover;
   background-position: center;
   height: 300px;

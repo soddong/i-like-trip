@@ -14,9 +14,9 @@
               <div v-if="selectedMenu === 'about'">
                 <span>회원 정보</span>
               </div>
-              <div v-if="selectedMenu === 'friend'">                  
+              <!-- <div v-if="selectedMenu === 'friend'">                  
                 <span>친구 관리</span>
-              </div>
+              </div> -->
               <div v-if="selectedMenu === 'plan'">
                 <span>내 계획</span>
               </div>

@@ -18,7 +18,7 @@ const toggleDrawer = () => {
 const mainMenuList = ref([
     {
         title: '여행 일정들',
-        to: { name: "Board" } // Plan 에러나서 임시로
+        to: { name: "Plan" }
     },
     {
         title: '자유게시판',
@@ -29,7 +29,7 @@ const mainMenuList = ref([
 const myMenuList = ref([
     {
         title: '내친구',
-        to: { name: "friend" } 
+        to: { name: "Friend" } 
     },
     {
         title: '내계획',

@@ -1,10 +1,11 @@
 <script setup>
-import PlanMap from "@/components/plan/PlanMap.vue";
+// import PlanMap from "@/components/plan/PlanMap.vue";
 
 </script>
 
 <template>
-    <PlanMap />
+    <!-- <PlanMap /> -->
+    <router-view></router-view>
 </template>
 
 <style scoped></style>

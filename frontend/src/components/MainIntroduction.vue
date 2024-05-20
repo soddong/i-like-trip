@@ -10,7 +10,7 @@
                     <p class="title">간단한 여행플래너</p>
                     <p class="subtitle">조아요행으로 스케줄링 하고 친구와 공유해보세요.</p>
                     <br>
-                    <v-btn width="300px" height="70px" color="#072a40" :to="{ name: 'plan' }"><span
+                    <v-btn width="300px" height="70px" color="#072a40" :to="{ name: 'plan-write' }"><span
                             style="font-size: 20px">일정 계획하기</span></v-btn>
                 </div>
             </v-col>
