@@ -1,33 +1,45 @@
 <script setup>
 import { ref, computed, onMounted, defineProps, defineEmits } from 'vue';
 import { mdiMagnify, mdiPlus } from '@mdi/js';
-import { fetchFriends } from '@/api/friend';
+import { searchFriends } from '@/api/member.js'; 
+import { fetchFriends } from '@/api/friend.js'; 
 import { useUserStore } from '@/stores/user';
 import defaultProfile from '@/assets/default_profile.png';
 
 const VITE_VUE_API_URL = import.meta.env.VITE_VUE_API_URL;
 const userStore = useUserStore();
-const searchQuery = ref('');
 const showFriends = ref(false);
 const friends = ref([]);
 const isDataLoaded = ref(false);
+const searchQuery = ref('');
+const searchResults = ref([]);
 
 const props = defineProps({
-    modelValue: Array // Accepting modelValue prop which is used for v-model
+    modelValue: Array
 });
 
 const emits = defineEmits(['update:modelValue']);
 
-const filteredFriends = computed(() => {
-  return friends.value.filter(friend => 
-    (searchQuery.value === '' || friend.name.includes(searchQuery.value)) &&
-    showFriends.value
-  );
+const displayResults = computed(() => {
+  let results = [];
+  if (showFriends.value) {
+    results = friends.value.filter(friend =>
+      friend.id.toLowerCase().includes(searchQuery.value.toLowerCase()) &&
+      friend.id !== userStore.userId 
+    );
+  } else {
+    results = searchResults.value.filter(member =>
+      member.id !== userStore.userId
+    );
+  }
+  return results;
 });
 
+
+
 function addFriend(friend) {
-    let newTripWith = [...props.modelValue, friend];
-    emits('update:modelValue', newTripWith);
+  let newTripWith = [...props.modelValue, friend];
+  emits('update:modelValue', newTripWith);
 }
 
 onMounted(() => {
@@ -52,6 +64,27 @@ function loadFriends() {
     }
   );
 }
+
+async function searchFriendsHandler() {
+  if (searchQuery.value === '') {
+    searchResults.value = [];
+    return;
+  }
+  isDataLoaded.value = false;
+  try {
+    const result = await searchFriends(searchQuery.value);
+    searchResults.value = result.map(user => ({
+      id: user.id,
+      name: user.name,
+      profilePicture: user.profilePicture ? `${VITE_VUE_API_URL}upload?name=${user.profilePicture}` : defaultProfile,
+      relation: user.relation || 'Unknown'
+    }));
+    isDataLoaded.value = true;
+  } catch (error) {
+    console.error('회원 정보를 가져오는 중 오류 발생:', error);
+    isDataLoaded.value = true; 
+  }
+}
 </script>
 
 
@@ -68,13 +101,12 @@ function loadFriends() {
           hide-details
           single-line
           class="search-field"
-          @input="loadFriends"
-          >
+        >
           <v-icon>{{ mdiMagnify }}</v-icon>
         </v-text-field>
       </v-col>
       <v-col>
-        <v-btn @click="loadFriends" class="search-btn">검색</v-btn>
+        <v-btn @click="searchFriendsHandler" class="search-btn">검색</v-btn>
       </v-col>
     </v-row>
     <v-row>
@@ -87,8 +119,8 @@ function loadFriends() {
       </v-col>
     </v-row>
     <v-sheet class="friend-list" outlined v-if="isDataLoaded">
-      <v-row v-show="filteredFriends.length > 0" class="py-2 px-3">
-        <v-col cols="12" v-for="friend in filteredFriends" :key="friend.id" class="box">
+      <v-row v-show="displayResults.length > 0" class="py-2 px-3">
+        <v-col cols="12" v-for="friend in displayResults" :key="friend.id" class="box">
           <v-row align="center" no-gutters>
             <v-col cols="4" class="d-flex justify-center">
               <img :src="friend.profilePicture" alt="프로필 사진" class="profile-picture">
@@ -105,7 +137,7 @@ function loadFriends() {
           </v-row>
         </v-col>
       </v-row>
-      <v-row v-show="filteredFriends.length === 0" class="py-2 px-3">
+      <v-row v-show="displayResults.length === 0" class="py-2 px-3">
         <v-col>
           <p class="text-center grey--text">친구가 없습니다.</p>
         </v-col>
