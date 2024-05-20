@@ -21,10 +21,18 @@ export const usePlanStore = defineStore("planStore", () => {
     }
   };
 
+  const getPlaceStartEnd = (idx) => {
+    pickedPlace.value[idx]
+    let start = new Date(period.value[0].getTime()+(1000*60*60*pickedPlace.value[idx].y))
+    let end = new Date(start.getTime()+(1000*60*60*pickedPlace.value[idx].h)-1)
+    return {start, end}
+  };
+
   return {
     period,
     pickedPlace,
     getStartEnd,
     getPeriodTime,
+    getPlaceStartEnd
   };
 });

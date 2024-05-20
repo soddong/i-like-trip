@@ -22,7 +22,7 @@ onMounted(() => {
         row: period * 24,
         column: 1,
         acceptWidgets: true,
-        margin: "0 0 0 10",
+        margin: "15 0 0 10",
         resizable: { handles: 's' },
         removable: true
     }, document.getElementById('grid2'));
@@ -50,6 +50,17 @@ onMounted(() => {
             pickedPlace.value.splice(idx, 1)
         }
     });
+
+    grid.on('change', function (event, items) {
+        items.forEach((item) => {
+            console.log(item.id, item.x, item.y, item.h, item.w)
+            let idx = pickedPlace.value.findIndex((e) => item.id === e.id)
+            pickedPlace.value[idx].y=item.y
+            pickedPlace.value[idx].h=item.h
+            console.log(planStore.getPlaceStartEnd(idx))
+            
+        });
+    });
 });
 
 </script>
@@ -62,12 +73,12 @@ onMounted(() => {
         </div>
         <v-sheet class="border overflow-y-auto overflow-x-hidden position-relative" id="grid2-wrap"
             style="height: 800px; width: 100%;">
-            <div id="time-line">
+            <div id="time-line" :style="{ height: planStore.getPeriodTime() * 24 * 100 + 'px' }">
                 <div class="time-line-day" v-for="day in planStore.getPeriodTime()" :key="day">
-                    <div style="width: 10px; background-color: aqua">{{ day }}일차</div>
+                    <div style="width: 10px; background-color: #e4e4e4">{{ day }}일차</div>
                     <div class="time-line-hour">
                         <div v-for="(item, index) in 24" :key="index">
-                            <p>{{ item - 1 }}시</p>
+                            <p>{{ item - 1<10?"0"+(item-1):item-1 }}:00</p>
                         </div>
                     </div>
                 </div>
@@ -75,7 +86,7 @@ onMounted(() => {
             <v-sheet class="grid-stack position-absolute" id="grid2">
                 <v-container class="pa-0 grid-stack-item" v-for="place in pickedPlace" :key="place.id" :gs-x="place.x"
                     :gs-y="place.y" :gs-w="place.w" :gs-h="place.h" :gs-id="place.id" :id="place.id"
-                    @click="mapMove(place.lat, place.lng)">
+                    >
                     <v-row class="ma-0 grid-stack-item-content border">
                         <v-col cols="4" style="height: 100%;">
                             <v-img cover rounded style="height: 100%; width: 100%;"
@@ -83,13 +94,17 @@ onMounted(() => {
                             </v-img>
                         </v-col>
                         <v-col cols="8">
-                            <v-sheet class="d-flex flex-column h-100 justify-space-evenly">
-                                <div class="pb-1 text-truncate " style="font-size: small;">{{ place.title }}</div>
-                                <div class="text-truncate pb-1" style="font-size: x-small;">{{ place.addr }}</div>
+                            <v-sheet class="d-flex flex-column h-100 justify-space-between">
+                                <div class="pb-1 text-truncate " style="font-size: small;">
+                                    <v-chip size="x-small" :prepend-icon="attrTypes[place.attractionType].icon">{{
+                                        attrTypes[place.attractionType].title }}
+                                    </v-chip>
+                                    {{ place.title }}
+                                </div>
+                                <div @click="mapMove(place.lat, place.lng)" class="text-truncate pb-1" style="font-size: x-small;">{{ place.addr }}</div>
                                 <div style="font-size: x-small;">
-                                <v-chip size="x-small" :prepend-icon="attrTypes[place.attractionType].icon">{{
-                                    attrTypes[place.attractionType].title }}</v-chip>
-                            </div>
+                                    <input type="text" name="" id="" >
+                                </div>
                             </v-sheet>
                         </v-col>
                     </v-row>
@@ -113,7 +128,6 @@ onMounted(() => {
 }
 
 #time-line {
-    height: 9600px;
     width: 100%;
     box-sizing: border-box;
 }
