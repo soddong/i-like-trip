@@ -1,11 +1,10 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { onMounted } from 'vue';
 import PlanCheckDate from "./item/PlanCheckDate.vue";
 import { GridStack } from 'gridstack';
 import { usePlanStore } from '@/stores/plan';
 
 const planStore = usePlanStore()
-const info = ref("");
 let grid = null;
 
 onMounted(() => {
@@ -18,11 +17,6 @@ onMounted(() => {
         acceptWidgets: true,
         margin: "0 0 0 10"
     }, document.getElementById('grid2'));
-
-    grid.on("dragstop", function (event, element) {
-        const node = element.gridstackNode;
-        info.value = `you just dragged node #${node.id} to ${node.x},${node.y} – good job!`;
-    });
 });
 
 </script>
