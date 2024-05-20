@@ -55,7 +55,7 @@ public class PlanController {
 	/**
 	 * TODO: 검색 조건에 따른 여행계획 조회
 	 *
-	 * @param planId
+	 * @param searchDto
 	 * @return
 	 */
 	@GetMapping("")
@@ -64,6 +64,9 @@ public class PlanController {
 			List<PlanDto> planDtos = null;
 			if (searchDto.getKeyword() == null || searchDto.getKeyword().isBlank()) {
 				planDtos = planService.getPlans();
+				for (PlanDto planDto : planDtos) {
+					System.out.println(planDto.toString());
+				}
 			} else {
 				planDtos = planService.searchPlans(searchDto);
 			}
@@ -76,6 +79,7 @@ public class PlanController {
 			return exceptionHandling(e);
 		}
 	}
+
 	// TODO : 등록하기
 	@PostMapping("")
 	public ResponseEntity<?> registPlan(@RequestBody PlanReponseDto newPlan) {

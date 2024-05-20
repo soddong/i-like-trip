@@ -5,7 +5,8 @@
 <mapper namespace="com.ssafy.plan.model.mapper.PlanMapper">
 	<resultMap type="PlanDto" id="plan">
 		<result column="plan_id" property="planId" />
-		<result column="maker_id" property="makerId" />
+		<result column="title" property="title" />
+		<result column="user_id" property="makerId" />
 		<result column="regist_date" property="registDate" />
 		<result column="visibility" property="visibility" />
 		<result column="comment" property="comment" />
@@ -13,7 +14,7 @@
 
 	<select id="getPlan" parameterType="int" resultMap="plan">
 		select
-		plan_id, maker_id, regist_date, visibility, comment
+		plan_id, title, user_id, regist_date, visibility, comment
 		from plan
 		where
 		plan_id = #{planId}
@@ -21,7 +22,7 @@
 
 	<select id="getPlans" parameterType="int" resultMap="plan">
 		select
-		plan_id, maker_id, regist_date, visibility, comment
+		plan_id, title, user_id, regist_date, visibility, comment
 		from plan
 		where
 		visibility = #{visibility}
@@ -29,17 +30,17 @@
 
 	<select id="searchPlans" parameterType="planSearchDto"
 		resultMap="plan">
-		select plan_id, maker_id, regist_date, visibility, comment
+		select plan_id, title, user_id, regist_date, visibility, comment
 		from plan
 		<where>
 			<if test="keyword == 'maker'">
-				and maker_id = #{word}
+				and user_id = #{word}
 			</if>
 		</where>
 	</select>
 	
 	<insert id="registPlan">
-		insert into plan (maker_id, comment)
+		insert into plan (user_id, comment)
 		value (#{plan.makerId},#{plan.comment})
 		<selectKey keyProperty="plan.planId" keyColumn="plan_id" resultType="int" order="AFTER">
 			select last_insert_id() as plan_id;
