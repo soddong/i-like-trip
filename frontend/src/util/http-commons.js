@@ -10,6 +10,9 @@ function localAxios() {
     headers: {
       "Content-Type": "application/json;charset=utf-8",
     },
+    paramsSerializer: {
+      indexes: null,
+    },
   });
 
   // instance.interceptors.request.use(
