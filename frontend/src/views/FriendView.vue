@@ -14,9 +14,8 @@
 </template>
   
 <script setup>
-import { ref } from 'vue';
-import MyfriendNews from '@/components/mypage/MyfriendNews.vue'
-import MyfriendList from '@/components/mypage/MyfriendList.vue'
+import MyfriendNews from '@/components/friend/MyfriendNews.vue'
+import MyfriendList from '@/components/friend/MyfriendList.vue'
 </script>
 
 <style>
