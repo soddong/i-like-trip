@@ -15,7 +15,7 @@ const toggleDrawer = () => {
     drawerOpen.value = !drawerOpen.value;
 };
 
-const menuList = ref([
+const mainMenuList = ref([
     {
         title: '여행 일정들',
         to: { name: "Board" } // Plan 에러나서 임시로
@@ -23,10 +23,17 @@ const menuList = ref([
     {
         title: '자유게시판',
         to: { name: "Board" }
-    // },
-    // {
-    //     title: '마이페이지',
-    //     to: { name: "Mypage" }
+    }
+])
+
+const myMenuList = ref([
+    {
+        title: '내친구',
+        to: { name: "friend" } 
+    },
+    {
+        title: '내계획',
+        to: { name: "Mypage" }
     }
 ])
 
@@ -55,49 +62,58 @@ watch(
             </RouterLink>
         </v-app-bar-title>
 
-
         <!-- Automatically collapses into dropdown menu -->
         <v-spacer></v-spacer>
         <v-app-bar-nav-icon @click="toggleDrawer" v-show="!mdAndUp"></v-app-bar-nav-icon>
-        <v-btn-group color="#f9f7f0" v-show="mdAndUp">
-            <v-btn v-for="menu in menuList" :key="menu.title" :to="menu.to">{{ menu.title }}</v-btn>
+
+        <!-- Centered main menu -->
+        <v-btn-group v-show="mdAndUp" class="main-button-group">
+            
+            <v-btn v-for="menu in mainMenuList" :key="menu.title" :to="menu.to" class="main-button">{{ menu.title }}</v-btn>
         </v-btn-group>
-        <!-- <v-spacer></v-spacer> -->
+
+        <!-- Sub menu -->
+        <v-btn-group v-show="mdAndUp" class="sub-button-group">
+            <v-btn v-for="menu in myMenuList" :key="menu.title" :to="menu.to" class="sub-button">{{ menu.title }}</v-btn>
+        </v-btn-group>
+
+
         <v-btn v-if="!userStore.isSignIn" :to="{ name: 'sign-in' }">로그인</v-btn>
         <v-menu v-else min-width="120px" rounded>
-    <template v-slot:activator="{ props }">
-      <v-btn icon v-bind="props">
-        <v-avatar color="brown">
-          <img :src="userProfile" alt="Profile Image" class="cover-image">
-        </v-avatar>
-      </v-btn>
-    </template>
-    <v-card>
-      <v-card-text>
-        <div class="mx-auto text-center">
-          <v-avatar color="brown">
-            <img :src="userProfile" alt="Profile Image" class="cover-image">
-          </v-avatar>
-          <h3>{{ userStore.userInfo.name }}</h3>
-          <p class="text-caption mt-1">
-            {{userStore.userInfo.email}}
-          </p>
-          <v-divider class="my-1"></v-divider>
-          <v-btn variant="text" :to="{ name: 'Mypage' }" rounded>
-            내정보
-          </v-btn>
-          <v-divider class="my-1"></v-divider>
-          <v-btn variant="text" rounded @click="userStore.userLogout">
-            로그아웃
-          </v-btn>
-        </div>
-      </v-card-text>
-    </v-card>
-  </v-menu>
+            <template v-slot:activator="{ props }">
+                <v-btn icon v-bind="props">
+                    <v-avatar color="brown">
+                        <img :src="userProfile" alt="Profile Image" class="cover-image">
+                    </v-avatar>
+                </v-btn>
+            </template>
+            <v-card>
+                <v-card-text>
+                    <div class="mx-auto text-center">
+                        <v-avatar color="brown">
+                            <img :src="userProfile" alt="Profile Image" class="cover-image">
+                        </v-avatar>
+                        <h3>{{ userStore.userInfo.name }}</h3>
+                        <p class="text-caption mt-1">
+                            {{userStore.userInfo.email}}
+                        </p>
+                        <v-divider class="my-1"></v-divider>
+                        <v-btn variant="text" :to="{ name: 'Mypage' }" rounded>
+                            내정보
+                        </v-btn>
+                        <v-divider class="my-1"></v-divider>
+                        <v-btn variant="text" rounded @click="userStore.userLogout">
+                            로그아웃
+                        </v-btn>
+                    </div>
+                </v-card-text>
+            </v-card>
+        </v-menu>
     </v-app-bar>
     <v-navigation-drawer v-model="drawerOpen" location="right" disableResizeWatcher>
         <v-list two-line>
-            <v-list-item v-for="menu in menuList" :title="menu.title" :to="menu.to" :key="menu.title"></v-list-item>
+            <v-list-item v-for="menu in mainMenuList" :title="menu.title" :to="menu.to" :key="menu.title"></v-list-item>
+            <v-list-item v-for="menu in myMenuList" :title="menu.title" :to="menu.to"</v-list-item>
         </v-list>
     </v-navigation-drawer>
 </template>
@@ -129,6 +145,15 @@ watch(
     /* 글씨 크기 조절 */
 }
 
+.main-button {
+  background-color: #178ca4;
+  color: white;
+  
+}
+
+.sub-button {
+  color: "#f9f7f0",
+}
 
 .cover-image {
   width: 100%;

@@ -116,10 +116,8 @@ function getRelationText(relation) {
 function getButtonClass(relation) {
   return {
     'friend-button': true,
-    'waiting': relation === 1,
-    'accepted': relation === 2,
-    'friends': relation === 3,
-    'none': relation === 0
+    'cancle': relation === 1 || relation==3,
+    'register': relation === 2,
   };
 }
 
@@ -185,13 +183,13 @@ tr:not(:last-child) td {
   transition: background-color 0.3s;
 }
 
-.friend-button.accepted {
-  background-color: rgb(7, 42, 64);; /* 진한 노란색 */
+.friend-button.register {
+  background-color:#1cb2b99f; /* 진한 노란색 */
   color: white;
 }
 
-.friend-button.friends {
-  background-color: #e44a4a; /* 녹색 */
+.friend-button.cancle {
+  background-color: #f44336bd; /* 녹색 */
   color: white;
 }
 </style>

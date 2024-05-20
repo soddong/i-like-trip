@@ -5,6 +5,7 @@
         <v-card class="friend-info-card" outlined>
           <h3 class="highlight">내 친구 목록</h3>
           <hr class="divider">
+          <FriendCount :ilikeCount="ilikeCount" :likemeCount="likemeCount"></FriendCount>
           <FriendMemberSearch :existingFriends="friends" :userId="userId" @add-friend="handleAddFriend"/>
           <FriendList :friends="friends" @add-friend="handleAddFriend" @remove-friend="handleRemoveFriend"/>
         </v-card>
@@ -17,6 +18,7 @@
 import { ref, onMounted } from 'vue';
 import FriendMemberSearch from '@/components/friend/FriendMemberSearch.vue';
 import FriendList from '@/components/friend/FriendList.vue';
+import FriendCount from '@/components/friend/FriendCount.vue';
 import { fetchFriends, addFriend, removeFriend } from '@/api/friend'; 
 import { useUserStore } from '@/stores/user';
 
@@ -25,21 +27,36 @@ const friends = ref([]);
 const userStore = useUserStore();
 const userId = userStore.userId;
 
-function updateFriendsList() {
+const ilikeCount = ref(0);
+const likemeCount = ref(0);
+
+async function updateFriendsList() {
   fetchFriends(userId, 
     (data) => {
-      friends.value = data.map(friend => ({
-        id: friend.friendId,
-        name: friend.friendName,
-        profilePicture: friend.friendProfile,
-        relation: friend.relation
-      }));
+      ilikeCount.value = 0;
+      likemeCount.value = 0;
+
+      friends.value = data.map(friend => {
+        if (friend.relation === 1 || friend.relation === 3) {
+          ilikeCount.value++;
+        }
+        if (friend.relation === 2 || friend.relation === 3) {
+          likemeCount.value++;
+        }
+        return {
+          id: friend.friendId,
+          name: friend.friendName,
+          profilePicture: friend.friendProfile,
+          relation: friend.relation
+        };
+      });
     },
     (error) => {
       console.error('Error loading friends:', error);
     }
   );
 }
+
 
 onMounted(() => {
   updateFriendsList();
@@ -79,11 +96,10 @@ function handleRemoveFriend(friend) {
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 75vh;
-  background-color: #f0f0f0;
+  height: 85vh;
+  /* background-color: #f0f0f0; */
   padding: 20px;
   box-sizing: border-box;
-  overflow-y: auto;
 }
 
 .friend-info-card {
@@ -93,12 +109,12 @@ function handleRemoveFriend(friend) {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   width: 100%;
   margin-bottom: 20px;
-  height: 70vh;
+  height: 80vh;
   overflow-y: auto;
 }
 
 h3 {
-  color: #666;
+  /* color: #666; */
 }
 
 .divider {
@@ -106,4 +122,10 @@ h3 {
   border-top: 1px solid #ddd;
   margin: 20px 0;
 }
+
+.highlight {
+  display: inline-block;
+  box-shadow: inset 0 -10px 0 #fcd9e5;
+}
+
 </style>
