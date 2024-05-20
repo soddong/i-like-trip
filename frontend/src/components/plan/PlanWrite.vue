@@ -5,6 +5,8 @@ import PlanPickTripwith from '@/components/plan/step/PlanPickTripwith.vue'
 import PlanPickTripwithSearch from '@/components/plan/step/item/PlanPickTripwithSearch.vue'
 import PlanPickPlace from '@/components/plan/step/PlanPickPlace.vue'
 import PlanSearchPlace from '@/components/plan/step/PlanSearchPlace.vue'
+
+import createPlan from '@/api/plan.js'
 import { mdiDotsVertical } from '@mdi/js';
 import { ref } from 'vue';
 
@@ -49,6 +51,33 @@ const mapMove = (lat, lng) => {
         map.value.panTo(new kakao.maps.LatLng(lat, lng));
     }
 }
+
+const handleCreatePlan = () => {
+  const newPlan = {
+    plan: {
+
+    }, 
+    places: attrList.value.map((attr, index) => ({
+      order: index + 1,
+      startTime: '',
+      endTime: '',
+      comment: '',
+      place: attr,
+    })),
+    members: tripwith.value,
+  };
+
+  createPlan(
+    newPlan,
+    () => {
+      alert('Plan created successfully!');
+    },
+    (error) => {
+      console.error(error);
+      alert('Failed to create plan');
+    }
+  );
+};
 </script>
 
 <template>
@@ -137,6 +166,8 @@ const mapMove = (lat, lng) => {
         <PlanSearchPlace @open-detail="openDetail" @change-attr-list="changeAttrList" :mapMove="mapMove"
             :attrList="attrList" />
     </v-navigation-drawer>
+    <v-btn @click="handleCreatePlan">Create Plan</v-btn>
+    
 </template>
 
 <style>
