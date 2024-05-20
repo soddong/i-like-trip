@@ -33,7 +33,15 @@ function onClick() {
 
         nextTick(() => {
             GridStack.setupDragIn('.grid-stack-item', {
-                helper: "clone"
+                helper: (e)=>{
+                    let element=e.target
+                    while(!element.classList.contains("grid-stack-item")){
+                        element=element.parentElement
+                    }
+                    emit('openDetail')
+                    let clone=element.cloneNode(true) 
+                    return clone;
+                }
             });
         });
 

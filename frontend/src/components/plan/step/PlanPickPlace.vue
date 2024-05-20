@@ -6,6 +6,7 @@ import { usePlanStore } from '@/stores/plan';
 import { storeToRefs } from "pinia";
 
 const props = defineProps({
+    mapMove: Function,
     attrList: Array
 })
 const planStore = usePlanStore()
@@ -21,29 +22,33 @@ onMounted(() => {
         column: 1,
         acceptWidgets: true,
         margin: "0 0 0 10",
-        resizable: { handles: 's,n' },
+        resizable: { handles: 's' },
         removable: true
     }, document.getElementById('grid2'));
 
+    grid.on('dropped', function (event, previousWidget, newWidget) {
+        let newId = "w_" + crypto.randomUUID() + "_p"
+        let attrId = newWidget.id.substring(2)
+        let attr = { ...(props.attrList.find((element) => attrId == element.attractionId)) }
+        attr.x = newWidget.x
+        attr.y = newWidget.y
+        attr.h = newWidget.h
+        attr.w = newWidget.w
+        attr.id = newId
+        pickedPlace.value.push(attr)
+        grid.removeWidget(newWidget.id)
+        nextTick(() => {
+            grid.makeWidget(newId);
+        });
+    });
 
-    grid.on("added", (e, items) => {
-        pickedPlace.value.push(items[0])
-        let attrId = items[0].id.substring(2)
-        console.log("추가됨", attrId)
-        console.log(props.attrList.find((element) => attrId == element.attractionId))
-        pickedPlace.value.push(props.attrList.find((element) => attrId == element.attractionId))
-        // nextTick(() => {
-        //     grid.batchUpdate(true)
-        //     grid.makeWidget(element.id);
-        //     grid.batchUpdate(false)
-        // });
-    })
-
-    // grid.on('dropped', function (event, previousWidget, newWidget) {
-    //     // console.log(event)
-    //     // console.log("추가됨", previousWidget, newWidget)
-    //     // grid.removeWidget(newWidget.id)
-    // });
+    grid.on('removed', function (event, items) {
+        if (items[0].id.endsWith("p")) {
+            let id = items[0].id
+            let idx = pickedPlace.value.findIndex((e) => id === e.id)
+            pickedPlace.value.splice(idx, 1)
+        }
+    });
 });
 
 </script>
@@ -67,19 +72,39 @@ onMounted(() => {
                 </div>
             </div>
             <v-sheet class="grid-stack position-absolute" id="grid2">
-                <v-container class="pa-0 grid-stack-item" :gs-x="0" :gs-y="0" :gs-w="1" :gs-h="1" gs-id="w_125406"
-                    id="w_125406" key="w_125406" @click="mapMove(w.lat, w.lng)">
+                <v-container class="pa-0 grid-stack-item" v-for="place in pickedPlace" :key="place.id" :gs-x="place.x"
+                    :gs-y="place.y" :gs-w="place.w" :gs-h="place.h" :gs-id="place.id" :id="place.id"
+                    @click="mapMove(place.lat, place.lng)">
                     <v-row class="ma-0 grid-stack-item-content border">
                         <v-col cols="4">
-                            <v-img cover rounded style="height: 100%; width: 70px;" :src="'/src/assets/logo2.png'">
+                            <v-img cover rounded style="height: 100%; width: 70px;"
+                                :src="place.imgSmall ? place.imgSmall : '/src/assets/logo2.png'">
 
                             </v-img>
                         </v-col>
                         <v-col cols="8" align-self="center">
-                            <v-row class="pb-1" style="font-size: small;">제목</v-row>
+                            <v-row class="pb-1 text-truncate " style="font-size: small;">{{ place.title }}</v-row>
+                            <v-row style="font-size: x-small;">{{ place.attractionType }}</v-row>
+                            <v-row class="text-truncate pb-1" style="font-size: x-small;">{{ place.addr }}</v-row>
+                            <v-row>
+                                
+                                <v-menu location="bottom">
+                                    <template v-slot:activator="{ props }">
+                                        <v-btn size="x-small" color="success" dark v-bind="props">메모</v-btn>
+                                    </template>
 
-                            <v-row style="font-size: x-small;">23</v-row>
-                            <v-row class="text-truncate pb-1" style="font-size: x-small;">ㅈ주소</v-row>
+                                    <v-list>
+                                        <v-list-item >
+                                            <!-- <v-list-item-title>{{ item.title }}</v-list-item-title> -->
+                                            <v-text-field
+                                                name="name"
+                                                label="label"
+                                                id="id"
+                                            ></v-text-field>
+                                        </v-list-item>
+                                    </v-list>
+                                </v-menu>
+                            </v-row>
                         </v-col>
                     </v-row>
                 </v-container>
