@@ -24,8 +24,6 @@ const loadArticles = (params) => {
       getMainImageUrl(article.articleNo, (blob) => {
         const imageUrl = URL.createObjectURL(blob);
         articleImages.value[article.articleNo] = imageUrl;
-      }, error => {
-        console.error(error);
       });
     });
   }, error => {
@@ -85,6 +83,9 @@ const moveWrite = () => {
   align-items: flex-start; 
   gap: 16px; 
   padding: 20px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+  border: none;
+  box-shadow: none;
+  
+  /* box-shadow: 0 2px 12px rgba(0,0,0,0.1); */
 }
 </style>

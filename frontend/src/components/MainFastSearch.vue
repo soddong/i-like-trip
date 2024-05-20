@@ -1,6 +1,5 @@
 <script setup>
-import { mdiMagnify } from '@mdi/js';
-import VSearchInput from '@/components/common/VSearchInput.vue'; 
+import VSearchInput from '@/components/common/VSearchInput.vue';
 </script>
 
 <template>
@@ -21,7 +20,7 @@ import VSearchInput from '@/components/common/VSearchInput.vue';
 .head {
     background-color: #f9f7f0;
     padding-top: 200px; 
-    height: 500px;
+    height: 800px;
 }
 .title {
     font-size: 45px;
