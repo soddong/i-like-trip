@@ -98,7 +98,7 @@ const onLoadKakaoMap = (mapRef) => {
         <v-container class="h-screen d-flex flex-column justify-center" :style="{ minWidth: stepDetailwidth + 'px' }">
             <PlanPickDate v-if="curStep === 1" />
             <PlanPickTripwith v-if="curStep === 2" v-model="tripwith" />
-            <PlanPickPlace v-if="curStep === 3" />v
+            <PlanPickPlace v-if="curStep === 3" />
         </v-container>
     </v-sheet>
     <v-main>
@@ -120,6 +120,6 @@ const onLoadKakaoMap = (mapRef) => {
 
 <style>
 html {
-    overflow-y: auto
+    overflow: auto;
 }
 </style>

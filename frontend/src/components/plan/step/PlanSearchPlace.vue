@@ -25,8 +25,8 @@ function onClick() {
         grid.batchUpdate(true)
         attractionList.value.forEach(element => {
             grid.addWidget(`
-    <div class="v-container v-locale--is-ltr border pa-0 grid-stack-item ui-resizable-disabled" gs-x="0" gs-y="0">
-        <div class="v-row ma-0 grid-stack-item-content">
+    <div class="v-container v-locale--is-ltr pa-0 grid-stack-item ui-resizable-disabled" gs-x="0" gs-y="0">
+        <div class="v-row ma-0 grid-stack-item-content border">
             <div class="v-col v-col-4"><img class="rounded"
                     src="${element.imgSmall ? element.imgSmall : '/src/assets/logo2.png'}" alt=""
                     style="height: 100%; width: 70px; object-fit: cover;"></div>
@@ -83,26 +83,26 @@ onMounted(() => {
 
             </v-col>
         </v-sheet>
-        <v-sheet class="grid-stack border fill-height overflow-auto" id="grid1">
-            <!-- <v-container class="border pa-0 grid-stack-item">
-                <v-row class="ma-0 grid-stack-item-content">
+        <!-- <v-sheet class="grid-stack border fill-height overflow-auto" id="grid1">
+            <v-container class="pa-0 grid-stack-item">
+                <v-row class="ma-0 grid-stack-item-content border">
                     <v-col cols="4">
                         <img style="height: 100%; width: 70px; object-fit: cover" class="rounded"
                             src="http://tong.visitkorea.or.kr/cms/resource/62/219162_image3_1.jpg" alt="">
                     </v-col>
                     <v-col cols="8" align-self="center">
-                        <v-row style="font-size: small;">비슬산자연휴양림</v-row>
+                        <v-row class="pb-1" style="font-size: small;">비슬산자연휴양림</v-row>
 
-                        <v-row class="py-1" style="font-size: x-small;">관광지</v-row>
-                        <v-row class="text-truncate" style="font-size: x-small;">대구광역시 달성군 유가읍 일연선사길 61</v-row>
+                        <v-row style="font-size: x-small;">관광지</v-row>
+                        <v-row class="text-truncate pb-1" style="font-size: x-small;">대구광역시 달성군 유가읍 일연선사길 61</v-row>
                     </v-col>
                 </v-row>
-            </v-container> -->
-        </v-sheet>
+            </v-container>
+        </v-sheet> -->
     </v-sheet>
 </template>
 
-<style>
+<style scoped>
 /* 스크롤바 설정*/
 #grid1::-webkit-scrollbar {
     width: 7px;
@@ -111,7 +111,7 @@ onMounted(() => {
 /* 스크롤바 막대 설정*/
 #grid1::-webkit-scrollbar-thumb {
     background-color: rgb(83, 83, 83);
-    /* 스크롤바 둥글게 설정    */
+    /* 스크롤바 둥글게 설정 */
     border-radius: 5px;
 }
 
