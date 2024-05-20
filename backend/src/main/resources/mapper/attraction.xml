@@ -30,11 +30,15 @@
 					and gugun_code = #{gugunCode}
 				</if>
 			</if>
-			<if test="contentType != null and contentType != 0">
-				and type_id = #{contentType}
+			<if test="contentType != null and contentType.size() != 0">
+				and type_id in
+				<foreach item="item" index="index" collection="contentType"
+					open="(" separator="," close=")">
+					#{item}
+				</foreach>
 			</if>
 			<if test='keyword != null and keyword != ""'>
-				and title = concat('%',#{keyword},'%')
+				and title like concat('%',#{keyword},'%')
 			</if>
 		</where>
 		limit 25;
