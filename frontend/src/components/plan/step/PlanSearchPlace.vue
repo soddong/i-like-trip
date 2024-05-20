@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, nextTick } from 'vue';
+import { ref, nextTick } from 'vue';
 import { mdiMagnify } from '@mdi/js';
 import { getAttraction } from '@/api/plan';
 import { GridStack } from 'gridstack';
@@ -18,7 +18,6 @@ const props = defineProps({
     mapMove: Function,
     attrList: Array
 })
-let grid = null;
 
 function onClick() {
     loading.value = true
@@ -26,23 +25,16 @@ function onClick() {
 
         loading.value = false;
         loaded.value = true;
-        grid.removeAll(false)
 
-        res.data.map((element, idx) => {
-            element.x = idx;
-            element.y = 0;
-            element.w = 1;
-            element.h = 1;
+        res.data.map((element) => {
             element.id = "w_" + element.attractionId
         });
         emit('changeAttrList', res.data)
+
         nextTick(() => {
-            grid.batchUpdate(true)
-            res.data.forEach((element) => {
-                console.log(element)
-                grid.makeWidget(element.id);
+            GridStack.setupDragIn('.grid-stack-item', {
+                helper: "clone"
             });
-            grid.batchUpdate(false)
         });
 
 
@@ -51,18 +43,6 @@ function onClick() {
         console.log(e)
     })
 }
-onMounted(() => {
-    grid = GridStack.init({
-        cellHeight: "100px",
-        column: 1,
-        disableResize: true,
-        margin: 0
-    }, document.getElementById('grid1'));
-
-    grid.on('dragstart', () => {
-        emit('openDetail')
-    })
-})
 
 </script>
 
@@ -91,10 +71,10 @@ onMounted(() => {
 
             </v-col>
         </v-sheet>
-        <v-sheet class="grid-stack border fill-height overflow-auto" id="grid1">
-            <v-container class="pa-0 grid-stack-item" v-for="(w, idx) in attrList" :gs-x="0" :gs-y="idx" :gs-w="1"
-                :gs-h="1" :gs-id="w.id" :id="w.id" :key="w.id" @click="mapMove(w.lat, w.lng)">
-                <v-row class="ma-0 grid-stack-item-content border">
+        <v-sheet class="border fill-height overflow-auto" id="grid1">
+            <v-container class="pa-0 grid-stack-item" v-for="w in attrList" :gs-id="w.id" :key="w.id" :id="w.id"
+                @click="mapMove(w.lat, w.lng)" style="height: 100px;">
+                <v-row class="ma-0 grid-stack-item-content border" style="height: 100%;">
                     <v-col cols="4">
                         <v-img cover rounded style="height: 100%; width: 70px;"
                             :src="w.imgSmall ? w.imgSmall : '/src/assets/logo2.png'">
