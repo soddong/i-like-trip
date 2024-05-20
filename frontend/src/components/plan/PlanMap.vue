@@ -22,7 +22,7 @@ const curStep = ref(1);
 const map = ref();
 
 const tripwith = ref([]);
-
+const attrList = ref([]);
 const onLoadKakaoMap = (mapRef) => {
     map.value = mapRef;
 
@@ -33,7 +33,18 @@ const onLoadKakaoMap = (mapRef) => {
         stepDetailFold.value = true;
     });
 };
+const changeAttrList = (data) => {
+    attrList.value = data
+}
 
+const mapMove = (lat, lng) => {
+    console.log(lat, lng, "불림")
+    if (map.value) {
+        // 지도 중심을 부드럽게 이동시킵니다
+        // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
+        map.value.panTo(new kakao.maps.LatLng(lat, lng));
+    }
+}
 </script>
 
 <template>
@@ -104,7 +115,12 @@ const onLoadKakaoMap = (mapRef) => {
     <v-main>
         <KakaoMap @on-load-kakao-map="onLoadKakaoMap" :lat="coordinate.lat" :lng="coordinate.lng" :draggable="true"
             height="100%" width="100%">
-            <KakaoMapMarker :lat="coordinate.lat" :lng="coordinate.lng"></KakaoMapMarker>
+            <KakaoMapMarker v-for="item in attrList" :key="item.attractionId" :lat="item.lat" :lng="item.lng" :image="{
+                imageSrc: 'src/assets/marker/type12.png',
+                imageWidth: 25,
+                imageHeight: 35,
+                imageOption: {}
+            }"></KakaoMapMarker>
         </KakaoMap>
     </v-main>
 
@@ -114,7 +130,7 @@ const onLoadKakaoMap = (mapRef) => {
         </v-sheet>
     </v-navigation-drawer>
     <v-navigation-drawer permanent :width="curStep == 3 ? stepDetailwidth - 50 : 1" location="right">
-        <PlanSearchPlace />
+        <PlanSearchPlace @change-attr-list="changeAttrList" :mapMove="mapMove" />
     </v-navigation-drawer>
 </template>
 

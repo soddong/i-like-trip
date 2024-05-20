@@ -13,18 +13,21 @@ const searchFilter = ref({
 })
 const loaded = ref(false)
 const loading = ref(false)
-const attractionList = ref([])
-
+const emit = defineEmits(['changeAttrList'])
+const props = defineProps({
+    mapMove: Function
+})
 let grid = null;
+
 function onClick() {
     loading.value = true
     getAttraction({}, (res) => {
-        attractionList.value = res.data
+        emit('changeAttrList', res.data)
         loading.value = false;
         loaded.value = true;
         grid.batchUpdate(true)
-        attractionList.value.forEach(element => {
-            grid.addWidget(`
+        res.data.forEach(element => {
+            let widget = grid.addWidget(`
     <div class="v-container v-locale--is-ltr pa-0 grid-stack-item ui-resizable-disabled" gs-x="0" gs-y="0">
         <div class="v-row ma-0 grid-stack-item-content border">
             <div class="v-col v-col-4"><img class="rounded"
@@ -39,6 +42,7 @@ function onClick() {
     </div>
     
         `)
+            widget.addEventListener('click', () => { props.mapMove(element.lat, element.lng) });
         });
         grid.batchUpdate(false)
     }, (e) => {
@@ -53,8 +57,8 @@ onMounted(() => {
         disableResize: true,
         margin: 0
     }, document.getElementById('grid1'));
-})
 
+})
 </script>
 
 <template>
@@ -65,8 +69,7 @@ onMounted(() => {
                     :append-inner-icon="mdiMagnify" @click:append-inner="onClick" :loading="loading">
                 </v-text-field>
                 <v-row class="overflow-auto">
-                    <v-chip v-for="category in placeCategory" :key="category.value" variant="tonal" size="small"
-                        @click="">
+                    <v-chip v-for="category in placeCategory" :key="category.value" variant="tonal" size="small">
                         {{ category.title }}
                     </v-chip>
                 </v-row>
@@ -83,7 +86,7 @@ onMounted(() => {
 
             </v-col>
         </v-sheet>
-        <!-- <v-sheet class="grid-stack border fill-height overflow-auto" id="grid1">
+        <v-sheet class="grid-stack border fill-height overflow-auto" id="grid1">
             <v-container class="pa-0 grid-stack-item">
                 <v-row class="ma-0 grid-stack-item-content border">
                     <v-col cols="4">
@@ -98,7 +101,7 @@ onMounted(() => {
                     </v-col>
                 </v-row>
             </v-container>
-        </v-sheet> -->
+        </v-sheet>
     </v-sheet>
 </template>
 
