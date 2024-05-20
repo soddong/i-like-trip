@@ -37,6 +37,10 @@ const changeAttrList = (data) => {
     attrList.value = data
 }
 
+const openDetail = () => {
+    stepDetailFold.value = false;
+}
+
 const mapMove = (lat, lng) => {
     console.log(lat, lng, "불림")
     if (map.value) {
@@ -130,7 +134,8 @@ const mapMove = (lat, lng) => {
         </v-sheet>
     </v-navigation-drawer>
     <v-navigation-drawer permanent :width="curStep == 3 ? stepDetailwidth - 50 : 1" location="right">
-        <PlanSearchPlace @change-attr-list="changeAttrList" :mapMove="mapMove" />
+        <PlanSearchPlace @open-detail="openDetail" @change-attr-list="changeAttrList" :mapMove="mapMove"
+            :attrList="attrList" />
     </v-navigation-drawer>
 </template>
 

@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref, nextTick } from 'vue';
 import { mdiMagnify } from '@mdi/js';
 import { getAttraction } from '@/api/plan';
 import { GridStack } from 'gridstack';
@@ -13,38 +13,39 @@ const searchFilter = ref({
 })
 const loaded = ref(false)
 const loading = ref(false)
-const emit = defineEmits(['changeAttrList'])
+const emit = defineEmits(['changeAttrList', 'openDetail'])
 const props = defineProps({
-    mapMove: Function
+    mapMove: Function,
+    attrList: Array
 })
 let grid = null;
 
 function onClick() {
     loading.value = true
     getAttraction({}, (res) => {
-        emit('changeAttrList', res.data)
+
         loading.value = false;
         loaded.value = true;
-        grid.batchUpdate(true)
-        res.data.forEach(element => {
-            let widget = grid.addWidget(`
-    <div class="v-container v-locale--is-ltr pa-0 grid-stack-item ui-resizable-disabled" gs-x="0" gs-y="0">
-        <div class="v-row ma-0 grid-stack-item-content border">
-            <div class="v-col v-col-4"><img class="rounded"
-                    src="${element.imgSmall ? element.imgSmall : '/src/assets/logo2.png'}" alt=""
-                    style="height: 100%; width: 70px; object-fit: cover;"></div>
-            <div class="v-col v-col-8 align-self-center">
-                <div class="v-row" style="font-size: small;">${element.title}</div>
-                <div class="v-row py-1" style="font-size: x-small;">${element.attractionType}</div>
-                <div class="v-row text-truncate" style="font-size: x-small;">${element.addr}</div>
-            </div>
-        </div>
-    </div>
-    
-        `)
-            widget.addEventListener('click', () => { props.mapMove(element.lat, element.lng) });
+        grid.removeAll(false)
+
+        res.data.map((element, idx) => {
+            element.x = idx;
+            element.y = 0;
+            element.w = 1;
+            element.h = 1;
+            element.id = "w_" + element.attractionId
         });
-        grid.batchUpdate(false)
+        emit('changeAttrList', res.data)
+        nextTick(() => {
+            grid.batchUpdate(true)
+            res.data.forEach((element) => {
+                console.log(element)
+                grid.makeWidget(element.id);
+            });
+            grid.batchUpdate(false)
+        });
+
+
     }, (e) => {
         loading.value = false;
         console.log(e)
@@ -58,7 +59,11 @@ onMounted(() => {
         margin: 0
     }, document.getElementById('grid1'));
 
+    grid.on('dragstart', () => {
+        emit('openDetail')
+    })
 })
+
 </script>
 
 <template>
@@ -87,17 +92,20 @@ onMounted(() => {
             </v-col>
         </v-sheet>
         <v-sheet class="grid-stack border fill-height overflow-auto" id="grid1">
-            <v-container class="pa-0 grid-stack-item">
+            <v-container class="pa-0 grid-stack-item" v-for="(w, idx) in attrList" :gs-x="0" :gs-y="idx" :gs-w="1"
+                :gs-h="1" :gs-id="w.id" :id="w.id" :key="w.id" @click="mapMove(w.lat, w.lng)">
                 <v-row class="ma-0 grid-stack-item-content border">
                     <v-col cols="4">
-                        <img style="height: 100%; width: 70px; object-fit: cover" class="rounded"
-                            src="http://tong.visitkorea.or.kr/cms/resource/62/219162_image3_1.jpg" alt="">
+                        <v-img cover rounded style="height: 100%; width: 70px;"
+                            :src="w.imgSmall ? w.imgSmall : '/src/assets/logo2.png'">
+
+                        </v-img>
                     </v-col>
                     <v-col cols="8" align-self="center">
-                        <v-row class="pb-1" style="font-size: small;">비슬산자연휴양림</v-row>
+                        <v-row class="pb-1" style="font-size: small;">{{ w.title }}</v-row>
 
-                        <v-row style="font-size: x-small;">관광지</v-row>
-                        <v-row class="text-truncate pb-1" style="font-size: x-small;">대구광역시 달성군 유가읍 일연선사길 61</v-row>
+                        <v-row style="font-size: x-small;">{{ w.attractionType }}</v-row>
+                        <v-row class="text-truncate pb-1" style="font-size: x-small;">{{ w.addr }}</v-row>
                     </v-col>
                 </v-row>
             </v-container>
