@@ -1,15 +1,15 @@
 <script setup>
-import { ref, nextTick } from 'vue';
+import { ref, nextTick, onMounted } from 'vue';
 import { mdiMagnify } from '@mdi/js';
 import { getAttraction } from '@/api/plan';
 import { GridStack } from 'gridstack';
-
+import { attrTypes } from '@/util/attraction-type';
 
 const searchFilter = ref({
-    keyword: "",
-    sido: null,
-    gugun: null,
-    contentType: ""
+    keyword: null,
+    sidoCode: null,
+    gugunCode: null,
+    contentType: null
 })
 const loaded = ref(false)
 const loading = ref(false)
@@ -18,11 +18,11 @@ const props = defineProps({
     mapMove: Function,
     attrList: Array
 })
+const searchHistory = ref([])
 
-function onClick() {
+function search() {
     loading.value = true
-    getAttraction({}, (res) => {
-
+    getAttraction(searchFilter.value, (res) => {
         loading.value = false;
         loaded.value = true;
 
@@ -30,16 +30,20 @@ function onClick() {
             element.id = "w_" + element.attractionId
         });
         emit('changeAttrList', res.data)
+        if (searchHistory.value.length >= 5) {
+            searchHistory.value.pop()
+        }
+        searchHistory.value = [searchFilter.value.keyword, ...searchHistory.value]
 
         nextTick(() => {
             GridStack.setupDragIn('.grid-stack-item', {
-                helper: (e)=>{
-                    let element=e.target
-                    while(!element.classList.contains("grid-stack-item")){
-                        element=element.parentElement
+                helper: (e) => {
+                    let element = e.target
+                    while (!element.classList.contains("grid-stack-item")) {
+                        element = element.parentElement
                     }
                     emit('openDetail')
-                    let clone=element.cloneNode(true) 
+                    let clone = element.cloneNode(true)
                     return clone;
                 }
             });
@@ -52,48 +56,53 @@ function onClick() {
     })
 }
 
+onMounted(() => {
+    search()
+})
 </script>
 
 <template>
     <v-sheet class="border fill-height d-flex flex-column">
-        <v-sheet class="border">
+        <v-sheet style="height: 150px;">
             <v-col>
-                <v-text-field density="compact" variant="solo" placeholder="어디로 가시나요?" single-line clearable
-                    :append-inner-icon="mdiMagnify" @click:append-inner="onClick" :loading="loading">
+                <v-text-field class="mb-2" density="compact" variant="solo" placeholder="어디로 가시나요?" single-line
+                    clearable v-model="searchFilter.keyword" :append-inner-icon="mdiMagnify"
+                    @click:append-inner="search" @keyup.enter="search" :loading="loading" hide-details>
                 </v-text-field>
-                <v-row class="overflow-auto">
-                    <v-chip v-for="category in placeCategory" :key="category.value" variant="tonal" size="small">
-                        {{ category.title }}
+                <v-chip-group column multiple v-model="searchFilter.contentType">
+                    <v-chip class="ma-1" v-for="(type, idx, key) in attrTypes" :key="idx" variant="tonal" size="x-small"
+                        :prepend-icon="type.icon" :value="idx">
+                        {{ type.title }}
                     </v-chip>
-                </v-row>
-                <v-row>
-                    <v-chip variant="tonal" size="small" v-if="searchFilter.sido" closable
-                        @click:close="resetAddrFilter()">
-                        {{ searchFilter.sido.title }}
+                </v-chip-group>
+                <!-- <v-sheet>
+                    <v-chip variant="tonal" size="x-small" v-for="(his, index) in searchHistory" :key="his"
+                        @click="">
+                        {{ his }}
                     </v-chip>
-                    <v-chip variant="tonal" size="small" v-if="searchFilter.gugun" closable
-                        @click:close="resetAddrFilter('gugun')">
-                        {{ searchFilter.gugun.title }}
-                    </v-chip>
-                </v-row>
+                </v-sheet> -->
 
             </v-col>
         </v-sheet>
-        <v-sheet class="border fill-height overflow-auto" id="grid1">
+        <v-sheet class="fill-height overflow-auto" id="grid1">
             <v-container class="pa-0 grid-stack-item" v-for="w in attrList" :gs-id="w.id" :key="w.id" :id="w.id"
                 @click="mapMove(w.lat, w.lng)" style="height: 100px;">
-                <v-row class="ma-0 grid-stack-item-content border" style="height: 100%;">
-                    <v-col cols="4">
-                        <v-img cover rounded style="height: 100%; width: 70px;"
+                <v-row class="ma-0 grid-stack-item-content " style="height: 100%;">
+                    <v-col cols="4" style="height: 100%;">
+                        <v-img cover rounded style="height: 100%; width: 100%;"
                             :src="w.imgSmall ? w.imgSmall : '/src/assets/logo2.png'">
 
                         </v-img>
                     </v-col>
-                    <v-col cols="8" align-self="center">
-                        <v-row class="pb-1" style="font-size: small;">{{ w.title }}</v-row>
-
-                        <v-row style="font-size: x-small;">{{ w.attractionType }}</v-row>
-                        <v-row class="text-truncate pb-1" style="font-size: x-small;">{{ w.addr }}</v-row>
+                    <v-col cols="8" align-self="stretch">
+                        <v-sheet class="d-flex flex-column h-100 justify-space-evenly">
+                            <div class="text-truncate pb-1" style="font-size: small;">{{ w.title }}</div>
+                            <div class="text-truncate pb-1" style="font-size: x-small;">{{ w.addr }}</div>
+                            <div style="font-size: x-small;">
+                                <v-chip size="x-small" :prepend-icon="attrTypes[w.attractionType].icon">{{
+                                    attrTypes[w.attractionType].title }}</v-chip>
+                            </div>
+                        </v-sheet>
                     </v-col>
                 </v-row>
             </v-container>
