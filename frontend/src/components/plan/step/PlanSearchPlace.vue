@@ -91,10 +91,9 @@ onMounted(() => {
                     <v-col cols="4" style="height: 100%;">
                         <v-img cover rounded style="height: 100%; width: 100%;"
                             :src="w.imgSmall ? w.imgSmall : '/src/assets/logo2.png'">
-
                         </v-img>
                     </v-col>
-                    <v-col cols="8" align-self="stretch">
+                    <v-col cols="8" >
                         <v-sheet class="d-flex flex-column h-100 justify-space-evenly">
                             <div class="text-truncate pb-1" style="font-size: small;">{{ w.title }}</div>
                             <div class="text-truncate pb-1" style="font-size: x-small;">{{ w.addr }}</div>

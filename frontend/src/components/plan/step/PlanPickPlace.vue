@@ -4,6 +4,7 @@ import PlanCheckDate from "./item/PlanCheckDate.vue";
 import { GridStack } from 'gridstack';
 import { usePlanStore } from '@/stores/plan';
 import { storeToRefs } from "pinia";
+import { attrTypes } from '@/util/attraction-type';
 
 const props = defineProps({
     mapMove: Function,
@@ -76,35 +77,20 @@ onMounted(() => {
                     :gs-y="place.y" :gs-w="place.w" :gs-h="place.h" :gs-id="place.id" :id="place.id"
                     @click="mapMove(place.lat, place.lng)">
                     <v-row class="ma-0 grid-stack-item-content border">
-                        <v-col cols="4">
-                            <v-img cover rounded style="height: 100%; width: 70px;"
+                        <v-col cols="4" style="height: 100%;">
+                            <v-img cover rounded style="height: 100%; width: 100%;"
                                 :src="place.imgSmall ? place.imgSmall : '/src/assets/logo2.png'">
-
                             </v-img>
                         </v-col>
-                        <v-col cols="8" align-self="center">
-                            <v-row class="pb-1 text-truncate " style="font-size: small;">{{ place.title }}</v-row>
-                            <v-row style="font-size: x-small;">{{ place.attractionType }}</v-row>
-                            <v-row class="text-truncate pb-1" style="font-size: x-small;">{{ place.addr }}</v-row>
-                            <v-row>
-                                
-                                <v-menu location="bottom">
-                                    <template v-slot:activator="{ props }">
-                                        <v-btn size="x-small" color="success" dark v-bind="props">메모</v-btn>
-                                    </template>
-
-                                    <v-list>
-                                        <v-list-item >
-                                            <!-- <v-list-item-title>{{ item.title }}</v-list-item-title> -->
-                                            <v-text-field
-                                                name="name"
-                                                label="label"
-                                                id="id"
-                                            ></v-text-field>
-                                        </v-list-item>
-                                    </v-list>
-                                </v-menu>
-                            </v-row>
+                        <v-col cols="8">
+                            <v-sheet class="d-flex flex-column h-100 justify-space-evenly">
+                                <div class="pb-1 text-truncate " style="font-size: small;">{{ place.title }}</div>
+                                <div class="text-truncate pb-1" style="font-size: x-small;">{{ place.addr }}</div>
+                                <div style="font-size: x-small;">
+                                <v-chip size="x-small" :prepend-icon="attrTypes[place.attractionType].icon">{{
+                                    attrTypes[place.attractionType].title }}</v-chip>
+                            </div>
+                            </v-sheet>
                         </v-col>
                     </v-row>
                 </v-container>
