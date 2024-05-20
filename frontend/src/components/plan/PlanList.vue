@@ -13,6 +13,7 @@ const param = ref({
   keyword: "",
   word: "",
 });
+
 const loadPlans = (params) => {
   listPlan(params, ({ data }) => {
     plans.value = [];
@@ -24,6 +25,7 @@ const loadPlans = (params) => {
         registDate: plan.registDate,
         visibility: plan.visibility,
         comment: plan.comment,
+        img: `@/assets/random-images/0${plan.planId}.jpg`
       };
       plans.value.push(planObject);
     });
@@ -33,25 +35,6 @@ const loadPlans = (params) => {
     console.error(error);
   });
 };
-
-
-// const loadArticles = (params) => {
-//   listArticle(params, ({ data }) => {
-//     articles.value = data.articles;
-//     hasError.value = false;
-//     articles.value.forEach(article => {
-//       getMainImageUrl(article.articleNo, (blob) => {
-//         const imageUrl = URL.createObjectURL(blob);
-//         articleImages.value[article.articleNo] = imageUrl;
-//       }, error => {
-//         console.error(error);
-//       });
-//     });
-//   }, error => {
-//     console.error(error);
-//     hasError.value = true;
-//   });
-// };
 
 watch(() => route.query.keyword, (newKeyword) => {
   if (newKeyword) {
@@ -120,8 +103,10 @@ export default {
   justify-content: flex-start; 
   align-items: flex-start; 
   gap: 16px; 
-  padding: 20px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+  border: none;
+  box-shadow: none;
+  /* padding: 20px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.1); */
 }
 .main-button {
   background-color: #072a40;
