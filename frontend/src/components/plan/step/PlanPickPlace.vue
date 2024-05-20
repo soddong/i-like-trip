@@ -9,15 +9,15 @@ const info = ref("");
 let grid = null;
 
 onMounted(() => {
-    let period=planStore.getPeriodTime()
+    let period = planStore.getPeriodTime()
     grid = GridStack.init({
-        float:true,
+        float: true,
         cellHeight: "100px",
-        row: period*48,
-        column:1,
+        row: period * 48,
+        column: 1,
         acceptWidgets: true,
-        margin:0
-    },document.getElementById('grid2'));
+        margin: 0
+    }, document.getElementById('grid2'));
 
     grid.on("dragstop", function (event, element) {
         const node = element.gridstackNode;
@@ -28,17 +28,17 @@ onMounted(() => {
 </script>
 
 <template>
-    <v-container fluid class="border fill-height">
+    <v-container fluid class="border fill-height d-flex">
         <PlanCheckDate />
-        <div class="border  overflow-auto" style="height: 700px; width: 300px;" >
+        <div class="border overflow-x-hidden" style="height: 700px; width: 100%;">
             <div class="grid-stack" id="grid2">
-        </div>
+            </div>
         </div>
 
     </v-container>
 
 </template>
 
-<style >
+<style>
 @import "gridstack/dist/gridstack.css";
 </style>

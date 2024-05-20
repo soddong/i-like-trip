@@ -103,21 +103,20 @@ onMounted(() => {
 </template>
 
 <style>
-
 /* 스크롤바 설정*/
-#grid1::-webkit-scrollbar{
-  width: 7px;
+#grid1::-webkit-scrollbar {
+    width: 7px;
 }
 
 /* 스크롤바 막대 설정*/
-#grid1::-webkit-scrollbar-thumb{
-  background-color: rgb(83, 83, 83);
-  /* 스크롤바 둥글게 설정    */
-  border-radius: 5px; 
+#grid1::-webkit-scrollbar-thumb {
+    background-color: rgb(83, 83, 83);
+    /* 스크롤바 둥글게 설정    */
+    border-radius: 5px;
 }
 
 /* 스크롤바 뒷 배경 설정*/
-#grid1::-webkit-scrollbar-track{
-  background-color: rgba(0,0,0,0);
+#grid1::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0);
 }
 </style>

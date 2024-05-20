@@ -4,6 +4,7 @@ import PlanPickDate from '@/components/plan/step/PlanPickDate.vue'
 import PlanPickTripwith from '@/components/plan/step/PlanPickTripwith.vue'
 import PlanPickTripwithSearch from '@/components/plan/step/item/PlanPickTripwithSearch.vue'
 import PlanPickPlace from '@/components/plan/step/PlanPickPlace.vue'
+import PlanSearchPlace from '@/components/plan/step/PlanSearchPlace.vue'
 import { mdiDotsVertical } from '@mdi/js';
 import { ref } from 'vue';
 
@@ -94,10 +95,9 @@ const onLoadKakaoMap = (mapRef) => {
             <v-icon :icon="mdiDotsVertical" size="small"></v-icon>
         </div>
 
-        <v-container class="h-screen d-flex flex-column justify-center"
-            :style="{ minWidth: stepDetailwidth + 'px' }">
+        <v-container class="h-screen d-flex flex-column justify-center" :style="{ minWidth: stepDetailwidth + 'px' }">
             <PlanPickDate v-if="curStep === 1" />
-            <PlanPickTripwith v-if="curStep === 2" v-model="tripwith"/>
+            <PlanPickTripwith v-if="curStep === 2" v-model="tripwith" />
             <PlanPickPlace v-if="curStep === 3" />v
         </v-container>
     </v-sheet>
@@ -109,13 +109,12 @@ const onLoadKakaoMap = (mapRef) => {
     </v-main>
 
     <v-navigation-drawer permanent :width="curStep == 2 ? stepDetailwidth : 1" location="right">
-            <v-sheet>
-                <PlanPickTripwithSearch v-if="curStep == 2" v-model="tripwith"/>
-            </v-sheet>
-        </v-navigation-drawer>
-    <v-navigation-drawer permanent :width="curStep == 3 ? stepDetailwidth-50 : 1" location="right">
         <v-sheet>
+            <PlanPickTripwithSearch v-if="curStep == 2" v-model="tripwith" />
         </v-sheet>
+    </v-navigation-drawer>
+    <v-navigation-drawer permanent :width="curStep == 3 ? stepDetailwidth - 50 : 1" location="right">
+        <PlanSearchPlace />
     </v-navigation-drawer>
 </template>
 
