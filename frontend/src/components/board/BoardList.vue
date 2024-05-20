@@ -24,8 +24,6 @@ const loadArticles = (params) => {
       getMainImageUrl(article.articleNo, (blob) => {
         const imageUrl = URL.createObjectURL(blob);
         articleImages.value[article.articleNo] = imageUrl;
-      }, error => {
-        console.error(error);
       });
     });
   }, error => {
