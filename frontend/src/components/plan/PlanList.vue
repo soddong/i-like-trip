@@ -56,11 +56,11 @@ watch(() => route.query.keyword, (newKeyword) => {
           <v-col cols="12">
             <v-card class="common-card">
               <template v-if="plans.length > 0">
-                <v-row>
-                  <v-col v-for="plan in plans" :key="plan.planId" class="py-2">
+                <div class="grid-container">
+                  <div v-for="plan in plans" :key="plan.planId" class="grid-item">
                     <PlanListItem :plan="plan" />
-                  </v-col>
-                </v-row>
+                  </div>
+                </div>
               </template>
               <template v-else>
                 <PlanListEmptyItem />
@@ -76,34 +76,27 @@ watch(() => route.query.keyword, (newKeyword) => {
 <script>
 export default {
   name: 'YourComponentName',
-  data() {
-    return {
-      plans: [] // Replace with your actual data source
-    };
-  },
-  methods: {
-    moveWrite() {
-      // Implement your moveWrite function here
-    }
-  }
 };
 </script>
 
 <style scoped>
 .common-card {
-  display: flex;
-  flex-wrap: wrap; 
-  justify-content: flex-start; 
-  align-items: flex-start; 
-  gap: 16px; 
   border: none;
   box-shadow: none;
-  /* padding: 20px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.1); */
 }
+
 .main-button {
   background-color: #072a40;
   color: white;
 }
-</style>
 
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 한 줄에 네 개의 항목 */
+  gap: 16px; /* 각 항목 사이의 간격 */
+}
+
+.grid-item {
+  width: 100%;
+}
+</style>

@@ -4,7 +4,7 @@
       :to="{ name: 'plan-view', params: { planno: plan.planId } }"
       class="no-border"
     >
-      <v-img :src="imagePath" height="300px" cover @click="handleImageClick">
+      <v-img :src="imagePath" height="300px" cover>
         <div class="overlay"></div>
         <v-card-title class="fill-height align-end justify-space-between pa-3">
           <div class="d-flex flex-column justify-space-between fill-height">

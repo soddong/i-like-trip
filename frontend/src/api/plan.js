@@ -27,7 +27,7 @@ function getPlanPath(data, success, fail) {
 
 // Plan 정보
 
-function getPlan(planId, success, fail) {
+function detailPlan(planId, success, fail) {
   local.get(`/plans/${planId}`).then(success).catch(fail);
 }
 
@@ -39,4 +39,4 @@ function createPlan(newPlan, success, fail) {
   local.post(`/plans`, JSON.stringify(newPlan)).then(success).catch(fail);
 }
 
-export { getSido, getGugun, getAttraction, getPlan, listPlan, createPlan, getPlanPath };
+export { getSido, getGugun, getAttraction, detailPlan, listPlan, createPlan, getPlanPath };
