@@ -166,8 +166,8 @@ function makePathPolyline() {
 
         <v-container class="h-screen d-flex flex-column justify-center" :style="{ minWidth: stepDetailwidth + 'px' }">
             <PlanPickDate v-if="curStep === 1" />
-            <PlanPickTripwith v-if="curStep === 2" v-model="tripwith" />
-            <PlanPickPlace v-if="curStep === 3" :attrList="attrList" :mapMove="mapMove"
+            <PlanPickTripwith v-if="curStep === 2" />
+            <PlanPickPlace v-if="curStep === 3" :attrList="attrList" :mapMove="mapMove"/>
                 :makePathPolyline="makePathPolyline" />
         </v-container>
     </v-sheet>
