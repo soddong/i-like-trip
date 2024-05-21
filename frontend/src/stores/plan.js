@@ -22,10 +22,14 @@ export const usePlanStore = defineStore("planStore", () => {
   };
 
   const getPlaceStartEnd = (idx) => {
-    pickedPlace.value[idx]
-    let start = new Date(period.value[0].getTime()+(1000*60*60*pickedPlace.value[idx].y))
-    let end = new Date(start.getTime()+(1000*60*60*pickedPlace.value[idx].h)-1)
-    return {start, end}
+    pickedPlace.value[idx];
+    let start = new Date(period.value[0].getTime() + 1000 * 60 * 60 * pickedPlace.value[idx].y);
+    let end = new Date(start.getTime() + 1000 * 60 * 60 * pickedPlace.value[idx].h - 1);
+    return { start, end };
+  };
+
+  const sortPickedPlace = () => {
+    pickedPlace.value.sort((a, b) => a.y - b.y);
   };
 
   return {
@@ -33,6 +37,7 @@ export const usePlanStore = defineStore("planStore", () => {
     pickedPlace,
     getStartEnd,
     getPeriodTime,
-    getPlaceStartEnd
+    getPlaceStartEnd,
+    sortPickedPlace,
   };
 });

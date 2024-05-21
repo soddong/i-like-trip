@@ -8,11 +8,13 @@ import { attrTypes } from '@/util/attraction-type';
 
 const props = defineProps({
     mapMove: Function,
-    attrList: Array
+    attrList: Array,
+    makePathPolyline: Function
 })
 const planStore = usePlanStore()
 const { pickedPlace } = storeToRefs(planStore)
 let grid = null;
+
 
 onMounted(() => {
     let period = planStore.getPeriodTime()
@@ -40,6 +42,7 @@ onMounted(() => {
         grid.removeWidget(newWidget.id)
         nextTick(() => {
             grid.makeWidget(newId);
+            props.makePathPolyline();
         });
     });
 
@@ -48,17 +51,17 @@ onMounted(() => {
             let id = items[0].id
             let idx = pickedPlace.value.findIndex((e) => id === e.id)
             pickedPlace.value.splice(idx, 1)
+            props.makePathPolyline();
         }
     });
 
     grid.on('change', function (event, items) {
         items.forEach((item) => {
-            console.log(item.id, item.x, item.y, item.h, item.w)
             let idx = pickedPlace.value.findIndex((e) => item.id === e.id)
-            pickedPlace.value[idx].y=item.y
-            pickedPlace.value[idx].h=item.h
-            console.log(planStore.getPlaceStartEnd(idx))
-            
+            pickedPlace.value[idx].y = item.y
+            pickedPlace.value[idx].h = item.h
+            planStore.sortPickedPlace()
+            props.makePathPolyline();
         });
     });
 });
@@ -69,7 +72,7 @@ onMounted(() => {
     <v-container fluid class="border fill-height d-flex">
         <PlanCheckDate />
         <div>
-
+            <v-btn @click="makePathPolyline">btn</v-btn>
         </div>
         <v-sheet class="border overflow-y-auto overflow-x-hidden position-relative" id="grid2-wrap"
             style="height: 800px; width: 100%;">
@@ -78,15 +81,14 @@ onMounted(() => {
                     <div style="width: 10px; background-color: #e4e4e4">{{ day }}일차</div>
                     <div class="time-line-hour">
                         <div v-for="(item, index) in 24" :key="index">
-                            <p>{{ item - 1<10?"0"+(item-1):item-1 }}:00</p>
+                            <p>{{ item - 1 < 10 ? "0" + (item - 1) : item - 1 }}:00</p>
                         </div>
                     </div>
                 </div>
             </div>
             <v-sheet class="grid-stack position-absolute" id="grid2">
                 <v-container class="pa-0 grid-stack-item" v-for="place in pickedPlace" :key="place.id" :gs-x="place.x"
-                    :gs-y="place.y" :gs-w="place.w" :gs-h="place.h" :gs-id="place.id" :id="place.id"
-                    >
+                    :gs-y="place.y" :gs-w="place.w" :gs-h="place.h" :gs-id="place.id" :id="place.id">
                     <v-row class="ma-0 grid-stack-item-content border">
                         <v-col cols="4" style="height: 100%;">
                             <v-img cover rounded style="height: 100%; width: 100%;"
@@ -101,9 +103,10 @@ onMounted(() => {
                                     </v-chip>
                                     {{ place.title }}
                                 </div>
-                                <div @click="mapMove(place.lat, place.lng)" class="text-truncate pb-1" style="font-size: x-small;">{{ place.addr }}</div>
+                                <div @click="mapMove(place.lat, place.lng)" class="text-truncate pb-1"
+                                    style="font-size: x-small;">{{ place.addr }}</div>
                                 <div style="font-size: x-small;">
-                                    <input type="text" name="" id="" >
+                                    <input type="text" name="" id="">
                                 </div>
                             </v-sheet>
                         </v-col>
