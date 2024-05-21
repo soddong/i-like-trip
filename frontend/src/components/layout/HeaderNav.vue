@@ -52,7 +52,7 @@ watch(
 </script>
 
 <template>
-    <v-app-bar color="#CCE2E8" elevation="0" absolute rounded="">
+    <v-app-bar :color=" $route.name=='Home'? 'transparent':'#CCE2E8'" elevation="0" >
         <v-app-bar-title :style="{ fontSize: 'x-large', color: '#20435C', cursor: 'pointer' }"
             @click="$router.push({ name: 'Home' })">
             조아요행
