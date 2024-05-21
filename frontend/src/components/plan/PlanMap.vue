@@ -21,7 +21,7 @@ const curStep = ref(1);
 
 const map = ref();
 
-const tripwith = ref([]);
+// const tripwith = ref([]);
 const attrList = ref([]);
 const onLoadKakaoMap = (mapRef) => {
     map.value = mapRef;
@@ -112,7 +112,7 @@ const mapMove = (lat, lng) => {
 
         <v-container class="h-screen d-flex flex-column justify-center" :style="{ minWidth: stepDetailwidth + 'px' }">
             <PlanPickDate v-if="curStep === 1" />
-            <PlanPickTripwith v-if="curStep === 2" v-model="tripwith" />
+            <PlanPickTripwith v-if="curStep === 2" />
             <PlanPickPlace v-if="curStep === 3" :attrList="attrList" :mapMove="mapMove"/>
         </v-container>
     </v-sheet>
@@ -130,7 +130,7 @@ const mapMove = (lat, lng) => {
 
     <v-navigation-drawer permanent :width="curStep == 2 ? stepDetailwidth : 1" location="right">
         <v-sheet>
-            <PlanPickTripwithSearch v-if="curStep == 2" v-model="tripwith" />
+            <PlanPickTripwithSearch v-if="curStep == 2" />
         </v-sheet>
     </v-navigation-drawer>
     <v-navigation-drawer permanent :width="curStep == 3 ? stepDetailwidth - 50 : 1" location="right">

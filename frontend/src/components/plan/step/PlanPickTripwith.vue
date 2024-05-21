@@ -1,23 +1,17 @@
 <script setup>
-import { ref, watch, defineProps, defineEmits } from 'vue';
+import { ref, watch, defineProps, defineEmits, computed } from 'vue';
 import { mdiMinus } from '@mdi/js';
+import { useTripwithStore } from '@/stores/tripwith';
 
-const props = defineProps({
-  modelValue: Array
-});
+const tripwithStore = useTripwithStore()
+const tripwith = computed(() => tripwithStore.tripwith);
 
-const emits = defineEmits(['update:modelValue']);
+// watch(() => tripwithStore.tripwith.value, (newValue) => {
+//   console.log(newValue)
+//   tripwith.value = newValue;
+//   console.log("watch ", tripwith.value)
+// }, { deep: true });
 
-const tripwith = ref([]);
-
-watch(() => props.modelValue, (newValue) => {
-  tripwith.value = newValue;
-}, { deep: true });
-
-function removeFriend(id) {
-    const updatedTripWith = tripwith.value.filter(companion => companion.id !== id);
-    emits('update:modelValue', updatedTripWith);
-}
 </script>
 
 <template>
@@ -26,7 +20,7 @@ function removeFriend(id) {
         <v-divider></v-divider>
         <v-row class="playground">
             <v-col class="col">
-                <v-card v-for="(person, index) in tripwith" :key="person.id" class="box">
+                <v-card v-for="(person) in tripwith" :key="person.id" class="box">
                     <v-row align="center" no-gutters>
                         <v-col cols="4" class="d-flex justify-center">
                             <img :src="person.profilePicture" alt="프로필 사진" class="profile-picture">
@@ -36,7 +30,7 @@ function removeFriend(id) {
                             <span class="small-id">{{ person.id }}</span>
                         </v-col>
                         <v-col cols="4" class="d-flex justify-end">
-                            <v-btn @click="removeFriend(person.id)" class="remove-btn" icon>
+                            <v-btn @click="tripwithStore.handleRemoveTripwith(person.id)" class="remove-btn" icon>
                                 <v-icon>{{ mdiMinus }}</v-icon>
                             </v-btn>
                         </v-col>

@@ -4,21 +4,21 @@ import { mdiMagnify, mdiPlus } from '@mdi/js';
 import { searchFriends } from '@/api/member.js'; 
 import { fetchFriends } from '@/api/friend.js'; 
 import { useUserStore } from '@/stores/user';
+import { useTripwithStore } from '@/stores/tripwith';
 import defaultProfile from '@/assets/default_profile.png';
 
 const VITE_VUE_API_URL = import.meta.env.VITE_VUE_API_URL;
 const userStore = useUserStore();
+const tripwithStore = useTripwithStore();
 const showFriends = ref(false);
 const friends = ref([]);
 const isDataLoaded = ref(false);
 const searchQuery = ref('');
 const searchResults = ref([]);
 
-const props = defineProps({
-    modelValue: Array
-});
-
-const emits = defineEmits(['update:modelValue']);
+// const props = defineProps({
+//     modelValue: Array
+// });
 
 const displayResults = computed(() => {
   let results = [];
@@ -34,13 +34,6 @@ const displayResults = computed(() => {
   }
   return results;
 });
-
-
-
-function addFriend(friend) {
-  let newTripWith = [...props.modelValue, friend];
-  emits('update:modelValue', newTripWith);
-}
 
 onMounted(() => {
   loadFriends();
@@ -130,7 +123,7 @@ async function searchFriendsHandler() {
               <span class="small-id">{{ friend.id }}</span>
             </v-col>
             <v-col cols="4" class="d-flex justify-center">
-              <v-btn icon class="add-btn" @click="addFriend(friend)">
+              <v-btn icon class="add-btn" @click="tripwithStore.handleAddTripwith(friend)">
                 <v-icon>{{ mdiPlus }}</v-icon>
               </v-btn>
             </v-col>
