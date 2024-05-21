@@ -40,8 +40,8 @@
 	</select>
 	
 	<insert id="registPlan">
-		insert into plan (user_id, comment)
-		value (#{plan.makerId},#{plan.comment})
+		insert into plan (user_id, comment, title)
+		value (#{plan.makerId},#{plan.comment}, #{plan.title})
 		<selectKey keyProperty="plan.planId" keyColumn="plan_id" resultType="int" order="AFTER">
 			select last_insert_id() as plan_id;
 		</selectKey>
