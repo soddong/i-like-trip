@@ -1,5 +1,6 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
+import { createPlan } from "@/api/plan";
 
 export const usePlanStore = defineStore("planStore", () => {
   const period = ref([new Date(new Date().toDateString())]);
@@ -32,6 +33,42 @@ export const usePlanStore = defineStore("planStore", () => {
     pickedPlace.value.sort((a, b) => a.y - b.y);
   };
 
+  const registPlan = () => {
+    let registPlace = [];
+    pickedPlace.value.forEach((attr, index) => {
+      const { start, end } = getPlaceStartEnd(index);
+      registPlace.push({
+        order: index + 1,
+        startTime: start,
+        endTime: end,
+        comment: "",
+        place: {
+          attractionId: attr.attractionId,
+        },
+      });
+    });
+    const newPlan = {
+      plan: {
+        title: "",
+        makerId: "",
+        comment: "",
+      },
+      places: registPlace,
+      members: [{ id: "" }],
+    };
+    console.log(newPlan);
+    // createPlan(
+    //   newPlan,
+    //   () => {
+    //     alert("Plan created successfully!");
+    //   },
+    //   (error) => {
+    //     console.error(error);
+    //     alert("Failed to create plan");
+    //   }
+    // );
+  };
+
   return {
     period,
     pickedPlace,
@@ -39,5 +76,6 @@ export const usePlanStore = defineStore("planStore", () => {
     getPeriodTime,
     getPlaceStartEnd,
     sortPickedPlace,
+    registPlan,
   };
 });
