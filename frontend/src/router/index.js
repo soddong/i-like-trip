@@ -2,6 +2,7 @@ import AccountView from "@/views/AccountView.vue";
 import HomeView from "@/views/HomeView.vue";
 import MypageView from "@/views/MypageView.vue";
 import FriendView from "@/views/FriendView.vue";
+import PlanView from "@/views/PlanView.vue";
 import { createRouter, createWebHistory } from "vue-router";
 import { useUserStore } from "@/stores/user";
 
@@ -66,32 +67,24 @@ const router = createRouter({
     },
     {
       path: "/plan",
-      name: "Plan",
-      component: () => import("../views/PlanView.vue"),
-      redirect: { name: "plan-list" },
-      children: [
-        {
-          path: "/plan",
-          name: "plan-list",
-          component: () => import("@/components/plan/PlanList.vue"),
-        },
-        // {
-        //   path: "/plan/:planno",
-        //   name: "plan-view",
-        //   component: () => import("@/components/plan/PlanDetail.vue"),
-        // },
-        {
-          path: "/plan",
-          name: "plan-write",
-          component: () => import("@/components/plan/PlanWrite.vue"),
-        },
-        // {
-        //   path: "/plan/:planno",
-        //   name: "plan-modify",
-        //   component: () => import("@/components/plan/PlanModify.vue"),
-        // },
-      ],
+      name: "plan-list",
+      component: () => import("@/components/plan/PlanList.vue"),
     },
+    // {
+    //   path: "/plan/:planno",
+    //   name: "plan-view",
+    //   component: () => import("@/components/plan/PlanDetail.vue"),
+    // },
+      {
+        path: "/plan",
+        name: "plan-write",
+        component: () => import("@/components/plan/PlanMap.vue"),
+      },
+    // {
+    //   path: "/plan/:planno",
+    //   name: "plan-modify",
+    //   component: () => import("@/components/plan/PlanModify.vue"),
+    // },
     {
       path: "/friend",
       name: "Friend",
@@ -108,7 +101,9 @@ router.beforeEach(async (to) => {
       try {
         await userStore.refreshToken();
         userStore.getUserInfo();
-      } catch (error) {}
+      } catch (error) {
+        console.log("")
+      }
     }
   }
 });
