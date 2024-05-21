@@ -18,7 +18,7 @@ import VSearchInput from '@/components/common/VSearchInput.vue';
 
 <style scoped>
 .head {
-    background-color: #f9f7f0;
+    background-color:  white;
     padding-top: 200px; 
     height: 800px;
 }

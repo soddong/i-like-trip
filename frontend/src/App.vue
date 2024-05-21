@@ -11,7 +11,15 @@ import HeaderNav from "@/components/layout/HeaderNav.vue";
 
 <style>
 .v-application {
-  font-family: 'JalnanGothic' !important;
+  font-family: 'SeoulNamsanM' !important;
+  color: #20435C
+}
+
+@font-face {
+  font-family: 'SeoulHangangM';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/SeoulHangangM.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
 }
 
 @font-face {
@@ -64,6 +72,13 @@ import HeaderNav from "@/components/layout/HeaderNav.vue";
   font-weight: 300;
   src: url('//fastly.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebLight.eot');
   src: url('//fastly.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebLight.eot?#iefix') format('embedded-opentype'), url('//fastly.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebLight.woff') format('woff'), url('//fastly.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebLight.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'SeoulNamsanM';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/SeoulNamsanM.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
 }
 
 .nanumbarungothic * {
