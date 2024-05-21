@@ -29,7 +29,7 @@ const mainMenuList = ref([
 const myMenuList = ref([
     {
         title: '내친구',
-        to: { name: "Friend" } 
+        to: { name: "Friend" }
     },
     {
         title: '내계획',
@@ -40,26 +40,22 @@ const myMenuList = ref([
 const userStore = useUserStore()
 
 watch(
-  () => userStore.userInfo?.profileImg,
-  (newProfile) => {
-    if (newProfile) {
-      userProfile.value = `${VITE_VUE_API_URL}upload?name=${newProfile}`;
-      console.log("Updated userProfile URL:", userProfile.value);
-    }
-  },
-  { immediate: true }
+    () => userStore.userInfo?.profileImg,
+    (newProfile) => {
+        if (newProfile) {
+            userProfile.value = `${VITE_VUE_API_URL}upload?name=${newProfile}`;
+            console.log("Updated userProfile URL:", userProfile.value);
+        }
+    },
+    { immediate: true }
 );
 </script>
 
 <template>
-    <v-app-bar color="#178ca4">
-        <v-app-bar-title>
-            <RouterLink :to="{ name: 'Home' }">
-                <v-sheet class="d-inline-flex align-center">
-                    <v-img :width="40" src="src/assets/logo2.png" inline class="rounded-pill mr-2"></v-img>
-                    <span class="logo ">조아요행</span>
-                </v-sheet>
-            </RouterLink>
+    <v-app-bar color="#CCE2E8" elevation="0" absolute rounded="">
+        <v-app-bar-title :style="{ fontSize: 'x-large', color: '#20435C', cursor: 'pointer' }"
+            @click="$router.push({ name: 'Home' })">
+            조아요행
         </v-app-bar-title>
 
         <!-- Automatically collapses into dropdown menu -->
@@ -67,14 +63,15 @@ watch(
         <v-app-bar-nav-icon @click="toggleDrawer" v-show="!mdAndUp"></v-app-bar-nav-icon>
 
         <!-- Centered main menu -->
-        <v-btn-group v-show="mdAndUp" class="main-button-group">
-            
-            <v-btn v-for="menu in mainMenuList" :key="menu.title" :to="menu.to" class="main-button">{{ menu.title }}</v-btn>
+        <v-btn-group v-show="mdAndUp" class="button-group" variant="text">
+            <v-btn v-for="menu in mainMenuList" :key="menu.title" :to="menu.to" class="main-button">
+                {{ menu.title }}</v-btn>
         </v-btn-group>
 
         <!-- Sub menu -->
-        <v-btn-group v-show="mdAndUp" class="sub-button-group">
-            <v-btn v-for="menu in myMenuList" :key="menu.title" :to="menu.to" class="sub-button">{{ menu.title }}</v-btn>
+        <v-btn-group v-show="mdAndUp" class="button-group" variant="text">
+            <v-btn v-for="menu in myMenuList" :key="menu.title" :to="menu.to" class="sub-button">
+                {{ menu.title }}</v-btn>
         </v-btn-group>
 
 
@@ -95,7 +92,7 @@ watch(
                         </v-avatar>
                         <h3>{{ userStore.userInfo.name }}</h3>
                         <p class="text-caption mt-1">
-                            {{userStore.userInfo.email}}
+                            {{ userStore.userInfo.email }}
                         </p>
                         <v-divider class="my-1"></v-divider>
                         <v-btn variant="text" :to="{ name: 'Mypage' }" rounded>
@@ -113,7 +110,7 @@ watch(
     <v-navigation-drawer v-model="drawerOpen" location="right" disableResizeWatcher>
         <v-list two-line>
             <v-list-item v-for="menu in mainMenuList" :title="menu.title" :to="menu.to" :key="menu.title"></v-list-item>
-            <v-list-item v-for="menu in myMenuList" :title="menu.title" :to="menu.to"</v-list-item>
+            <v-list-item v-for="menu in myMenuList" :title="menu.title" :to="menu.to" </v-list-item>
         </v-list>
     </v-navigation-drawer>
 </template>
@@ -132,7 +129,7 @@ watch(
 }
 
 .logo {
-    color: #f9f7f0;
+    color: #20435C;
 }
 
 .v-app-bar {
@@ -145,21 +142,16 @@ watch(
     /* 글씨 크기 조절 */
 }
 
-.main-button {
-  background-color: #178ca4;
-  color: white;
-  
-}
 
-.sub-button {
-  color: "#f9f7f0",
+.button-group {
+    color: #20435C;
+    font-family: 'SeoulHangangM' !important;
 }
 
 .cover-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 50%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
 }
-
 </style>
