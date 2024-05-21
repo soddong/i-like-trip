@@ -72,7 +72,7 @@ onMounted(() => {
     <v-container fluid class="border fill-height d-flex">
         <PlanCheckDate />
         <div>
-            <v-btn @click="makePathPolyline">btn</v-btn>
+            <!-- <v-btn @click="makePathPolyline">btn</v-btn> -->
         </div>
         <v-sheet class="border overflow-y-auto overflow-x-hidden position-relative" id="grid2-wrap"
             style="height: 800px; width: 100%;">

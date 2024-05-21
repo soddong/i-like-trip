@@ -70,16 +70,16 @@ const router = createRouter({
       name: "plan-list",
       component: () => import("@/components/plan/PlanList.vue"),
     },
-    // {
-    //   path: "/plan/:planno",
-    //   name: "plan-view",
-    //   component: () => import("@/components/plan/PlanDetail.vue"),
-    // },
-      {
-        path: "/plan",
-        name: "plan-write",
-        component: () => import("@/components/plan/PlanMap.vue"),
-      },
+    {
+      path: "/plan/:planno",
+      name: "plan-view",
+      component: () => import("@/components/plan/PlanDetail.vue"),
+    },
+    {
+      path: "/plan",
+      name: "plan-write",
+      component: () => import("@/components/plan/PlanMap.vue"),
+    },
     // {
     //   path: "/plan/:planno",
     //   name: "plan-modify",

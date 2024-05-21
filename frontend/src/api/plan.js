@@ -36,7 +36,7 @@ function listPlan(filter, success, fail) {
 }
 
 function createPlan(newPlan, success, fail) {
-  local.post(`/plans`, newPlan).then(success).catch(fail);
+  local.post(`/plans`, JSON.stringify(newPlan)).then(success).catch(fail);
 }
 
 export { getSido, getGugun, getAttraction, getPlan, listPlan, createPlan, getPlanPath };

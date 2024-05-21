@@ -1,8 +1,7 @@
-import { ref } from "vue";
-import { defineStore } from "pinia";
-import { createPlan } from "@/api/plan";
+import { ref } from 'vue';
+import { defineStore } from 'pinia';
 
-export const usePlanStore = defineStore("planStore", () => {
+export const usePlanStore = defineStore('planStore', () => {
   const period = ref([new Date(new Date().toDateString())]);
   const pickedPlace = ref([]);
 
@@ -23,7 +22,6 @@ export const usePlanStore = defineStore("planStore", () => {
   };
 
   const getPlaceStartEnd = (idx) => {
-    pickedPlace.value[idx];
     let start = new Date(period.value[0].getTime() + 1000 * 60 * 60 * pickedPlace.value[idx].y);
     let end = new Date(start.getTime() + 1000 * 60 * 60 * pickedPlace.value[idx].h - 1);
     return { start, end };
@@ -33,41 +31,14 @@ export const usePlanStore = defineStore("planStore", () => {
     pickedPlace.value.sort((a, b) => a.y - b.y);
   };
 
-  const registPlan = () => {
-    let registPlace = [];
-    pickedPlace.value.forEach((attr, index) => {
-      const { start, end } = getPlaceStartEnd(index);
-      registPlace.push({
-        order: index + 1,
-        startTime: start,
-        endTime: end,
-        comment: "",
-        place: {
-          attractionId: attr.attractionId,
-        },
-      });
-    });
-    const newPlan = {
-      plan: {
-        title: "",
-        makerId: "",
-        comment: "",
-      },
-      places: registPlace,
-      members: [{ id: "" }],
-    };
-    console.log(newPlan);
-    // createPlan(
-    //   newPlan,
-    //   () => {
-    //     alert("Plan created successfully!");
-    //   },
-    //   (error) => {
-    //     console.error(error);
-    //     alert("Failed to create plan");
-    //   }
-    // );
+  const resetPlan = () => {
+    period.value = [new Date(new Date().toDateString())];
+    pickedPlace.value = [];
   };
+
+  const isEmpty = () => {
+    return (pickedPlace.value.length > 0 || period.value[0] != null || period.value[1] != null) ? false : true;
+  }
 
   return {
     period,
@@ -76,6 +47,7 @@ export const usePlanStore = defineStore("planStore", () => {
     getPeriodTime,
     getPlaceStartEnd,
     sortPickedPlace,
-    registPlan,
+    resetPlan,
+    isEmpty,
   };
 });

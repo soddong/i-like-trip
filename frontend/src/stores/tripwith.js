@@ -28,9 +28,19 @@ export const useTripwithStore = defineStore("tripwithStore", () => {
     tripwith.value = tripwith.value.filter(companion => companion.id !== id);
   };
 
+  const resetTripwith = () => {
+    tripwith.value = [];
+  };
+
+  const isEmpty = () => {
+    return tripwith.value.length > 0 ? false : true;
+  }
+
   return {
     handleAddTripwith,
     handleRemoveTripwith,
-    tripwith
+    resetTripwith,
+    isEmpty,
+    tripwith,
   };
 });

@@ -1,27 +1,30 @@
 <template>
   <v-card class="mx-auto my-5" max-width="400">
-    <v-img :src="imagePath" height="300px" cover>
-      <div class="overlay"></div>
-      <v-card-title class="fill-height align-end justify-space-between pa-3">
-        <div class="d-flex flex-column justify-space-between fill-height">
-          <div>
-            <h2 class="headline white--text">{{ plan.title }}</h2>
-            <span class="subheading white--text">{{ plan.registDate.split(' ')[0] }}</span>
+    <router-link
+      :to="{ name: 'plan-view', params: { planno: plan.planId } }"
+      class="no-border"
+    >
+      <v-img :src="imagePath" height="300px" cover @click="handleImageClick">
+        <div class="overlay"></div>
+        <v-card-title class="fill-height align-end justify-space-between pa-3">
+          <div class="d-flex flex-column justify-space-between fill-height">
+            <div>
+              <h2 class="headline white--text">{{ plan.title }}</h2>
+              <span class="subheading white--text">{{ plan.registDate.split(' ')[0] }}</span>
+            </div>
+            <div class="comment-container">
+              <div class="comment white--text" v-html="plan.comment"></div>
+            </div>
           </div>
-          <div class="comment-container">
-            <div class="comment white--text" v-html="plan.comment"></div>
-          </div>
-        </div>
-      </v-card-title>
-    </v-img>
-    <!-- <v-card-subtitle class="pt-4 text-right white--text" style="background-color: rgba(0, 0, 0, 0.5); padding: 10px;">
-      <span class="maker-id white--text">{{ plan.makerId }}</span>
-    </v-card-subtitle> -->
+        </v-card-title>
+      </v-img>
+    </router-link>
   </v-card>
 </template>
 
 <script setup>
 import { defineProps, computed } from 'vue';
+
 const props = defineProps({
   plan: {
     type: Object,
@@ -33,6 +36,10 @@ const imagePath = computed(() => {
   return `src/assets/random-images/0${props.plan.planId}.jpg`;
 });
 
+const handleImageClick = () => {
+  console.log("Image clicked!");
+  console.log("Navigating to plan id:", props.plan.planId);
+};
 </script>
 
 <style scoped>
@@ -51,7 +58,7 @@ const imagePath = computed(() => {
 }
 
 .maker-id {
-  font-size: 12px; /* Smaller font size for maker ID */
+  font-size: 12px;
   align-self: flex-end;
 }
 
@@ -83,5 +90,9 @@ const imagePath = computed(() => {
 
 .comment {
   font-size: 18px;
+}
+
+.no-border {
+  text-decoration: none;
 }
 </style>

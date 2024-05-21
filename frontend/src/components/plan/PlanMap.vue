@@ -5,12 +5,17 @@ import PlanPickTripwith from '@/components/plan/step/PlanPickTripwith.vue'
 import PlanPickTripwithSearch from '@/components/plan/step/item/PlanPickTripwithSearch.vue'
 import PlanPickPlace from '@/components/plan/step/PlanPickPlace.vue'
 import PlanSearchPlace from '@/components/plan/step/PlanSearchPlace.vue'
+import PlanPickResult from '@/components/plan/step/PlanPickResult.vue'
 import { mdiDotsVertical } from '@mdi/js';
-import { ref } from 'vue';
-import { getPlanPath } from "@/api/plan";
+import { ref, computed } from 'vue';
+import { getPlanPath, createPlan } from "@/api/plan";
 import { usePlanStore } from "@/stores/plan";
+import { useTripwithStore } from "@/stores/tripwith";
+import { useUserStore } from "@/stores/user";
+import { useRouter } from "vue-router"
 
-const coordinate = {
+const router = useRouter()
+const coordinate = { 
     lat: 33.45, lng: 126.571
 };
 
@@ -49,13 +54,23 @@ const mapMove = (lat, lng) => {
 }
 
 const planStore = usePlanStore()
-const { pickedPlace } = planStore
+const { pickedPlace,  } = planStore
+const tripwithStore = useTripwithStore()
+const userStore = useUserStore()
 
 const latLngList = ref([
     { lat: 33.45, lng: 126.571 },
     { lat: 33.449, lng: 126.5705 },
     { lat: 33.45, lng: 126.5725 }
 ]);
+
+const plan = ref({
+    title: "",        
+    makerId: computed(() => userStore.userId), // computed를 이용해 userId를 가져오되, ref 안에서 사용
+    visibility: "", 
+    comment: ""
+});
+
 function makePathPolyline() {
     let data = {
         "origin": {
@@ -69,7 +84,7 @@ function makePathPolyline() {
             "y": pickedPlace[pickedPlace.length - 1].lat,
         }
     }
-    if (pickedPlace.length > 2) {
+    if (pickedPlace.length > 2) {   
         let waypoints = []
         for (let index = 1; index < pickedPlace.length; index++) {
             waypoints.push({
@@ -80,96 +95,133 @@ function makePathPolyline() {
         }
         data['waypoints'] = waypoints
     }
-
-    // getPlanPath(data, (res) => {
-    //     console.log(res)
-    //     let path = []
-    //     let result = res.data.routes[0]
-    //     if (result.result_code != 0)
-    //         return
-    //     result.sections.forEach(section => {
-    //         section.roads.forEach(road => {
-    //             for (let index = 0; index < road.vertexes.length; index += 2) {
-    //                 path.push({
-    //                     lat: road.vertexes[index + 1],
-    //                     lng: road.vertexes[index]
-    //                 })
-    //             }
-    //         })
-    //     });
-    //     console.log(path)
-    //     latLngList.value = path
-    // }, (e) => { console.log(e) })
 }
 
+function registerPlan() {
+  if (!pickedPlace) {
+    return;
+  }
 
+  const newPlan = {
+    plan: { ...plan.value },
+    places: pickedPlace.map((attr, index) => {
+      const { start, end } = planStore.getPlaceStartEnd(index);
+      return {
+        order: index + 1,
+        startTime: start,
+        endTime: end,
+        comment: '',
+        place: {
+          attractionId: attr.attractionId,
+          lat: attr.lat,
+          lng: attr.lng,
+        },
+      };
+    }),
+    members: tripwithStore.tripwith,
+  };
+
+  createPlan(newPlan, () => {
+    alert('계획을 등록하였습니다.');
+
+    planStore.resetPlan();
+    tripwithStore.resetTripwith();
+
+    moveList();
+  }, (error) => {
+    console.error(error);
+    alert('등록에 실패했습니다.');
+  });
+}
+
+function canclePlan() {
+    alert('계획이 취소되었습니다.');
+
+    planStore.resetPlan();
+    tripwithStore.resetTripwith();
+
+    moveList();
+}
+
+function moveList() {
+  router.replace({ name: "plan-list" })
+}
+
+function moveToStep4() {
+    console.log(tripwithStore.isEmpty(), planStore.isEmpty())
+  if (tripwithStore.isEmpty() || planStore.isEmpty()) {
+    alert('STEP 1, 2, 3을 완료해야 합니다.');
+    return;
+  }
+  curStep.value = 4;
+}
 </script>
 
 <template>
     <v-navigation-drawer permanent :width="drawerWidth">
-        <v-list>
-            <v-list-item title="조아요행" :to="{ name: 'Home' }">
-                <template v-slot:prepend>
-                    <v-avatar tile image="src/assets/logo2.png" size="small">
-                    </v-avatar>
-                </template>
-            </v-list-item>
-        </v-list>
-
-        <v-divider></v-divider>
-
-        <v-list nav>
-            <v-list-item value="step1" @click="curStep = 1">
-                <template #title>
-                    <v-sheet class="d-flex flex-column align-center">
-                        <h3>STEP 1</h3>
-                        <p>날짜 선택</p>
-                    </v-sheet>
-                </template>
-            </v-list-item>
-            <v-list-item value="step2" @click="curStep = 2">
-                <template #title>
-                    <v-sheet class="d-flex flex-column align-center">
-                        <h3>STEP 2</h3>
-                        <p>동행 선택</p>
-                    </v-sheet>
-                </template>
-            </v-list-item>
-            <v-list-item value="step3" @click="curStep = 3">
-                <template #title>
-                    <v-sheet class="d-flex flex-column align-center">
-                        <h3>STEP 3</h3>
-                        <p>장소 선택</p>
-                    </v-sheet>
-                </template>
-            </v-list-item>
-            <v-list-item value="step4">
-                <template #title>
-                    <v-sheet class="d-flex flex-column align-center">
-                        <h3>STEP 4</h3>
-                        <p>최종 확인</p>
-                    </v-sheet>
-                </template>
-            </v-list-item>
-        </v-list>
+      <v-list>
+        <v-list-item title="조아요행" :to="{ name: 'Home' }">
+          <template v-slot:prepend>
+            <v-avatar tile image="src/assets/logo2.png" size="small"></v-avatar>
+          </template>
+        </v-list-item>
+      </v-list>
+  
+      <v-divider></v-divider>
+  
+      <v-list nav>
+        <v-list-item value="step1" @click="curStep = 1">
+          <template #title>
+            <v-sheet class="d-flex flex-column align-center">
+              <h3>STEP 1</h3>
+              <p>날짜 선택</p>
+            </v-sheet>
+          </template>
+        </v-list-item>
+        <v-list-item value="step2" @click="curStep = 2">
+          <template #title>
+            <v-sheet class="d-flex flex-column align-center">
+              <h3>STEP 2</h3>
+              <p>동행 선택</p>
+            </v-sheet>
+          </template>
+        </v-list-item>
+        <v-list-item value="step3" @click="curStep = 3">
+          <template #title>
+            <v-sheet class="d-flex flex-column align-center">
+              <h3>STEP 3</h3>
+              <p>장소 선택</p>
+            </v-sheet>
+          </template>
+        </v-list-item>
+        <v-list-item value="step4" @click="moveToStep4">
+          <template #title>
+            <v-sheet class="d-flex flex-column align-center">
+              <h3>STEP 4</h3>
+              <p>최종 확인</p>
+            </v-sheet>
+          </template>
+        </v-list-item>
+      </v-list>
     </v-navigation-drawer>
+  
     <v-sheet :width="stepDetailFold ? 25 : stepDetailwidth"
-        class="position-absolute border-e fill-height overflow-hidden" :style="{
-            zIndex: 1004, left: drawerWidth + 'px', transitionProperty: 'width',
-            transitionDuration: '0.2s',
-            transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)'
-        }">
-        <div @click="stepDetailFold = !stepDetailFold" v-if="stepDetailFold"
-            class="h-screen d-flex flex-column justify-center align-center">
-            <v-icon :icon="mdiDotsVertical" size="small"></v-icon>
-        </div>
-
-        <v-container class="h-screen d-flex flex-column justify-center" :style="{ minWidth: stepDetailwidth + 'px' }">
-            <PlanPickDate v-if="curStep === 1" />
-            <PlanPickTripwith v-if="curStep === 2" />
-            <PlanPickPlace v-if="curStep === 3" :attrList="attrList" :mapMove="mapMove"/>
-                :makePathPolyline="makePathPolyline" />
-        </v-container>
+             class="position-absolute border-e fill-height overflow-hidden" :style="{
+               zIndex: 1004, left: drawerWidth + 'px', transitionProperty: 'width',
+               transitionDuration: '0.2s', transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)'
+             }">
+      <div @click="stepDetailFold = !stepDetailFold" v-if="stepDetailFold"
+           class="h-screen d-flex flex-column justify-center align-center">
+        <v-icon :icon="mdiDotsVertical" size="small"></v-icon>
+      </div>
+      <v-container class="h-screen d-flex flex-column justify-center" :style="{ minWidth: stepDetailwidth + 'px' }">
+        <PlanPickDate v-if="curStep === 1" @complete="completeStep(1)" />
+        <PlanPickTripwith v-if="curStep === 2" @complete="completeStep(2)" />
+        <PlanPickPlace v-if="curStep === 3" :attrList="attrList" :mapMove="mapMove"
+                       :makePathPolyline="makePathPolyline" @complete="completeStep(3)" />
+        <PlanPickResult v-if="curStep === 4" :attrList="attrList" :mapMove="mapMove"
+                        :plan="plan" @registerPlan="registerPlan" @cancle:plan="canclePlan" />
+      </v-container>
     </v-sheet>
     <v-main>
         <KakaoMap @on-load-kakao-map="onLoadKakaoMap" :lat="coordinate.lat" :lng="coordinate.lng" :draggable="true"

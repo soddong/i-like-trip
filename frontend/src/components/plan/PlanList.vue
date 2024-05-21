@@ -1,12 +1,11 @@
 <script setup>
 import { ref, watch } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
+import { useRoute } from 'vue-router';
 import { listPlan } from '@/api/plan.js';
 import PlanListItem from '@/components/plan/item/PlanListItem.vue';
 import PlanListEmptyItem from '@/components/plan/item/PlanListEmptyItem.vue';
 import PlanHeaderItem from '@/components/plan/item/PlanHeaderItem.vue';
 
-const router = useRouter();
 const route = useRoute();
 const plans = ref([]);
 const param = ref({
@@ -43,11 +42,6 @@ watch(() => route.query.keyword, (newKeyword) => {
     loadPlans(param.value);
   }
 }, { immediate: true });
-
-// const moveWrite = () => {
-//   router.push({ name: 'plan-write' });
-// };
-
 </script>
 
 <template>
@@ -57,8 +51,7 @@ watch(() => route.query.keyword, (newKeyword) => {
         <PlanHeaderItem style="margin-top: 75px; margin-bottom: 20px; text-align: center;" />
         <v-row justify="center">
           <v-col cols="12" class="text-right">
-            <!-- Uncomment the button below if you want to use it -->
-            <v-btn class="main-button" @click="moveWrite" color="#072a40">게시글 작성하기</v-btn>
+            <v-btn class="main-button" :to="{ name: 'plan-write' }" color="#072a40">게시글 작성하기</v-btn>
           </v-col>
           <v-col cols="12">
             <v-card class="common-card">
