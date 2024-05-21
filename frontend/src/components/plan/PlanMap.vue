@@ -1,5 +1,5 @@
 <script setup>
-import { KakaoMap, KakaoMapMarker } from 'vue3-kakao-maps';
+import { KakaoMap, KakaoMapMarker, KakaoMapPolyline } from 'vue3-kakao-maps';
 import PlanPickDate from '@/components/plan/step/PlanPickDate.vue'
 import PlanPickTripwith from '@/components/plan/step/PlanPickTripwith.vue'
 import PlanPickTripwithSearch from '@/components/plan/step/item/PlanPickTripwithSearch.vue'
@@ -7,10 +7,11 @@ import PlanPickPlace from '@/components/plan/step/PlanPickPlace.vue'
 import PlanSearchPlace from '@/components/plan/step/PlanSearchPlace.vue'
 import { mdiDotsVertical } from '@mdi/js';
 import { ref } from 'vue';
+import { getPlanPath } from "@/api/plan";
+import { usePlanStore } from "@/stores/plan";
 
 const coordinate = {
-    lat: 37.566826,
-    lng: 126.9786567
+    lat: 33.45, lng: 126.571
 };
 
 const drawerWidth = 150
@@ -42,13 +43,66 @@ const openDetail = () => {
 }
 
 const mapMove = (lat, lng) => {
-    console.log(lat, lng, "불림")
     if (map.value) {
-        // 지도 중심을 부드럽게 이동시킵니다
-        // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
         map.value.panTo(new kakao.maps.LatLng(lat, lng));
     }
 }
+
+const planStore = usePlanStore()
+const { pickedPlace } = planStore
+
+const latLngList = ref([
+    { lat: 33.45, lng: 126.571 },
+    { lat: 33.449, lng: 126.5705 },
+    { lat: 33.45, lng: 126.5725 }
+]);
+function makePathPolyline() {
+    let data = {
+        "origin": {
+            "name": pickedPlace[0].title,
+            "x": pickedPlace[0].lng,
+            "y": pickedPlace[0].lat,
+        },
+        "destination": {
+            "name": pickedPlace[pickedPlace.length - 1].title,
+            "x": pickedPlace[pickedPlace.length - 1].lng,
+            "y": pickedPlace[pickedPlace.length - 1].lat,
+        }
+    }
+    if (pickedPlace.length > 2) {
+        let waypoints = []
+        for (let index = 1; index < pickedPlace.length; index++) {
+            waypoints.push({
+                "name": pickedPlace[index].title,
+                "x": pickedPlace[index].lng,
+                "y": pickedPlace[index].lat,
+            })
+        }
+        data['waypoints'] = waypoints
+    }
+
+    // getPlanPath(data, (res) => {
+    //     console.log(res)
+    //     let path = []
+    //     let result = res.data.routes[0]
+    //     if (result.result_code != 0)
+    //         return
+    //     result.sections.forEach(section => {
+    //         section.roads.forEach(road => {
+    //             for (let index = 0; index < road.vertexes.length; index += 2) {
+    //                 path.push({
+    //                     lat: road.vertexes[index + 1],
+    //                     lng: road.vertexes[index]
+    //                 })
+    //             }
+    //         })
+    //     });
+    //     console.log(path)
+    //     latLngList.value = path
+    // }, (e) => { console.log(e) })
+}
+
+
 </script>
 
 <template>
@@ -112,8 +166,9 @@ const mapMove = (lat, lng) => {
 
         <v-container class="h-screen d-flex flex-column justify-center" :style="{ minWidth: stepDetailwidth + 'px' }">
             <PlanPickDate v-if="curStep === 1" />
-            <PlanPickTripwith v-if="curStep === 2" />
-            <PlanPickPlace v-if="curStep === 3" :attrList="attrList" :mapMove="mapMove"/>
+            <PlanPickTripwith v-if="curStep === 2" v-model="tripwith" />
+            <PlanPickPlace v-if="curStep === 3" :attrList="attrList" :mapMove="mapMove"
+                :makePathPolyline="makePathPolyline" />
         </v-container>
     </v-sheet>
     <v-main>
@@ -125,6 +180,7 @@ const mapMove = (lat, lng) => {
                 imageHeight: 35,
                 imageOption: {}
             }"></KakaoMapMarker>
+            <KakaoMapPolyline :latLngList="latLngList" />
         </KakaoMap>
     </v-main>
 

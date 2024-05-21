@@ -17,5 +17,4 @@ public class PlanDto {
 	private String registDate;
 	private String visibility;
 	private String comment;
-
 }
