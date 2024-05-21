@@ -4,6 +4,7 @@ import com.ssafy.plan.model.PlaceDto;
 import com.ssafy.plan.model.PlanReponseDto;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -12,5 +13,5 @@ import java.util.List;
 public interface PlaceMapper {
 	List<PlaceDto> getPlaces(int planId) throws SQLException;
 
-	void registPlace(PlanReponseDto newPlan) throws SQLException;
+	void registPlace(@Param("planId") int planId, @Param("places") List<PlaceDto> places)  throws SQLException;
 }

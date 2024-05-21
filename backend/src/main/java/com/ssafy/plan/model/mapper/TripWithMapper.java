@@ -5,6 +5,7 @@ import com.ssafy.plan.model.PlanDto;
 import com.ssafy.plan.model.PlanReponseDto;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -15,5 +16,5 @@ public interface TripWithMapper {
 
     List<PlanDto> getPlanIds(String userId) throws SQLException;
 
-	void registTripWith(PlanReponseDto newPlan) throws SQLException;
+	void registTripWith(@Param("planId") int planId, @Param("members") List<MemberDto> newPlan) throws SQLException;
 }

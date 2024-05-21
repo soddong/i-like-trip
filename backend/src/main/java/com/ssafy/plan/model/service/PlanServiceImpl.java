@@ -84,12 +84,8 @@ public class PlanServiceImpl implements PlanService {
 	@Override
 	@Transactional
 	public void registPlan(PlanReponseDto newPlan) throws Exception {
-		System.out.println("00 "+newPlan.getPlan().getPlanId());
-		planMapper.registPlan(newPlan);
-		System.out.println("11 "+newPlan.getPlan().getPlanId());
-		placeMapper.registPlace(newPlan);
-		System.out.println("22");
-		tripWithMapper.registTripWith(newPlan);
-		
+		planMapper.registPlan(newPlan.getPlan());
+		placeMapper.registPlace(newPlan.getPlan().getPlanId(), newPlan.getPlaces());
+		tripWithMapper.registTripWith(newPlan.getPlan().getPlanId(), newPlan.getMembers());
 	}
 }

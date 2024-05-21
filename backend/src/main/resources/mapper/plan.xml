@@ -38,12 +38,12 @@
 			</if>
 		</where>
 	</select>
-	
-	<insert id="registPlan">
-		insert into plan (user_id, comment, title)
-		value (#{plan.makerId},#{plan.comment}, #{plan.title})
-		<selectKey keyProperty="plan.planId" keyColumn="plan_id" resultType="int" order="AFTER">
-			select last_insert_id() as plan_id;
+
+	<insert id="registPlan" parameterType="PlanDto" useGeneratedKeys="true" keyProperty="planId">
+		INSERT INTO plan (user_id, comment, title, visibility)
+		VALUES (#{makerId}, #{comment}, #{title}, #{visibility})
+		<selectKey keyProperty="planId" resultType="int" order="AFTER">
+			SELECT LAST_INSERT_ID()
 		</selectKey>
 	</insert>
 

@@ -7,25 +7,25 @@
 
 	<select id="getMembers" parameterType="int" resultMap="com.ssafy.member.model.mapper.MemberMapper.member">
 		SELECT user_id, name
-		FROM `member` join `tripwith` using(`user_id`) 
+		FROM `member` join `tripwith` using(`user_id`)
 		WHERE plan_id = #{planId}
 	</select>
-	
+
 	<sql id="selectPlansByUserId">
-		SELECT * 
-		FROM `plan` join `tripwith` using(`plan_id`) 
+		SELECT *
+		FROM `plan` join `tripwith` using(`plan_id`)
 		WHERE user_id = #{userId};
 	</sql>
-	
+
 	<select id="getPlanIds" parameterType="int" resultMap="com.ssafy.plan.model.mapper.PlanMapper.plan">
 		<include refid="selectPlansByUserId" />
 	</select>
-	
+
 	<insert id="registTripWith">
 		insert into tripwith (plan_id, user_id)
 		values
 		<foreach collection="members" item="memberObj" separator="," >
-		(#{plan.planId},#{memberObj.userId})
+		(#{planId}, #{memberObj.id})
 		</foreach>
 	</insert>
 

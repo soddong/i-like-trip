@@ -15,6 +15,6 @@ public class PlanDto {
 	private String title;
 	private String makerId;
 	private String registDate;
-	private String visibility;
+	private int visibility;
 	private String comment;
 }
