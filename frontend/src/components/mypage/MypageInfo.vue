@@ -1,12 +1,12 @@
 <template>
   <v-container class="user-info-container">
     <v-row>
-      <v-col cols="12" md="6">
-        <v-card class="user-info-card" v-if="userStore.userInfo" outlined>
+      <v-col cols="12" md="12">
+        <v-div v-if="userStore.userInfo">
           <v-card-title>
             <span class="highlight">기본정보</span>
           </v-card-title>
-          <v-divider></v-divider>
+          <v-divider class="divider"></v-divider>
 
           <v-list>
             <v-list-item>
@@ -38,36 +38,7 @@
                   @click="pushUpdateButton"
                 >수 정</v-btn>
           </v-list>
-        </v-card>
-      </v-col>
-
-      <v-col cols="12" md="6">
-        <v-card class="user-info-card" outlined>
-          <v-card-title>
-            <span class="highlight">선택정보</span>
-          </v-card-title>
-          <v-divider></v-divider>
-
-          <v-list>
-            <v-list-item v-for="item in electiveInfoItems" :key="item.key">
-              <v-list-item-content>
-                <v-text-field
-                  v-model="item.value"
-                  :label="item.label"
-                  :type="item.key === 'birthday' ? 'date' : 'text'"
-                  outlined
-                  dense
-                ></v-text-field>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
-          <v-btn
-                  text
-                  class="edit-button button"
-                  dense
-                  @click="pushUpdateButton"
-                >수 정</v-btn>
-        </v-card>
+        </v-div>
       </v-col>
     </v-row>
   </v-container>
@@ -147,66 +118,26 @@ export default {
   align-items: center;
   width: 100%;
   height: 75vh;
-  background-color: #f0f0f0;
-  padding: 20px;
+  padding: 20px 20px; /* 좌우 패딩을 20px로 조정 */
   box-sizing: border-box;
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
 }
 
 .v-row {
   width: 100%;
+  padding: 0 20px; /* 좌우 패딩을 20px로 조정 */
 }
 
-.user-info-card {
-  background-color: white;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  margin: 20px;
-  min-height: 580px;
-  width: 100%; /* 카드가 가로로 100% 차지 */
-  max-width: 80%; /* 최대 너비 제한 제거 */
-  margin-left: 10%;
-}
-
-.info-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
-}
-
-label {
-  font-weight: bold;
-  color: #333;
-}
-
-input, select {
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  width: 60%;
-}
-
-button {
-  background-color: #18b7be;
-  color: white;
-  width: 100px;
-}
-
-button:hover {
-  background-color: #0056b3;
+.v-card-title {
+  margin-top: 0;
+  padding-top: 0;
+  text-align: center; /* 타이틀을 중앙으로 정렬 */
 }
 
 .divider {
   border: none;
   border-top: 1px solid #ddd;
   margin: 20px 0;
-}
-
-.highlight {
-  display: inline-block;
-  box-shadow: inset 0 -10px 0 #fcd9e5;
 }
 
 .flex-container {
@@ -219,16 +150,30 @@ button:hover {
   flex-grow: 1;
 }
 
-.edit-button {
-  margin-left: 40%;
+.label-container {
+  width: 70px;
+  font-weight: bold;
+  padding-right: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.label-container {
-  width: 70px; /* 고정된 너비를 지정 */
-  font-weight: bold;
-  padding-right: 10px; /* 라벨과 텍스트 필드 사이의 간격 */
-  white-space: nowrap; /* 줄바꿈 방지 */
-  overflow: hidden; /* 내용이 넘칠 경우 숨김 */
-  text-overflow: ellipsis; /* 넘치는 텍스트를 ...로 표시 */
+.edit-button {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  background-color: #18b7be;
+  color: white;
+  width: 100px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.highlight {
+  display: inline-block;
+  box-shadow: inset 0 -10px 0 #fcd9e5;
 }
 </style>

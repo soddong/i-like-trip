@@ -1,17 +1,19 @@
 <template>
-  <v-container class="friend-info-container">
-    <v-row>
-      <v-col cols="12">
-        <v-card class="friend-info-card" outlined>
-          <h3 class="highlight">내 친구 목록</h3>
-          <hr class="divider">
-          <FriendCount :ilikeCount="friendStore.ilikeCount" :likemeCount="friendStore.likemeCount" />
-          <FriendMemberSearch :existingFriends="friendStore.friends" :userId="userStore.userId" @add-friend="friendStore.handleAddFriend" />
-          <FriendList :friends="friendStore.friends" @remove-friend="friendStore.handleRemoveFriend" />
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
+  <v-main>
+    <v-container class="friend-info-container">
+        <div class="sub-seperate">
+            내 친구 목록
+        </div>
+        <v-col cols="12">
+          <!-- <v-card class="friend-info-card" outlined> -->
+            <!-- <hr class="divider"> -->
+            <FriendCount :ilikeCount="friendStore.ilikeCount" :likemeCount="friendStore.likemeCount" />
+            <FriendMemberSearch :existingFriends="friendStore.friends" :userId="userStore.userId" @add-friend="friendStore.handleAddFriend" />
+            <FriendList :friends="friendStore.friends" @remove-friend="friendStore.handleRemoveFriend" />
+          <!-- </v-card> -->
+        </v-col>
+    </v-container>
+  </v-main>
 </template>
 
 <script setup>
@@ -36,10 +38,8 @@ onMounted(async () => {
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 85vh;
-  /* background-color: #f0f0f0; */
-  padding: 20px;
-  box-sizing: border-box;
+  height: 100vh;
+
 }
 
 .friend-info-card {
@@ -53,10 +53,6 @@ onMounted(async () => {
   overflow-y: auto;
 }
 
-h3 {
-  /* color: #666; */
-}
-
 .divider {
   border: none;
   border-top: 1px solid #ddd;
@@ -67,5 +63,12 @@ h3 {
   display: inline-block;
   box-shadow: inset 0 -10px 0 #fcd9e5;
 }
+
+.sub-seperate {
+    border-bottom: 1px solid #20435C;
+    font-size: x-large;
+    margin-bottom: 30px
+}
+
 
 </style>

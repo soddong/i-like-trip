@@ -114,7 +114,7 @@ const router = createRouter({
       name: "my-plan",
       component: () => import("@/components/myplan/MyPlanList.vue"),
       meta: {
-        viewTitle: "내 일정",
+        viewTitle: "내일정",
       },
     },
   ],

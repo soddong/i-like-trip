@@ -1,28 +1,24 @@
 <template>
   <v-main class="fill-height top-margin">
+    <v-container class="friend-info-container">
     <v-row align="start" justify="center" class="fill-height">
+      <v-cols cols="12" md="2"></v-cols>
       <v-col cols="12" md="2" class="fixed-height">
         <v-card class="fill-height">
           <MypageProfileItem></MypageProfileItem>
           <MypageMenuItem v-model:selectedMenu="selectedMenu"></MypageMenuItem>
         </v-card>
       </v-col>
-      <v-col cols="12" md="10" class="fixed-height">
+      <v-col cols="10" md="8" class="fixed-height">
         <v-card class="fill-height">
           <v-card-title>
-            <div v-if="selectedMenu === 'about'">
-              <span>회원 정보</span>
-            </div>
-            <!-- <div v-if="selectedMenu === 'friend'">                  
-                <span>친구 관리</span>
-              </div> -->
-            <div v-if="selectedMenu === 'plan'">
-              <span>내 계획</span>
-            </div>
           </v-card-title>
           <v-card-text>
             <div v-if="selectedMenu === 'about'">
               <MypageInfo></MypageInfo>
+            </div>
+            <div v-if="selectedMenu === 'remove'">
+              <MypageSignout></MypageSignout>
             </div>
             <!-- <div v-if="selectedMenu === 'friend'">
                 <MypageFriend></MypageFriend>
@@ -31,7 +27,9 @@
           </v-card-text>
         </v-card>
       </v-col>
+      <v-cols cols="12" md="1"></v-cols>
     </v-row>
+    </v-container>
   </v-main>
 </template>
 
@@ -39,8 +37,9 @@
 import { ref } from 'vue';
 import MypageProfileItem from '@/components/mypage/item/MypageProfileItem.vue'
 import MypageMenuItem from '@/components/mypage/item/MypageMenuItem.vue'
-import MypageInfo from '@/components/mypage/MypageInfo.vue'
-// import MypageFriend from '@/components/mypage/MypageFriend.vue'
+import MypageInfo from '@/components/mypage/MypageInfo.vue' 
+import MypageSignout from '@/components/mypage/MypageSignout.vue' 
+// import MypageFriend from '@/components/mypage/MypageFriend.vue' MypageSignout.vue
 const selectedMenu = ref('about'); // Default to 'about'
 </script>
 
@@ -61,5 +60,11 @@ const selectedMenu = ref('about'); // Default to 'about'
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.sub-seperate {
+    border-bottom: 1px solid #20435C;
+    font-size: x-large;
+    margin-bottom: 30px
 }
 </style>

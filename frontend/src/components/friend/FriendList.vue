@@ -85,6 +85,7 @@ const filteredFriends = computed(() => {
 function getRelationText(relation) {
   switch(relation) {
     case 1:
+      return '친구 취소';
     case 3:
       return '친구 취소';
     default: // case 2 포함
@@ -104,7 +105,7 @@ function toggleFriendStatus(friend) {
   if (friend.relation === 1) { // 내가 등록한 친구
     friendStore.handleRemoveFriend({userId: userStore.userId, friendId: friend.id, relation: 0})
   } else if (friend.relation === 2) { // 나를 등록한 친구
-    friendStore.handleRemoveFriend({userId: userStore.userId, friendId: friend.id, relation: 3})
+    friendStore.handleAddFriend({userId: userStore.userId, friendId: friend.id, relation: 3})
   } else if (friend.relation === 3) { // 서로 친구
     friendStore.handleRemoveFriend({userId: userStore.userId, friendId: friend.id, relation: 2})
   }

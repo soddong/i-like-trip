@@ -45,7 +45,7 @@ watch(() => route.query.keyword, (newKeyword) => {
 
 <template>
     <v-main>
-        <v-container class="mt-10">
+        <v-container style="margin-top: 110px">
             <div class="sub-seperate">
                 예정된 일정
             </div>

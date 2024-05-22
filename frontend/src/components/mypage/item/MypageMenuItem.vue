@@ -17,18 +17,11 @@
             회원 정보
             </v-list-item>
             <v-list-item 
-            @click="selectMenu('friend')" 
+            @click="selectMenu('remove')" 
             ripple
-            :class="{ selected: selectedMenu === 'friend' }"
+            :class="{ selected: selectedMenu === 'remove' }"
             >
-            친구 관리
-            </v-list-item>
-            <v-list-item 
-            @click="selectMenu('plan')" 
-            ripple
-            :class="{ selected: selectedMenu === 'plan' }"
-            >
-            내 계획
+            회원 탈퇴
             </v-list-item>
         </v-list>
     </v-card-text>
