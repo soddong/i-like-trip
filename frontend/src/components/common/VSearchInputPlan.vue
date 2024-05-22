@@ -28,7 +28,9 @@ onMounted(async () => {
     console.log('Fetching top places...');
     const response = await getChatgpt();
     console.log('Response:', response);
-    popularPlaces.value = response.split('\n');
+    popularPlaces.value = response.split('\n').map(place =>
+      place.trim().replace(/^\d+\.\s*/, '')
+    );
     isLoading.value = false; 
   } catch (error) {
     console.error('Failed to fetch top places', error);
@@ -58,8 +60,8 @@ onMounted(async () => {
       <div class="dropdown" v-if="showDropdown">
         <h2>인기 여행지 TOP 5</h2>
         <ul v-if="!isLoading">
-          <li v-for="place in popularPlaces" :key="place" @click="setKeyword(place)">
-            {{ place }}
+          <li v-for="(place, idx) in popularPlaces" :key="place" @click="setKeyword(place)">
+            {{idx+1}}. {{ place }}
           </li>
         </ul>
         <p v-if="isLoading">로딩중...</p> <!-- 로딩중 메시지를 표시 -->
