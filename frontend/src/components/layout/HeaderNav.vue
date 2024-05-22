@@ -33,7 +33,7 @@ const myMenuList = ref([
     },
     {
         title: '내계획',
-        to: { name: "Mypage" }
+        to: { name: "my-plan" }
     }
 ])
 
@@ -52,7 +52,7 @@ watch(
 </script>
 
 <template>
-    <v-app-bar :color=" $route.name=='Home'? 'transparent':'#CCE2E8'" elevation="0" >
+    <v-app-bar :color="'transparent'" elevation="0">
         <v-app-bar-title :style="{ fontSize: 'x-large', color: '#20435C', cursor: 'pointer' }"
             @click="$router.push({ name: 'Home' })">
             조아요행
@@ -116,6 +116,17 @@ watch(
 </template>
 
 <style scoped>
+* {
+    --v-layout-top: 64px
+}
+
+#header-wave {
+    width: 100%;
+    height: 200px;
+    background-color: rgb(204 226 232);
+    position: absolute;
+}
+
 .v-sheet {
     background-color: #178ca4;
     align-items: center;

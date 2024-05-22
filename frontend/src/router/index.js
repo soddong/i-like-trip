@@ -90,6 +90,11 @@ const router = createRouter({
       name: "Friend",
       component: FriendView,
     },
+    {
+      path: "/myplan",
+      name: "my-plan",
+      component: () => import("@/views/MyPlanView.vue"),
+    },
   ],
 });
 
@@ -102,7 +107,7 @@ router.beforeEach(async (to) => {
         await userStore.refreshToken();
         userStore.getUserInfo();
       } catch (error) {
-        console.log("")
+        console.log("");
       }
     }
   }

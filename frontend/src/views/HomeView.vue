@@ -1,7 +1,7 @@
 <template>
   <v-main>
-    <MainIntroduction/>
-    <MainFastSearch/>
+    <MainIntroduction />
+    <MainFastSearch />
   </v-main>
 </template>
 
@@ -10,5 +10,4 @@ import MainIntroduction from '@/components/MainIntroduction.vue';
 import MainFastSearch from '@/components/MainFastSearch.vue';
 </script>
 
-<style>
-</style>
+<style></style>

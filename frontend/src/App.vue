@@ -1,18 +1,55 @@
 <template>
   <v-app>
     <HeaderNav v-if="$route.name !== 'plan'" />
-    <RouterView />
+    <div style="background-color: rgb(204 226 232);">
+      <div :style="{ height: $route.name == 'Home' ? '100dvh' : '30dvh' }"></div>
+      <div class="position-absolute overflow-hidden" style="width: 100%; height: 400px;"
+        :style="{ top: $route.name == 'Home' ? '75dvh' : '60px' }">
+        <img class="position-absolute wave wave1" style="top:0px; left:-50px; animation-duration: 8s;"
+          src="/src/assets/landing-page/wave3.png" alt="">
+        <img class="position-absolute wave wave2" style="left: -50px;"
+          :style="{ top: $route.name == 'Home' ? '50px' : '25px' }" src="/src/assets/landing-page/wave2.png" alt="">
+        <img class="position-absolute wave wave3" style="left: -50px; animation-duration: 5s;"
+          :style="{ top: $route.name == 'Home' ? '100px' : '50px' }" src="/src/assets/landing-page/wave1.png" alt="">
+        <div class="position-absolute" style="top:90px; left: 40px;">
+          <h1>{{ $route.name }}</h1>
+        </div>
+      </div>
+      <div class="position-absolute" style="width: 100%;" :style="{ top: $route.name == 'Home' ? '0dvh' : '80px' }">
+        <RouterView />
+      </div>
+    </div>
+
   </v-app>
 </template>
 
 <script setup>
 import HeaderNav from "@/components/layout/HeaderNav.vue";
+
 </script>
 
 <style>
+#main-area {
+  background-color: rgb(204 226 232)
+}
+
 .v-application {
   font-family: 'SeoulNamsanM' !important;
   color: #20435C
+}
+
+.wave {
+  animation: moveLeftRight 10s infinite alternate linear;
+}
+
+@keyframes moveLeftRight {
+  from {
+    transform: translate(-50px, 0px);
+  }
+
+  to {
+    transform: translate(50px, 0px);
+  }
 }
 
 @font-face {
@@ -55,7 +92,9 @@ import HeaderNav from "@/components/layout/HeaderNav.vue";
   font-style: normal;
   font-weight: 400;
   src: url('//fastly.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.eot');
-  src: url('//fastly.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.eot?#iefix') format('embedded-opentype'), url('//fastly.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.woff') format('woff'), url('//fastly.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.ttf') format('truetype');
+  src: url('//fastly.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.eot?#iefix') format('embedded-opentype'),
+    url('//fastly.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.woff') format('woff'),
+    url('//fastly.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.ttf') format('truetype');
 }
 
 @font-face {
@@ -63,7 +102,9 @@ import HeaderNav from "@/components/layout/HeaderNav.vue";
   font-style: normal;
   font-weight: 700;
   src: url('//fastly.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebBold.eot');
-  src: url('//fastly.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebBold.eot?#iefix') format('embedded-opentype'), url('//fastly.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebBold.woff') format('woff'), url('//fastly.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebBold.ttf') format('truetype')
+  src: url('//fastly.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebBold.eot?#iefix') format('embedded-opentype'),
+    url('//fastly.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebBold.woff') format('woff'),
+    url('//fastly.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebBold.ttf') format('truetype')
 }
 
 @font-face {
@@ -71,7 +112,9 @@ import HeaderNav from "@/components/layout/HeaderNav.vue";
   font-style: normal;
   font-weight: 300;
   src: url('//fastly.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebLight.eot');
-  src: url('//fastly.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebLight.eot?#iefix') format('embedded-opentype'), url('//fastly.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebLight.woff') format('woff'), url('//fastly.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebLight.ttf') format('truetype');
+  src: url('//fastly.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebLight.eot?#iefix') format('embedded-opentype'),
+    url('//fastly.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebLight.woff') format('woff'),
+    url('//fastly.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebLight.ttf') format('truetype');
 }
 
 @font-face {

@@ -11,20 +11,18 @@ import VSearchInput from '@/components/common/VSearchInput.vue';
             </div>
         </v-row>
         <v-row justify="center">
-        <VSearchInput></VSearchInput>
+            <VSearchInput></VSearchInput>
         </v-row>
     </v-container>
 </template>
 
 <style scoped>
 .head {
-    background-color:  white;
-    padding-top: 200px; 
+    padding-top: 200px;
     height: 800px;
 }
+
 .title {
     font-size: 45px;
 }
-
-
 </style>
