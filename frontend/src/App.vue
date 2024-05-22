@@ -1,7 +1,7 @@
 <template>
   <v-app>
-    <HeaderNav v-if="$route.name !== 'plan'" />
-    <div style="background-color: rgb(204 226 232);">
+    <HeaderNav v-if="$route.name !== 'plan-write'" />
+    <div v-if="$route.name !== 'plan-write'" style="background-color: rgb(204 226 232);">
       <div :style="{ height: $route.name == 'Home' ? '100dvh' : '30dvh' }"></div>
       <div class="position-absolute overflow-hidden" style="width: 100%; height: 400px;"
         :style="{ top: $route.name == 'Home' ? '75dvh' : '60px' }">
@@ -19,7 +19,7 @@
         <RouterView />
       </div>
     </div>
-
+    <RouterView v-if="$route.name == 'plan-write'" />
   </v-app>
 </template>
 
