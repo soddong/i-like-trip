@@ -64,9 +64,6 @@ public class PlanServiceImpl implements PlanService {
 	public List<PlanDto> getTripWithPlanOfUser(String userId) throws Exception {
 		// 동행으로 참가하는 모든 plan id들을 리턴할것
 		List<PlanDto> plans = new ArrayList<>();
-//		for (String planId : tripWithMapper.getPlanIds(userId)) {
-//			plans.add(planMapper.getPlan(planId));
-//		}
 		return plans;
 	}
 
@@ -78,7 +75,7 @@ public class PlanServiceImpl implements PlanService {
 	 */
 	@Override
 	public List<PlanDto> searchPlans(PlanSearchDto searchDto) throws Exception {
-		return planMapper.searchPlans(searchDto);
+		return planMapper.searchPlans(searchDto.getWord());
 	}
 
 	@Override

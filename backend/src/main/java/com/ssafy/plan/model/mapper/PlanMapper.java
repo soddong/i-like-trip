@@ -10,6 +10,7 @@ import com.ssafy.plan.model.PlanReponseDto;
 import com.ssafy.plan.model.PlanSearchDto;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface PlanMapper {
@@ -18,7 +19,7 @@ public interface PlanMapper {
 
 	List<PlanDto> getPlans(int visibility) throws SQLException;
 
-	List<PlanDto> searchPlans(PlanSearchDto searchDto) throws SQLException;
+	List<PlanDto> searchPlans(@Param("word") String word) throws SQLException;
 
 	void registPlan(PlanDto newPlan) throws SQLException;
 

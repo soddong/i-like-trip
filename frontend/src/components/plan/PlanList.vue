@@ -7,8 +7,9 @@ import PlanListEmptyItem from '@/components/plan/item/PlanListEmptyItem.vue';
 
 const route = useRoute();
 const plans = ref([]);
+
 const param = ref({
-  keyword: "",
+  keyword: "title",
   word: "",
 });
 
@@ -37,7 +38,7 @@ const loadPlans = (params) => {
 
 watch(() => route.query.keyword, (newKeyword) => {
   if (newKeyword) {
-    loadPlans({ key: 'subject', word: newKeyword });
+    loadPlans({ keyword: 'title', word: route.query.word });
   } else {
     loadPlans(param.value);
   }

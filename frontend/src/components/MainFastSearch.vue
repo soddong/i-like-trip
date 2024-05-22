@@ -1,5 +1,7 @@
 <script setup>
-import VSearchInput from '@/components/common/VSearchInput.vue';
+import VSearchInput from '@/components/common/VSearchInput.vue'
+import VSearchInputPlan from '@/components/common/VSearchInputPlan.vue'
+// VSearchInputPlan.vue
 </script>
 
 <template>
@@ -11,7 +13,7 @@ import VSearchInput from '@/components/common/VSearchInput.vue';
             </div>
         </v-row>
         <v-row justify="center">
-            <VSearchInput></VSearchInput>
+            <VSearchInputPlan></VSearchInputPlan>
         </v-row>
     </v-container>
 </template>

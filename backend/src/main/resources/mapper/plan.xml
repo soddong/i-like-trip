@@ -28,14 +28,11 @@
 		visibility = #{visibility}
 	</select>
 
-	<select id="searchPlans" parameterType="planSearchDto"
-		resultMap="plan">
+	<select id="searchPlans" parameterType="com.ssafy.plan.model.PlanSearchDto" resultMap="plan">
 		select plan_id, title, user_id, regist_date, visibility, comment
 		from plan
 		<where>
-			<if test="keyword == 'maker'">
-				and user_id = #{word}
-			</if>
+			title like CONCAT('%', #{word}, '%')
 		</where>
 	</select>
 
@@ -47,15 +44,15 @@
 		</selectKey>
 	</insert>
 
-<!--	<update id="updatePlan">-->
-<!--		UPDATE plan-->
-<!--		SET title = #{title},-->
-<!--			maker_id = #{makerId},-->
-<!--			regist_date = #{registDate},-->
-<!--			visibility = #{visibility},-->
-<!--			comment = #{comment}-->
-<!--		WHERE plan_id = #{planId}-->
-<!--	</update>-->
+	<update id="updatePlan">
+		UPDATE plan
+		SET title = #{title},
+			maker_id = #{makerId},
+			regist_date = #{registDate},
+			visibility = #{visibility},
+			comment = #{comment}
+		WHERE plan_id = #{planId}
+	</update>
 
 
 </mapper>

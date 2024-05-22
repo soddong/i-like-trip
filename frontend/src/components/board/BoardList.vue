@@ -10,10 +10,12 @@ const router = useRouter();
 const route = useRoute();
 const articles = ref([]);
 const hasError = ref(false);
+
 const param = ref({
-  key: "subject",
+  keyword: "subject",
   word: "",
 });
+
 const articleImages = ref({}); 
 
 const loadArticles = (params) => {
