@@ -1,24 +1,30 @@
 <template>
   <v-app>
-    <HeaderNav v-if="$route.name !== 'plan'" />
-    <div style="background-color: rgb(204 226 232);">
-      <div :style="{ height: $route.name == 'Home' ? '100dvh' : '30dvh' }"></div>
-      <div class="position-absolute overflow-hidden" style="width: 100%; height: 400px;"
-        :style="{ top: $route.name == 'Home' ? '75dvh' : '60px' }">
-        <img class="position-absolute wave wave1" style="top:0px; left:-50px; animation-duration: 8s;"
-          src="/src/assets/landing-page/wave3.png" alt="">
-        <img class="position-absolute wave wave2" style="left: -50px;"
-          :style="{ top: $route.name == 'Home' ? '50px' : '25px' }" src="/src/assets/landing-page/wave2.png" alt="">
-        <img class="position-absolute wave wave3" style="left: -50px; animation-duration: 5s;"
-          :style="{ top: $route.name == 'Home' ? '100px' : '50px' }" src="/src/assets/landing-page/wave1.png" alt="">
-        <div class="position-absolute" style="top:90px; left: 40px;">
-          <h1>{{ $route.name }}</h1>
+    <template v-if="!$route.meta.noHeader">
+      <HeaderNav />
+      <div style="background-color: rgb(204 226 232);">
+        <div :style="{ height: $route.name == 'Home' ? '100dvh' : '30dvh' }"></div>
+        <div class="position-absolute overflow-hidden" style="width: 100%; height: 400px;"
+          :style="{ top: $route.name == 'Home' ? '75dvh' : '60px' }">
+          <img class="position-absolute wave wave1" style="top:0px; left:-50px; animation-duration: 8s;"
+            src="/src/assets/landing-page/wave3.png" alt="">
+          <img class="position-absolute wave wave2" style="left: -50px;"
+            :style="{ top: $route.name == 'Home' ? '50px' : '25px' }" src="/src/assets/landing-page/wave2.png" alt="">
+          <img class="position-absolute wave wave3" style="left: -50px; animation-duration: 5s;"
+            :style="{ top: $route.name == 'Home' ? '100px' : '50px' }" src="/src/assets/landing-page/wave1.png" alt="">
+          <div class="position-absolute" style="top:90px; left: 40px;">
+            <h1>{{ $route.name }}</h1>
+          </div>
+        </div>
+        <div class="position-absolute" style="width: 100%;" :style="{ top: $route.name == 'Home' ? '0dvh' : '80px' }">
+          <RouterView />
         </div>
       </div>
-      <div class="position-absolute" style="width: 100%;" :style="{ top: $route.name == 'Home' ? '0dvh' : '80px' }">
-        <RouterView />
-      </div>
-    </div>
+    </template>
+    <template v-else>
+      <RouterView />
+    </template>
+
 
   </v-app>
 </template>

@@ -47,25 +47,28 @@ watch(() => route.query.keyword, (newKeyword) => {
 
 <template>
   <v-main class="bg-transparent">
-    <v-row justify="center">
-      <v-col cols="12" class="text-right">
-        <v-btn class="main-button" :to="{ name: 'plan-write' }" color="#072a40">게시글 작성하기</v-btn>
-      </v-col>
-      <v-col cols="12">
-        <v-card class="common-card">
-          <template v-if="plans.length > 0">
-            <div class="grid-container">
-              <div v-for="plan in plans" :key="plan.planId" class="grid-item">
-                <PlanListItem :plan="plan" />
+    <v-container>
+      <v-row justify="center">
+        <v-col cols="12" class="text-right">
+          <v-btn class="main-button" :to="{ name: 'plan-write' }" color="#072a40">게시글 작성하기</v-btn>
+        </v-col>
+        <v-col cols="12">
+          <v-card class="common-card">
+            <template v-if="plans.length > 0">
+              <div class="grid-container">
+                <div v-for="plan in plans" :key="plan.planId" class="grid-item">
+                  <PlanListItem :plan="plan" />
+                </div>
               </div>
-            </div>
-          </template>
-          <template v-else>
-            <PlanListEmptyItem />
-          </template>
-        </v-card>
-      </v-col>
-    </v-row>
+            </template>
+            <template v-else>
+              <PlanListEmptyItem />
+            </template>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
+
   </v-main>
 </template>
 
