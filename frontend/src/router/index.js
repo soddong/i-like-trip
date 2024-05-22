@@ -80,11 +80,11 @@ const router = createRouter({
       name: "plan-write",
       component: () => import("@/components/plan/PlanMap.vue"),
     },
-    // {
-    //   path: "/plan/:planno",
-    //   name: "plan-modify",
-    //   component: () => import("@/components/plan/PlanModify.vue"),
-    // },
+    {
+      path: "/plan/:planno",
+      name: "plan-modify",
+      component: () => import("@/components/plan/PlanModify.vue"),
+    },
     {
       path: "/friend",
       name: "Friend",
