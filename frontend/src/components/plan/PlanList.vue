@@ -44,13 +44,13 @@ watch(() => route.query.keyword, (newKeyword) => {
   }
 }, { immediate: true });
 </script>
-
 <template>
-  <v-main class="bg-transparent">
+  <v-main>
     <v-container>
       <v-row justify="center">
         <v-col cols="12" class="text-right">
-          <v-btn class="main-button" :to="{ name: 'plan-write' }" color="#072a40">게시글 작성하기</v-btn>
+          <v-btn rounded class="main-button" :to="{ name: 'plan-write' }" color="#F0BBB1"
+            style=" width: 250px; font-size: 15px; color: white">게시글 작성하기</v-btn>
         </v-col>
         <v-col cols="12">
           <v-card class="common-card">
@@ -68,7 +68,6 @@ watch(() => route.query.keyword, (newKeyword) => {
         </v-col>
       </v-row>
     </v-container>
-
   </v-main>
 </template>
 
@@ -82,11 +81,6 @@ export default {
 .common-card {
   border: none;
   box-shadow: none;
-}
-
-.main-button {
-  background-color: #072a40;
-  color: white;
 }
 
 .grid-container {

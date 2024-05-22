@@ -2,7 +2,6 @@ import AccountView from "@/views/AccountView.vue";
 import HomeView from "@/views/HomeView.vue";
 import MypageView from "@/views/MypageView.vue";
 import FriendView from "@/views/FriendView.vue";
-import PlanView from "@/views/PlanView.vue";
 import { createRouter, createWebHistory } from "vue-router";
 import { useUserStore } from "@/stores/user";
 
@@ -41,6 +40,9 @@ const router = createRouter({
           component: () => import("@/components/board/BoardModify.vue"),
         },
       ],
+      meta: {
+        viewTitle: "게시판",
+      },
     },
     {
       path: "/account",
@@ -63,11 +65,17 @@ const router = createRouter({
       path: "/mypage",
       name: "Mypage",
       component: MypageView,
+      meta: {
+        viewTitle: "마이페이지",
+      },
     },
     {
       path: "/plan",
       name: "plan-list",
       component: () => import("@/components/plan/PlanList.vue"),
+      meta: {
+        viewTitle: "일정 공유",
+      },
     },
     {
       path: "/plan/:planno",
@@ -97,11 +105,17 @@ const router = createRouter({
       path: "/friend",
       name: "Friend",
       component: FriendView,
+      meta: {
+        viewTitle: "내친구",
+      },
     },
     {
       path: "/myplan",
       name: "my-plan",
-      component: () => import("@/views/MyPlanView.vue"),
+      component: () => import("@/components/myplan/MyPlanList.vue"),
+      meta: {
+        viewTitle: "내 일정",
+      },
     },
   ],
 });
