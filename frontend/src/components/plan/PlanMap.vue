@@ -27,7 +27,6 @@ const curStep = ref(1);
 
 const map = ref();
 
-// const tripwith = ref([]);
 const attrList = ref([]);
 const onLoadKakaoMap = (mapRef) => {
     map.value = mapRef;
@@ -66,7 +65,7 @@ const latLngList = ref([
 
 const plan = ref({
     title: "",        
-    makerId: computed(() => userStore.userId), // computed를 이용해 userId를 가져오되, ref 안에서 사용
+    makerId: computed(() => userStore.userId), 
     visibility: "", 
     comment: ""
 });
@@ -148,12 +147,27 @@ function moveList() {
 }
 
 function moveToStep4() {
-    console.log(tripwithStore.isEmpty(), planStore.isEmpty())
   if (tripwithStore.isEmpty() || planStore.isEmpty()) {
     alert('STEP 1, 2, 3을 완료해야 합니다.');
     return;
   }
   curStep.value = 4;
+}
+
+function completeStep(step) {
+  if (step === 1) {
+    plan.value.startDate = planStore.getStartEnd().start;
+    plan.value.endDate = planStore.getStartEnd().end;
+  } else if (step === 2) {
+    // Additional logic for step 2 completion
+  } else if (step === 3) {
+    makePathPolyline();
+  }
+  curStep.value = step + 1;
+}
+
+function updatePlan(updatedPlan) {
+  plan.value = { ...plan.value, ...updatedPlan };
 }
 </script>
 
@@ -220,7 +234,7 @@ function moveToStep4() {
         <PlanPickPlace v-if="curStep === 3" :attrList="attrList" :mapMove="mapMove"
                        :makePathPolyline="makePathPolyline" @complete="completeStep(3)" />
         <PlanPickResult v-if="curStep === 4" :attrList="attrList" :mapMove="mapMove"
-                        :plan="plan" @registerPlan="registerPlan" @cancle:plan="canclePlan" />
+                        v-model="plan" @registerPlan="registerPlan" @cancle:plan="canclePlan" @update:plan="updatePlan"/>
       </v-container>
     </v-sheet>
     <v-main>

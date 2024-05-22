@@ -1,4 +1,4 @@
-<!-- <script setup>
+<script setup>
 import { KakaoMap, KakaoMapMarker, KakaoMapPolyline } from 'vue3-kakao-maps';
 import PlanPickDate from '@/components/plan/step/PlanPickDate.vue'
 import PlanPickTripwith from '@/components/plan/step/PlanPickTripwith.vue'
@@ -7,14 +7,13 @@ import PlanPickPlace from '@/components/plan/step/PlanPickPlace.vue'
 import PlanSearchPlace from '@/components/plan/step/PlanSearchPlace.vue'
 import PlanPickResult from '@/components/plan/step/PlanPickResult.vue'
 import { mdiDotsVertical } from '@mdi/js';
-import { ref, computed, onMounted } from 'vue';
-import { createPlan, detailPlan } from "@/api/plan";
+import { ref, computed } from 'vue';
+import { getPlanPath, createPlan } from "@/api/plan";
 import { usePlanStore } from "@/stores/plan";
 import { useTripwithStore } from "@/stores/tripwith";
 import { useUserStore } from "@/stores/user";
-import { useRoute, useRouter } from "vue-router"
+import { useRouter } from "vue-router"
 
-const route = useRoute();
 const router = useRouter()
 const coordinate = { 
     lat: 33.45, lng: 126.571
@@ -28,7 +27,6 @@ const curStep = ref(1);
 
 const map = ref();
 
-// const tripwith = ref([]);
 const attrList = ref([]);
 const onLoadKakaoMap = (mapRef) => {
     map.value = mapRef;
@@ -65,53 +63,12 @@ const latLngList = ref([
     { lat: 33.45, lng: 126.5725 }
 ]);
 
-const myPlan = ref([]);
-
-
-/* detail */
-const { planno } = route.params;
-
-onMounted(() => {
-  getPlan();
-  updatePlan();
+const plan = ref({
+    title: "",        
+    makerId: computed(() => userStore.userId), 
+    visibility: "", 
+    comment: ""
 });
-
-const getPlan = () => {
-  detailPlan(
-    planno,
-    ({ data }) => {
-        planStore.pickedPlace.value = data.places;
-        tripwithStore.tripwith.value = data.members;
-        console.log(myPlan.value)
-    },
-    (error) => {
-      console.log(error);
-    }
-  );
-};
-
-async function updatePlan() {
-    planStore.pickedPlace.value = myPlan.value.places;
-    tripwithStore.tripwith.value = myPlan.value
-}
-const newPlan = {
-    plan: { ...plan.value },
-    places: pickedPlace.map((attr, index) => {
-      const { start, end } = planStore.getPlaceStartEnd(index);
-      return {
-        order: index + 1,
-        startTime: start,
-        endTime: end,
-        comment: '',
-        place: {
-          attractionId: attr.attractionId,
-          lat: attr.lat,
-          lng: attr.lng,
-        },
-      };
-    }),
-    members: tripwithStore.tripwith,
-};
 
 function makePathPolyline() {
     let data = {
@@ -190,12 +147,27 @@ function moveList() {
 }
 
 function moveToStep4() {
-    console.log(tripwithStore.isEmpty(), planStore.isEmpty())
   if (tripwithStore.isEmpty() || planStore.isEmpty()) {
     alert('STEP 1, 2, 3을 완료해야 합니다.');
     return;
   }
   curStep.value = 4;
+}
+
+function completeStep(step) {
+  if (step === 1) {
+    plan.value.startDate = planStore.getStartEnd().start;
+    plan.value.endDate = planStore.getStartEnd().end;
+  } else if (step === 2) {
+    // Additional logic for step 2 completion
+  } else if (step === 3) {
+    makePathPolyline();
+  }
+  curStep.value = step + 1;
+}
+
+function updatePlan(updatedPlan) {
+  plan.value = { ...plan.value, ...updatedPlan };
 }
 </script>
 
@@ -262,7 +234,7 @@ function moveToStep4() {
         <PlanPickPlace v-if="curStep === 3" :attrList="attrList" :mapMove="mapMove"
                        :makePathPolyline="makePathPolyline" @complete="completeStep(3)" />
         <PlanPickResult v-if="curStep === 4" :attrList="attrList" :mapMove="mapMove"
-                        :plan="plan" @registerPlan="registerPlan" @cancle:plan="canclePlan" />
+                        v-model="plan" @registerPlan="registerPlan" @cancle:plan="canclePlan" @update:plan="updatePlan"/>
       </v-container>
     </v-sheet>
     <v-main>
@@ -293,4 +265,4 @@ function moveToStep4() {
 html {
     overflow: auto;
 }
-</style> -->
+</style>
