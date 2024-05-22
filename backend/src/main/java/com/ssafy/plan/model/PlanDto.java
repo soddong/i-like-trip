@@ -1,5 +1,7 @@
 package com.ssafy.plan.model;
 
+import java.time.LocalDateTime;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,4 +19,6 @@ public class PlanDto {
 	private String registDate;
 	private int visibility;
 	private String comment;
+	private LocalDateTime startTime;
+	private LocalDateTime endTime;
 }

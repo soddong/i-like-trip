@@ -10,11 +10,14 @@
 		<result column="regist_date" property="registDate" />
 		<result column="visibility" property="visibility" />
 		<result column="comment" property="comment" />
+		<result column="start_time" property="startTime" />
+		<result column="end_time" property="endTime" />
 	</resultMap>
 
 	<select id="getPlan" parameterType="int" resultMap="plan">
 		select
-		plan_id, title, user_id, regist_date, visibility, comment
+		plan_id, title, user_id, regist_date, visibility, comment, start_time,
+		end_time
 		from plan
 		where
 		plan_id = #{planId}
@@ -22,24 +25,67 @@
 
 	<select id="getPlans" parameterType="int" resultMap="plan">
 		select
-		plan_id, title, user_id, regist_date, visibility, comment
+		plan_id, title, user_id, regist_date, visibility, comment, start_time,
+		end_time
 		from plan
 		where
 		visibility = #{visibility}
 	</select>
 
-	<select id="searchPlans" parameterType="com.ssafy.plan.model.PlanSearchDto" resultMap="plan">
-		select plan_id, title, user_id, regist_date, visibility, comment
+	<select id="getPlansNew"
+		parameterType="com.ssafy.plan.model.PlanSearchDto" resultMap="plan">
+		select
+		plan_id, title, user_id, regist_date, visibility, comment, start_time, end_time
+		from plan
+		<where>
+			<if test="!onlyMine">
+				visibility = 1
+			</if>
+			<if test="onlyMine">
+				and plan_id in (select
+				plan_id from tripwith
+				where user_id=#{userId}
+				)
+			</if>
+			<if test="keyword !=null and keyword !=''">
+				<if test="word != null and word !=''">
+					and title like CONCAT('%', #{word}, '%')
+				</if>
+			</if>
+		</where>
+	</select>
+
+	<select id="getMyPlans" parameterType="String" resultMap="plan">
+		select
+		plan_id, title, user_id, regist_date, visibility, comment, start_time,
+		end_time
+		from plan
+		where
+		plan_id in (select
+		plan_id from tripwith
+		where
+		user_id=#{userId}
+		)
+	</select>
+
+	<select id="searchPlans"
+		parameterType="com.ssafy.plan.model.PlanSearchDto" resultMap="plan">
+		select plan_id, title, user_id, regist_date, visibility, comment,
+		start_time, end_time
 		from plan
 		<where>
 			title like CONCAT('%', #{word}, '%')
 		</where>
 	</select>
 
-	<insert id="registPlan" parameterType="PlanDto" useGeneratedKeys="true" keyProperty="planId">
-		INSERT INTO plan (user_id, comment, title, visibility)
-		VALUES (#{makerId}, #{comment}, #{title}, #{visibility})
-		<selectKey keyProperty="planId" resultType="int" order="AFTER">
+	<insert id="registPlan" parameterType="PlanDto"
+		useGeneratedKeys="true" keyProperty="planId">
+		INSERT INTO plan (user_id, comment, title, visibility, start_time,
+		end_time)
+		VALUES (#{makerId}, #{comment}, #{title}, #{visibility},
+		#{startTime}, #{endTime})
+		<selectKey keyProperty="planId" resultType="int"
+			order="AFTER">
 			SELECT LAST_INSERT_ID()
 		</selectKey>
 	</insert>
@@ -47,11 +93,15 @@
 	<update id="updatePlan">
 		UPDATE plan
 		SET title = #{title},
-			maker_id = #{makerId},
-			regist_date = #{registDate},
-			visibility = #{visibility},
-			comment = #{comment}
-		WHERE plan_id = #{planId}
+		maker_id =
+		#{makerId},
+		regist_date = #{registDate},
+		visibility = #{visibility},
+		comment = #{comment},
+		start_time=#{startTime},
+		end_time=#{endTime}
+		WHERE
+		plan_id = #{planId}
 	</update>
 
 

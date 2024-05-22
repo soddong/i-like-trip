@@ -24,4 +24,6 @@ public interface PlanService {
 	void registPlan(PlanReponseDto newPlan) throws Exception;
 
 	void updatePlan(PlanReponseDto newPlan) throws Exception;
+
+	List<PlanDto> getPlansNew(PlanSearchDto dto) throws Exception;
 }
