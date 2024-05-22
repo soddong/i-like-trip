@@ -25,7 +25,6 @@ const loadPlans = (params) => {
                 img: `@/assets/random-images/0${plan.planId}.jpg`
             };
             plans.value.push(planObject);
-            plans.value.push(planObject);
         });
         console.log("성공!!!!!!!!!");
         console.log(plans.value);

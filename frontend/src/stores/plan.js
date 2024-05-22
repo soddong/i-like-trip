@@ -1,11 +1,11 @@
-import { ref } from 'vue';
-import { defineStore } from 'pinia';
+import { ref } from "vue";
+import { defineStore } from "pinia";
 
-export const usePlanStore = defineStore('planStore', () => {
+export const usePlanStore = defineStore("planStore", () => {
   const period = ref([new Date(new Date().toDateString())]);
   const pickedPlace = ref([]);
   const planInfo = ref([]);
-  const content = ref([])
+  const content = ref([]);
 
   const getStartEnd = () => {
     let start = period.value[0].toDateString();
@@ -18,14 +18,21 @@ export const usePlanStore = defineStore('planStore', () => {
       return 1;
     } else {
       return Math.round(
-        (period.value[period.value.length - 1] - period.value[0] + 1) / 60000 / 60 / 24
+        (period.value[period.value.length - 1] - period.value[0] + 1) /
+          60000 /
+          60 /
+          24
       );
     }
   };
 
   const getPlaceStartEnd = (idx) => {
-    let start = new Date(period.value[0].getTime() + 1000 * 60 * 60 * pickedPlace.value[idx].y);
-    let end = new Date(start.getTime() + 1000 * 60 * 60 * pickedPlace.value[idx].h - 1);
+    let start = new Date(
+      period.value[0].getTime() + 1000 * 60 * 60 * pickedPlace.value[idx].y
+    );
+    let end = new Date(
+      start.getTime() + 1000 * 60 * 60 * pickedPlace.value[idx].h - 1
+    );
     return { start, end };
   };
 
@@ -39,11 +46,15 @@ export const usePlanStore = defineStore('planStore', () => {
   };
 
   const isEmpty = () => {
-    return (pickedPlace.value.length > 0 || period.value[0] != null || period.value[1] != null) ? false : true;
-  }
+    return pickedPlace.value.length > 0 ||
+      period.value[0] != null ||
+      period.value[1] != null
+      ? false
+      : true;
+  };
 
   const updatePickedPlace = (places) => {
-    pickedPlace.value = places.map(place => ({
+    pickedPlace.value = places.map((place) => ({
       attractionId: place.place.attractionId,
       attractionType: place.place.attractionType,
       title: place.place.title,
@@ -54,17 +65,43 @@ export const usePlanStore = defineStore('planStore', () => {
       imgBig: place.place.imgBig,
       lat: place.place.lat,
       lng: place.place.lng,
-      id: '',
+      id: "",
       x: 0,
       y: 0,
       h: 1,
       w: 1,
     }));
   };
-  
+
   const updatePlanInfo = (plan) => {
     planInfo.value = plan;
-  }
+  };
+
+  const getPlacePerDay = () => {
+    let allTime = getPeriodTime();
+    let placePerDay = [];
+    for (let index = 0; index < allTime; index++) {
+      placePerDay.push([]);
+    }
+
+    let curDayCount = 0;
+    pickedPlace.value.forEach((e, idx) => {
+      let { start, end } = getPlaceStartEnd(idx);
+      const timeDifference =
+        new Date(`${end.getFullYear()}-${end.getMonth()}-${end.getDate()}`) -
+        new Date(
+          `${start.getFullYear()}-${start.getMonth()}-${start.getDate()}`
+        );
+      const millisecondsPerDay = 24 * 60 * 60 * 1000;
+      let containDayCount = Math.ceil(timeDifference / millisecondsPerDay) + 1;
+      for (let i = 0; i < containDayCount; i++) {
+        if (i != 0) curDayCount++;
+        placePerDay[curDayCount].push({ ...e, start, end });
+      }
+      if (end.getHours() == 23) curDayCount++;
+    });
+    return placePerDay;
+  };
 
   return {
     period,
@@ -78,6 +115,7 @@ export const usePlanStore = defineStore('planStore', () => {
     resetPlan,
     isEmpty,
     updatePickedPlace,
-    updatePlanInfo
+    updatePlanInfo,
+    getPlacePerDay,
   };
 });
