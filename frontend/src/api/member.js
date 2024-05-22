@@ -62,4 +62,8 @@ async function searchFriends(searchQuery) {
   }
 }
 
-export { signIn, refreshTokenReq, signUp, getUserInfoReq, updateUserInfo, searchFriends };
+async function deleteUser(userId, success, fail) {
+  await local.delete(`/member/${userId}`).then(success).catch(fail);
+}
+
+export { signIn, refreshTokenReq, signUp, getUserInfoReq, updateUserInfo, searchFriends, deleteUser };
