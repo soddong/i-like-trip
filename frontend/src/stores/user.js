@@ -18,6 +18,7 @@ export const useUserStore = defineStore("userStore", () => {
       (response) => {
         if (response.status === 201) {
           console.log("로그인 성공!!!!");
+          alert('로그인에 성공했습니다')
           let { data } = response;
 
           jwt.value = data["accessToken"];
@@ -32,6 +33,7 @@ export const useUserStore = defineStore("userStore", () => {
       },
       (error) => {
         console.log("로그인 실패!!!!");
+        alert('로그인에 실패했습니다')
         isSignIn.value = false;
         console.error(error);
       }
@@ -75,8 +77,11 @@ export const useUserStore = defineStore("userStore", () => {
           id: signUpData.id,
           password: signUpData.password,
         });
+        alert("회원가입에 성공했습니다")
       },
-      () => {}
+      () => {
+        alert("회원가입에 실패했습니다")
+      }
     );
   };
 
