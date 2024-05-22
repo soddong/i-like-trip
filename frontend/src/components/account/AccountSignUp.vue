@@ -1,7 +1,9 @@
 <script setup>
 import { ref } from "vue";
+import { useRouter } from "vue-router"
 import { useUserStore } from "@/stores/user"
 const userStore = useUserStore()
+const router = useRouter();
 
 const signUpData = ref({
     id: "",
@@ -10,6 +12,10 @@ const signUpData = ref({
     name: "",
     location: ""
 })
+
+const signup = async () => {
+    await userStore.userSingUp(signUpData.value);
+}
 </script>
 
 <template>
@@ -42,7 +48,7 @@ const signUpData = ref({
         <v-text-field density="compact" placeholder="location" :prepend-inner-icon="mdiEmailOutline" variant="outlined"
             v-model="signUpData.location"></v-text-field>
 
-        <v-btn class="mb-8" color="blue" size="large" variant="tonal" block @click="userStore.userSingUp(signUpData)">
+        <v-btn class="mb-8" color="blue" size="large" variant="tonal" block @click="signup">
             Sign Up
         </v-btn>
     </v-card>

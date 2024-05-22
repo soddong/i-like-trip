@@ -16,27 +16,27 @@
 </template>
 <script>
 import { ref } from 'vue';
+import { useRouter } from "vue-router"
 import { useUserStore } from '@/stores/user';
-// import { deleteUser } from '@/api/member';
+import { deleteUser } from '@/api/member';
 
 export default {
   setup() {
     const userStore = useUserStore();
-    
+    const router = useRouter();
+
     function confirmDeletion() {
-    //   if (confirm("정말로 회원 탈퇴를 진행하시겠습니까?")) {
-    //     deleteUser(userStore.userId, 
-    //       () => {
-    //         alert("회원 탈퇴 처리가 완료되었습니다.");
-    //         // 로그아웃 로직 실행 등의 추가 동작 필요
-    //       },
-    //       (error) => {
-    //         console.error("탈퇴 처리 중 오류가 발생했습니다.", error);
-    //         alert("탈퇴 처리에 실패하였습니다.");
-    //       }
-    //     );
-    //   }
-        confirm("정말로 회원 탈퇴를 진행하시겠습니까?");
+      if (confirm("정말로 회원 탈퇴를 진행하시겠습니까?")) {
+        deleteUser(userStore.userId, 
+          () => {
+            alert("회원 탈퇴 처리가 완료되었습니다.");
+            userStore.userLogout();
+            router.replace({ name: "Home" })
+          },
+          () => {
+          }
+        );
+      }
     }
 
     return { confirmDeletion };

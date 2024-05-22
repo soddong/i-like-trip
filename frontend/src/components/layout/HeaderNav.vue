@@ -1,12 +1,13 @@
 <script setup>
 import { ref, watch } from "vue";
-import { RouterLink } from "vue-router";
+import { useRouter } from "vue-router";
 import { useDisplay } from 'vuetify'
 import { useUserStore } from "@/stores/user"
 import defaultProfile from '@/assets/default_profile.png';
 
 const VITE_VUE_API_URL = import.meta.env.VITE_VUE_API_URL;
 
+const router = useRouter();
 const userProfile = ref(defaultProfile);
 const { mdAndUp } = useDisplay()
 const drawerOpen = ref(false);
@@ -45,10 +46,18 @@ watch(
         if (newProfile) {
             userProfile.value = `${VITE_VUE_API_URL}upload?name=${newProfile}`;
             console.log("Updated userProfile URL:", userProfile.value);
+        } else {
+            userProfile.value = defaultProfile;
         }
     },
     { immediate: true }
 );
+
+function logout() {
+    alert('로그아웃 하였습니다.')
+    userStore.userLogout();
+    router.replace({ name: "Home" });
+}
 </script>
 
 <template>
@@ -80,7 +89,7 @@ watch(
             <template v-slot:activator="{ props }">
                 <v-btn icon v-bind="props">
                     <v-avatar color="brown">
-                        <img :src="userProfile" alt="Profile Image" class="cover-image">
+                        <img :src="userStore.userInfo? userProfile : defaultProfile" alt="Profile Image" class="cover-image">
                     </v-avatar>
                 </v-btn>
             </template>
@@ -88,7 +97,7 @@ watch(
                 <v-card-text>
                     <div class="mx-auto text-center">
                         <v-avatar color="brown">
-                            <img :src="userProfile" alt="Profile Image" class="cover-image">
+                            <img :src="userStore.userInfo? userProfile : defaultProfile" alt="Profile Image" class="cover-image">
                         </v-avatar>
                         <h3>{{ userStore.userInfo.name }}</h3>
                         <p class="text-caption mt-1">
@@ -99,7 +108,7 @@ watch(
                             내정보
                         </v-btn>
                         <v-divider class="my-1"></v-divider>
-                        <v-btn variant="text" rounded @click="userStore.userLogout">
+                        <v-btn variant="text" rounded @click="logout">
                             로그아웃
                         </v-btn>
                     </div>

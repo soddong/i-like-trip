@@ -1,50 +1,41 @@
-import { localAxiosInstance } from "@/util/http-commons";
-
-const local = localAxiosInstance;
-
-const API_KEY = 'sk-proj-j42dIXqfLndSc62NTyrVT3BlbkFJFKLiG40LIPOkK5Em76qe';
+const API_KEY = 'sk-proj-GNX9uIgvK9DrQwby0HgkT3BlbkFJJk4BhRO58Rw45nmVGZBA';
 const API_URL = 'https://api.openai.com/v1/chat/completions';
 
-function getChatgpt() {
+async function getChatgpt() {
+    const { localAxiosInstance } = await import("@/util/http-commons");
+    const local = localAxiosInstance;
     try {
-
-        // JSON 요청 본문 생성
         const requestBody = {
             model: 'gpt-3.5-turbo',
-            max_tokens: 100,
+            max_tokens: 1000,
             temperature: 1,
-            messages: [
-                {
-                    role: 'user',
-                    content: '3개월간(24년1월 ~ 24년4월) 가장 인기있었던 국내 여행지 top5를 알려줘'
-                }
-            ]
+            messages: [{
+                role: 'user',
+                content: '너가 분석하기에 3개월간(2024.2~2024.5) 가장 인기있었던 국내 여행지 top5 를 알려줘. 1. 2. 3. 4. 5. 지역만 나열해줘'
+            }]
         };
 
-        // HTTP 요청 생성 및 보내기
-        const response = local.post(API_URL, requestBody, {
+        const response = await local.post(API_URL, requestBody, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${API_KEY}`
             }
         });
 
-        if (response.status === 200) {
-            // 응답 처리
-            const choices = response.data.choices;
-            if (Array.isArray(choices) && choices.length > 0) {
-                const content = choices[0].message.content;
-                return content; // 성공적인 응답 반환
-            } else {
-                return 'No response from OpenAI API.';
-            }
+        if (response.status === 200 && response.data && response.data.choices && response.data.choices.length > 0) {
+            const content = response.data.choices[0].message.content;
+            return content;
         } else {
-            return `Error: ${response.status} - ${response.data}`;
+            console.log('Invalid or no data received:', response.data);
+            return 'No response from OpenAI API.';
         }
     } catch (error) {
-        console.error(error);
-        return 'An error occurred.';
+        console.error('Error sending request:', error);
+        console.error('Response status:', error.response ? error.response.status : 'No response');
+        console.error('Response data:', error.response ? error.response.data : 'No response data');
+        return `An error occurred: ${error.message}`;
     }
 }
+
 
 export { getChatgpt };

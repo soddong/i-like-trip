@@ -3,12 +3,13 @@ import { localAxiosInstance } from "@/util/http-commons";
 
 const local = localAxiosInstance;
 
-function uploadImage(formData) {
+function uploadImage(formData, success) {
     local.post('/upload', formData, {
         headers: {
             'Content-Type': 'multipart/form-data'
         }
-    });
+    })
+    .then(success);
 }
 
 function getMainImageUrl(articleno, success) {
@@ -20,6 +21,7 @@ function getMainImageUrl(articleno, success) {
         } 
     });
 }
+
 
 export {
     uploadImage,
