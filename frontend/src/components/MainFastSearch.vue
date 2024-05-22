@@ -1,5 +1,4 @@
 <script setup>
-import VSearchInput from '@/components/common/VSearchInput.vue'
 import VSearchInputPlan from '@/components/common/VSearchInputPlan.vue'
 // VSearchInputPlan.vue
 </script>

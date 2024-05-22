@@ -1,12 +1,13 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-// import getTopPlaces from '@/api/gpt'
+
+// import { getChatgpt } from '@/api/gpt'
 
 const router = useRouter();
 const keyword = ref('');
 const showDropdown = ref(false);
-const popularPlaces = ref(["장소1", "장소2", "장소3", "장소4", "장소5"]);
+const popularPlaces = ref(["제주도", "부산", "강릉", "경주", "여수"]);
 
 const handleSearch = () => {
   router.push({ name: 'plan-list', query: { keyword: 'title', word: keyword.value} });
@@ -21,6 +22,29 @@ const setKeyword = (place) => {
   showDropdown.value = false;
 };
 
+// const fetchPlaces = async () => {
+//   try {
+//     console.log('Fetching top places...');
+//     const response = await getChatgpt();
+//     popularPlaces.value = response.split('\n'); // 응답을 줄바꿈으로 분리하여 배열로 저장
+//   } catch (error) {
+//     console.error('Failed to fetch top places', error);
+//     popularPlaces.value = ["장소1", "장소2", "장소3", "장소4", "장소5"]; // 실패 시 기본값
+//   }
+// };
+
+// onMounted(async () => {
+//   try {
+//     console.log('Fetching top places...');
+//     const response = await getChatgpt();
+//     console.log('Response:', response);
+//     popularPlaces.value = response.data; // Assuming response.data contains the list of places
+//   } catch (error) {
+//     console.error('Failed to fetch top places', error);
+//     popularPlaces.value = ["장소1", "장소2", "장소3", "장소4", "장소5"];
+//   }
+// });
+
 </script>
 
 <template>
@@ -29,6 +53,9 @@ const setKeyword = (place) => {
     @mouseover="toggleDropdown(true)" 
     @mouseleave="toggleDropdown(false)"
   >
+    <!-- <v-row>
+        <button @click="fetchPlaces">인기 여행지 업데이트</button> 
+    </v-row> -->
     <input
       type="text"
       placeholder="여행지 키워드를 검색하세요"
