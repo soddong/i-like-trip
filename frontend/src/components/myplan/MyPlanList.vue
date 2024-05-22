@@ -35,9 +35,9 @@ const loadPlans = (params) => {
 };
 watch(() => route.query.keyword, (newKeyword) => {
     if (newKeyword) {
-        loadPlans({ key: 'subject', word: newKeyword });
+        loadPlans({ keyword: 'title', word: newKeyword, onlyMine: true });
     } else {
-        loadPlans(param.value);
+        loadPlans({ ...param.value, onlyMine: true });
     }
 }, { immediate: true });
 
