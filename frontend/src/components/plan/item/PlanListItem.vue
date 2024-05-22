@@ -1,9 +1,6 @@
 <template>
-  <v-card class="mx-auto my-5" max-width="400">
-    <router-link
-      :to="{ name: 'plan-view', params: { planno: plan.planId } }"
-      class="no-border"
-    >
+  <v-card class="mx-auto my-5" max-width="400" min-width="300">
+    <router-link :to="{ name: 'plan-view', params: { planno: plan.planId } }" class="no-border">
       <v-img :src="imagePath" height="300px" cover>
         <div class="overlay"></div>
         <v-card-title class="fill-height align-end justify-space-between pa-3">
@@ -65,7 +62,8 @@ const handleImageClick = () => {
 .v-card-subtitle {
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis; /* Ellipsis for overflow text */
+  text-overflow: ellipsis;
+  /* Ellipsis for overflow text */
 }
 
 .overlay {

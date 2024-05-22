@@ -2,7 +2,6 @@ import AccountView from "@/views/AccountView.vue";
 import HomeView from "@/views/HomeView.vue";
 import MypageView from "@/views/MypageView.vue";
 import FriendView from "@/views/FriendView.vue";
-import PlanView from "@/views/PlanView.vue";
 import { createRouter, createWebHistory } from "vue-router";
 import { useUserStore } from "@/stores/user";
 
@@ -113,7 +112,7 @@ const router = createRouter({
     {
       path: "/myplan",
       name: "my-plan",
-      component: () => import("@/views/MyPlanView.vue"),
+      component: () => import("@/components/myplan/MyPlanList.vue"),
       meta: {
         viewTitle: "내 일정",
       },
