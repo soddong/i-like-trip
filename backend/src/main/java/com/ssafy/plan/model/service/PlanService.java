@@ -22,4 +22,6 @@ public interface PlanService {
 	PlanReponseDto getPlanWithPlaces(int planId) throws Exception;
 
 	void registPlan(PlanReponseDto newPlan) throws Exception;
+
+	void updatePlan(PlanReponseDto newPlan) throws Exception;
 }

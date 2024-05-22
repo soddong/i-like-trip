@@ -14,4 +14,8 @@ public interface PlaceMapper {
 	List<PlaceDto> getPlaces(int planId) throws SQLException;
 
 	void registPlace(@Param("planId") int planId, @Param("places") List<PlaceDto> places)  throws SQLException;
+
+	void updatelace(@Param("planId") int planId, @Param("places") List<PlaceDto> places);
+
+	int deletePlaces(@Param("planId") int planId) throws SQLException;
 }

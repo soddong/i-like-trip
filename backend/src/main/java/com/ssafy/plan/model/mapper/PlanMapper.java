@@ -3,6 +3,7 @@ package com.ssafy.plan.model.mapper;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.ssafy.member.model.MemberDto;
 import com.ssafy.plan.model.PlaceDto;
 import com.ssafy.plan.model.PlanDto;
 import com.ssafy.plan.model.PlanReponseDto;
@@ -20,4 +21,7 @@ public interface PlanMapper {
 	List<PlanDto> searchPlans(PlanSearchDto searchDto) throws SQLException;
 
 	void registPlan(PlanDto newPlan) throws SQLException;
+
+    void updatePlan(PlanDto plan);
+
 }

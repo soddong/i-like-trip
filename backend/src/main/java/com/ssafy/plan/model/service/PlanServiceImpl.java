@@ -88,4 +88,12 @@ public class PlanServiceImpl implements PlanService {
 		placeMapper.registPlace(newPlan.getPlan().getPlanId(), newPlan.getPlaces());
 		tripWithMapper.registTripWith(newPlan.getPlan().getPlanId(), newPlan.getMembers());
 	}
+
+	@Override
+	@Transactional
+	public void updatePlan(PlanReponseDto newPlan) throws Exception {
+//		planMapper.updatePlan(newPlan.getPlan());
+//		placeMapper.updatelace(newPlan.getPlan().getPlanId(), newPlan.getPlaces());
+//		tripWithMapper.updateTripWith(newPlan.getPlan().getPlanId(), newPlan.getMembers());
+	}
 }

@@ -29,4 +29,14 @@
 		</foreach>
 	</insert>
 
+<!--	<delete id="deleteTripWith">-->
+<!--		DELETE FROM tripwith WHERE plan_id = #{planId}-->
+<!--	</delete>-->
+
+<!--	<update id="updateTripWith">-->
+<!--		<include refid="deleteTripWith"/>-->
+<!--		<include refid="registTripWith"/>-->
+<!--	</update>-->
+
+
 </mapper>

@@ -7,13 +7,7 @@ import com.ssafy.plan.model.PlanSearchDto;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.ssafy.plan.model.PlanDto;
 import com.ssafy.plan.model.service.PlanService;
@@ -90,5 +84,15 @@ public class PlanController {
 			return exceptionHandling(e);
 		}
 	}
-	
+
+	// TODO : 수정하기
+	@PutMapping("")
+	public ResponseEntity<?> updatePlan(@RequestBody PlanReponseDto newPlan) {
+		try {
+			planService.updatePlan(newPlan);
+			return new ResponseEntity<Void>(HttpStatus.CREATED);
+		} catch (Exception e) {
+			return exceptionHandling(e);
+		}
+	}
 }

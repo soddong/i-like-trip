@@ -27,4 +27,13 @@
         </foreach>
     </insert>
 
+<!--    <delete id="deletePlaces">-->
+<!--        DELETE FROM place WHERE plan_id = #{planId}-->
+<!--    </delete>-->
+
+<!--    <update id="updatePlace">-->
+<!--        <include refid="deletePlaces"/>-->
+<!--        <include refid="registPlace"/>-->
+<!--    </update>-->
+
 </mapper>

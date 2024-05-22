@@ -17,4 +17,8 @@ public interface TripWithMapper {
     List<PlanDto> getPlanIds(String userId) throws SQLException;
 
 	void registTripWith(@Param("planId") int planId, @Param("members") List<MemberDto> newPlan) throws SQLException;
+
+    void updateTripWith(@Param("planId") int planId, @Param("members") List<MemberDto> members);
+
+    int deleteTripWith(@Param("planId") int plan_id) throws SQLException;
 }
