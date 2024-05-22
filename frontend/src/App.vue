@@ -12,8 +12,8 @@
             :style="{ top: $route.name == 'Home' ? '50px' : '25px' }" src="/src/assets/landing-page/wave2.png" alt="">
           <img class="position-absolute wave wave3" style="left: -50px; animation-duration: 5s;"
             :style="{ top: $route.name == 'Home' ? '100px' : '50px' }" src="/src/assets/landing-page/wave1.png" alt="">
-          <div class="position-absolute" style="top:90px; left: 40px;">
-            <h1>{{ $route.name }}</h1>
+          <div class="position-absolute" style="top:90px; left: 40px;" v-if="$route.meta.viewTitle">
+            <h1>{{ $route.meta.viewTitle }}</h1>
           </div>
         </div>
         <div class="position-absolute" style="width: 100%;" :style="{ top: $route.name == 'Home' ? '0dvh' : '80px' }">
