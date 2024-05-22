@@ -10,4 +10,6 @@ import lombok.*;
 public class PlanSearchDto {
 	private String keyword;
 	private String word;
+	private boolean onlyMine;
+	private String userId;//api 요청에는 쓰이지 않는다
 }

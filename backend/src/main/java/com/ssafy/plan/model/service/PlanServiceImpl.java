@@ -53,6 +53,11 @@ public class PlanServiceImpl implements PlanService {
 	public List<PlanDto> getPlans() throws Exception {
 		return planMapper.getPlans(PUBLIC_VISIBILITY);
 	}
+	
+	@Override
+	public List<PlanDto> getPlansNew(PlanSearchDto dto) throws Exception {
+		return planMapper.getPlansNew(dto);
+	}
 
 	/**
 	 * 동행으로 참여하는 모든 경로들을 받아오는 함수

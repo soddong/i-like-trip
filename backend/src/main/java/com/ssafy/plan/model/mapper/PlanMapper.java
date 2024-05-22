@@ -24,5 +24,6 @@ public interface PlanMapper {
 	void registPlan(PlanDto newPlan) throws SQLException;
 
     void updatePlan(PlanDto plan);
-
+    
+    List<PlanDto> getPlansNew(PlanSearchDto dto) throws SQLException;
 }

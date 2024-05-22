@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import com.ssafy.plan.model.PlanDto;
 import com.ssafy.plan.model.service.PlanService;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/plans")
 public class PlanController {
@@ -53,14 +55,17 @@ public class PlanController {
 	 * @return
 	 */
 	@GetMapping("")
-	public ResponseEntity<?> viewPlans(@ModelAttribute PlanSearchDto searchDto) {
+	public ResponseEntity<?> viewPlans(@ModelAttribute PlanSearchDto searchDto, HttpServletRequest request) {
 		try {
-			List<PlanDto> planDtos = null;
-			if (searchDto.getWord() == null || searchDto.getWord().isBlank()) {
-				planDtos = planService.getPlans();
-			} else {
-				planDtos = planService.searchPlans(searchDto);
+			if(searchDto.isOnlyMine()) {
+				searchDto.setUserId(request.getUserPrincipal().getName());
 			}
+			List<PlanDto> planDtos = planService.getPlansNew(searchDto);
+//			if (searchDto.getWord() == null || searchDto.getWord().isBlank()) {
+//				planDtos = planService.getPlans();
+//			} else {
+//				planDtos = planService.searchPlans(searchDto);
+//			}
 			if (planDtos.isEmpty()) {
 				return ResponseEntity.notFound().build();
 			}
