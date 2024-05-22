@@ -46,7 +46,6 @@ const router = createRouter({
       path: "/account",
       name: "Account",
       component: AccountView,
-
       children: [
         {
           path: "sign-in",
@@ -74,16 +73,25 @@ const router = createRouter({
       path: "/plan/:planno",
       name: "plan-view",
       component: () => import("@/components/plan/PlanDetail.vue"),
+      meta: {
+        noHeader: true,
+      },
     },
     {
       path: "/plan",
       name: "plan-write",
       component: () => import("@/components/plan/PlanMap.vue"),
+      meta: {
+        noHeader: true,
+      },
     },
     {
       path: "/plan/:planno",
       name: "plan-modify",
       component: () => import("@/components/plan/PlanModify.vue"),
+      meta: {
+        noHeader: true,
+      },
     },
     {
       path: "/friend",
