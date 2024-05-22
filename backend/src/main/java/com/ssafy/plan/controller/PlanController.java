@@ -56,15 +56,11 @@ public class PlanController {
 	public ResponseEntity<?> viewPlans(@ModelAttribute PlanSearchDto searchDto) {
 		try {
 			List<PlanDto> planDtos = null;
-			if (searchDto.getKeyword() == null || searchDto.getKeyword().isBlank()) {
+			if (searchDto.getWord() == null || searchDto.getWord().isBlank()) {
 				planDtos = planService.getPlans();
-				for (PlanDto planDto : planDtos) {
-					System.out.println(planDto.toString());
-				}
 			} else {
 				planDtos = planService.searchPlans(searchDto);
 			}
-
 			if (planDtos.isEmpty()) {
 				return ResponseEntity.notFound().build();
 			}

@@ -35,11 +35,6 @@ const props = defineProps({
 const imagePath = computed(() => {
   return `src/assets/random-images/0${props.plan.planId}.jpg`;
 });
-
-const handleImageClick = () => {
-  console.log("Image clicked!");
-  console.log("Navigating to plan id:", props.plan.planId);
-};
 </script>
 
 <style scoped>
