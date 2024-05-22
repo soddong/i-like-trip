@@ -51,15 +51,20 @@ function moveModify() {
 }
 
 function onDeleteArticle() {
-  deleteArticle(
+  if (confirm('게시글을 정말 삭제하시겠습니까?')) {
+    deleteArticle(
     articleno,
     (response) => {
-      if (response.status == 200) moveList();
+      if (response.status == 200) {
+        moveList();
+        alert('게시글이 삭제되었습니다')
+      }
     },
     (error) => {
       console.log(error);
     }
   );
+  }
 }
 </script>
 
@@ -67,8 +72,7 @@ function onDeleteArticle() {
 <template>
   <v-container>
     <v-row justify="center">
-      <v-col cols="12">
-        <v-card class="common-card">
+      <v-col cols="7">
           <div class="article-header">
             <h2 class="article-title">{{ article.subject }}</h2>
           </div>
@@ -80,14 +84,19 @@ function onDeleteArticle() {
             <span class="register-time">{{ article.registerTime }}</span>
             <span class="hit">조회수 {{ article.hit }}회</span>
           </div>
+          <v-divider></v-divider>
           <div class="article-content">
             <BoardViewerItem :content="article.content" />
           </div>
           <div class="article-actions">
-            <v-btn @click="moveModify" variant="outlined" class="mr-2">글수정</v-btn>
-            <v-btn @click="onDeleteArticle" variant="outlined" class="mr-2">글삭제</v-btn>
+            <v-col cols="6">
+              <v-btn @click="onDeleteArticle" variant="tonal" class="mr-2">글삭제</v-btn>
+            </v-col>
+            <v-col cols="6">
+              <v-btn @click="moveModify" color="primary" variant="tonal" class="mr-2">글수정</v-btn>
+            </v-col>
           </div>
-        </v-card>
+
       </v-col>
     </v-row>
   </v-container>
@@ -114,12 +123,14 @@ function onDeleteArticle() {
 .article-details {
   display: flex;
   align-items: center;
+  margin-top: 20px;
   margin-bottom: 20px;
 }
 
 .article-content {
   margin-top: 50px;
   margin-bottom: 30px;
+  min-height: 300px;
   width: 100%;
 }
 
@@ -133,5 +144,10 @@ function onDeleteArticle() {
   margin-left: 20px;
   font-size: 16px;
   color: #666;
+}
+
+.v-btn {
+  width: 100%;
+  height: 50px;
 }
 </style>

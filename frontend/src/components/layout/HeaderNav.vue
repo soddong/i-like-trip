@@ -18,11 +18,11 @@ const toggleDrawer = () => {
 
 const mainMenuList = ref([
     {
-        title: '여행 일정들',
+        title: '일정공유',
         to: { name: "plan-list" }
     },
     {
-        title: '자유게시판',
+        title: '리뷰게시판',
         to: { name: "Board" }
     }
 ])

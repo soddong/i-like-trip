@@ -132,10 +132,10 @@ function moveList() {
       </v-row>
       <v-row style="margin-top: 100px;">
         <v-col>
-          <v-btn @click="onSubmit" variant="outlined" v-if="type === 'regist'" class="mr-2">
+          <v-btn @click="onSubmit" variant="tonal" color="primary" v-if="type === 'regist'" class="mr-2">
             글작성
           </v-btn>
-          <v-btn @click="onSubmit" variant="outlined" v-else class="mr-2">
+          <v-btn @click="onSubmit" variant="tonal" color="primary" v-else class="mr-2">
             글수정
           </v-btn>
         </v-col>
@@ -145,4 +145,8 @@ function moveList() {
 </template>
 
 <style scoped>
+.v-btn {
+  width: 100%;
+  height: 50px;
+}
 </style>

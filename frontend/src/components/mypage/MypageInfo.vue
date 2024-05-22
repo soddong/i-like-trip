@@ -58,12 +58,7 @@ export default {
       { key: 'email', label: '이메일', value: '' },
       { key: 'location', label: '거주지', value: '' }
     ]);
-    const electiveInfoItems = ref([
-      { key: 'tel', label: '전화번호', value: '010-5936-3877' },
-      { key: 'birthday', label: '생일', value: '1998.01.08' },
-      { key: 'job', label: '직업', value: '학생' },
-    ])
-
+    
     watch(
       () => userStore.userInfo,
       (newUserInfo) => {
@@ -104,7 +99,7 @@ export default {
         console.log('No changes detected, no update performed.');
       }
     }
-    return { userStore, userInfoItems, electiveInfoItems, pushUpdateButton  };
+    return { userStore, userInfoItems, pushUpdateButton  };
   },
 };
 </script>

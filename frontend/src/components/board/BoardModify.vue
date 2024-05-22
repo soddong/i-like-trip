@@ -8,9 +8,9 @@ import '@/assets/styles.css';
     <v-row justify="center">
       <v-col cols="12">
         <v-row justify="center">
-          <v-card class="common-card">
+          <div class="common-card">
             <BoardFormItem type="modify" />
-          </v-card>
+          </div>
         </v-row>
       </v-col>
     </v-row>

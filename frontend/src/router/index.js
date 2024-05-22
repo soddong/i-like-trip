@@ -41,7 +41,7 @@ const router = createRouter({
         },
       ],
       meta: {
-        viewTitle: "게시판",
+        viewTitle: "리뷰 게시판",
       },
     },
     {
