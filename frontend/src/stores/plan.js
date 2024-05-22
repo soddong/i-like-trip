@@ -4,6 +4,8 @@ import { defineStore } from 'pinia';
 export const usePlanStore = defineStore('planStore', () => {
   const period = ref([new Date(new Date().toDateString())]);
   const pickedPlace = ref([]);
+  const planInfo = ref([]);
+  const content = ref([])
 
   const getStartEnd = () => {
     let start = period.value[0].toDateString();
@@ -40,14 +42,42 @@ export const usePlanStore = defineStore('planStore', () => {
     return (pickedPlace.value.length > 0 || period.value[0] != null || period.value[1] != null) ? false : true;
   }
 
+  const updatePickedPlace = (places) => {
+    pickedPlace.value = places.map(place => ({
+      attractionId: place.place.attractionId,
+      attractionType: place.place.attractionType,
+      title: place.place.title,
+      addr: place.place.addr,
+      zipcode: place.place.zipcode,
+      tel: place.place.tel,
+      imgSmall: place.place.imgSmall,
+      imgBig: place.place.imgBig,
+      lat: place.place.lat,
+      lng: place.place.lng,
+      id: '',
+      x: 0,
+      y: 0,
+      h: 1,
+      w: 1,
+    }));
+  };
+  
+  const updatePlanInfo = (plan) => {
+    planInfo.value = plan;
+  }
+
   return {
     period,
     pickedPlace,
+    content,
+    planInfo,
     getStartEnd,
     getPeriodTime,
     getPlaceStartEnd,
     sortPickedPlace,
     resetPlan,
     isEmpty,
+    updatePickedPlace,
+    updatePlanInfo
   };
 });

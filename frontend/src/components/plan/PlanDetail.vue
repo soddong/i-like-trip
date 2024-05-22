@@ -6,15 +6,21 @@ import PlanPickTripwithSearch from '@/components/plan/step/item/PlanPickTripwith
 import PlanPickPlace from '@/components/plan/step/PlanPickPlace.vue'
 import PlanSearchPlace from '@/components/plan/step/PlanSearchPlace.vue'
 import PlanPickResult from '@/components/plan/step/PlanPickResult.vue'
+import PlanDetailItem from '@/components/plan/item/PlanDetailItem.vue'
+import PlanDetailTripwith from '@/components/plan/item/PlanDetailTripwith.vue'
+
 import { mdiDotsVertical } from '@mdi/js';
-import { ref, computed } from 'vue';
-import { getPlanPath, createPlan } from "@/api/plan";
+import { ref, computed, onMounted, watch } from 'vue';
+import { getPlanPath, createPlan, detailPlan } from "@/api/plan";
 import { usePlanStore } from "@/stores/plan";
 import { useTripwithStore } from "@/stores/tripwith";
 import { useUserStore } from "@/stores/user";
-import { useRouter } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 
 const router = useRouter()
+const route = useRoute();
+const planno = ref(null);
+
 const coordinate = { 
     lat: 33.45, lng: 126.571
 };
@@ -22,11 +28,7 @@ const coordinate = {
 const drawerWidth = 150
 const stepDetailwidth = 400
 const stepDetailFold = ref(true);
-
-const curStep = ref(1);
-
 const map = ref();
-
 const attrList = ref([]);
 const onLoadKakaoMap = (mapRef) => {
     map.value = mapRef;
@@ -38,13 +40,6 @@ const onLoadKakaoMap = (mapRef) => {
         stepDetailFold.value = true;
     });
 };
-const changeAttrList = (data) => {
-    attrList.value = data
-}
-
-const openDetail = () => {
-    stepDetailFold.value = false;
-}
 
 const mapMove = (lat, lng) => {
     if (map.value) {
@@ -52,10 +47,9 @@ const mapMove = (lat, lng) => {
     }
 }
 
-const planStore = usePlanStore()
-const { pickedPlace,  } = planStore
+const planStore = usePlanStore();
+const { pickedPlace } = planStore;
 const tripwithStore = useTripwithStore()
-const userStore = useUserStore()
 
 const latLngList = ref([
     { lat: 33.45, lng: 126.571 },
@@ -63,39 +57,72 @@ const latLngList = ref([
     { lat: 33.45, lng: 126.5725 }
 ]);
 
-const plan = ref({
-    title: "",        
-    makerId: computed(() => userStore.userId), 
-    visibility: "", 
-    comment: ""
+onMounted(() => {
+  planno.value = route.params.planno;
+  getPlan();
 });
 
-function makePathPolyline() {
-    let data = {
-        "origin": {
-            "name": pickedPlace[0].title,
-            "x": pickedPlace[0].lng,
-            "y": pickedPlace[0].lat,
-        },
-        "destination": {
-            "name": pickedPlace[pickedPlace.length - 1].title,
-            "x": pickedPlace[pickedPlace.length - 1].lng,
-            "y": pickedPlace[pickedPlace.length - 1].lat,
-        }
-    }
-    if (pickedPlace.length > 2) {   
-        let waypoints = []
-        for (let index = 1; index < pickedPlace.length; index++) {
-            waypoints.push({
-                "name": pickedPlace[index].title,
-                "x": pickedPlace[index].lng,
-                "y": pickedPlace[index].lat,
-            })
-        }
-        data['waypoints'] = waypoints
-    }
-}
+watch(() => planStore.pickedPlace, (newValue) => {
+  if (newValue.length > 0) {
+    makePathPolyline();
+  }
+}, { immediate: true });
 
+const getPlan = () => {
+  detailPlan(
+    planno.value,
+    ({ data }) => {
+      planStore.updatePickedPlace(data.places);
+      planStore.updatePlanInfo(data.plan);
+      tripwithStore.updateTripwith(data.members);
+    },
+    (error) => {
+      console.log(error);
+    }
+  );
+};
+
+const makePathPolyline = () => {
+  const data = {
+    origin: {
+      name: planStore.pickedPlace[0].title,
+      x: planStore.pickedPlace[0].lng,
+      y: planStore.pickedPlace[0].lat,
+    },
+    destination: {
+      name: planStore.pickedPlace[planStore.pickedPlace.length - 1].title,
+      x: planStore.pickedPlace[planStore.pickedPlace.length - 1].lng,
+      y: planStore.pickedPlace[planStore.pickedPlace.length - 1].lat,
+    }
+  };
+
+  if (planStore.pickedPlace.length > 2) {
+    const waypoints = planStore.pickedPlace.slice(1, -1).map(place => ({
+      name: place.title,
+      x: place.lng,
+      y: place.lat,
+    }));
+    data.waypoints = waypoints;
+  }
+
+  // getPlanPath(data, (res) => {
+  //   const path = [];
+  //   const result = res.data.routes[0];
+  //   if (result.result_code != 0) return;
+
+  //   result.sections.forEach(section => {
+  //     section.roads.forEach(road => {
+  //       for (let index = 0; index < road.vertexes.length; index += 2) {
+  //         path.push({
+  //           lat: road.vertexes[index + 1],
+  //           lng: road.vertexes[index]
+  //         });
+  //       }
+  //     });
+  //   });
+  //   latLngList.value = path;
+  // }, (e) => { console.log(e); });
+};
 function registerPlan() {
   if (!pickedPlace) {
     return;
@@ -114,6 +141,7 @@ function registerPlan() {
           attractionId: attr.attractionId,
           lat: attr.lat,
           lng: attr.lng,
+          title: attr.title
         },
       };
     }),
@@ -146,29 +174,10 @@ function moveList() {
   router.replace({ name: "plan-list" })
 }
 
-function moveToStep4() {
-  if (tripwithStore.isEmpty() || planStore.isEmpty()) {
-    alert('STEP 1, 2, 3을 완료해야 합니다.');
-    return;
-  }
-  curStep.value = 4;
+function moveModify() {
+  router.replace({ name: "plan-modify", params: planStore.planInfo.planId });
 }
 
-function completeStep(step) {
-  if (step === 1) {
-    plan.value.startDate = planStore.getStartEnd().start;
-    plan.value.endDate = planStore.getStartEnd().end;
-  } else if (step === 2) {
-    // Additional logic for step 2 completion
-  } else if (step === 3) {
-    makePathPolyline();
-  }
-  curStep.value = step + 1;
-}
-
-function updatePlan(updatedPlan) {
-  plan.value = { ...plan.value, ...updatedPlan };
-}
 </script>
 
 <template>
@@ -182,59 +191,16 @@ function updatePlan(updatedPlan) {
       </v-list>
   
       <v-divider></v-divider>
-  
-      <v-list nav>
-        <v-list-item value="step1" @click="curStep = 1">
-          <template #title>
-            <v-sheet class="d-flex flex-column align-center">
-              <h3>STEP 1</h3>
-              <p>날짜 선택</p>
-            </v-sheet>
-          </template>
-        </v-list-item>
-        <v-list-item value="step2" @click="curStep = 2">
-          <template #title>
-            <v-sheet class="d-flex flex-column align-center">
-              <h3>STEP 2</h3>
-              <p>동행 선택</p>
-            </v-sheet>
-          </template>
-        </v-list-item>
-        <v-list-item value="step3" @click="curStep = 3">
-          <template #title>
-            <v-sheet class="d-flex flex-column align-center">
-              <h3>STEP 3</h3>
-              <p>장소 선택</p>
-            </v-sheet>
-          </template>
-        </v-list-item>
-        <v-list-item value="step4" @click="moveToStep4">
-          <template #title>
-            <v-sheet class="d-flex flex-column align-center">
-              <h3>STEP 4</h3>
-              <p>최종 확인</p>
-            </v-sheet>
-          </template>
-        </v-list-item>
-      </v-list>
+
     </v-navigation-drawer>
   
-    <v-sheet :width="stepDetailFold ? 25 : stepDetailwidth"
-             class="position-absolute border-e fill-height overflow-hidden" :style="{
+    <v-sheet class="position-absolute border-e fill-height overflow-hidden" :style="{
                zIndex: 1004, left: drawerWidth + 'px', transitionProperty: 'width',
-               transitionDuration: '0.2s', transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)'
+               transitionDuration: '0.2s', transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
+               width: stepDetailwidth + 'px'
              }">
-      <div @click="stepDetailFold = !stepDetailFold" v-if="stepDetailFold"
-           class="h-screen d-flex flex-column justify-center align-center">
-        <v-icon :icon="mdiDotsVertical" size="small"></v-icon>
-      </div>
       <v-container class="h-screen d-flex flex-column justify-center" :style="{ minWidth: stepDetailwidth + 'px' }">
-        <PlanPickDate v-if="curStep === 1" @complete="completeStep(1)" />
-        <PlanPickTripwith v-if="curStep === 2" @complete="completeStep(2)" />
-        <PlanPickPlace v-if="curStep === 3" :attrList="attrList" :mapMove="mapMove"
-                       :makePathPolyline="makePathPolyline" @complete="completeStep(3)" />
-        <PlanPickResult v-if="curStep === 4" :attrList="attrList" :mapMove="mapMove"
-                        v-model="plan" @registerPlan="registerPlan" @cancle:plan="canclePlan" @update:plan="updatePlan"/>
+        <PlanDetailItem :mapMove="mapMove" @cancle:plan="canclePlan" @modify:plan="moveModify"/>
       </v-container>
     </v-sheet>
     <v-main>
@@ -250,14 +216,10 @@ function updatePlan(updatedPlan) {
         </KakaoMap>
     </v-main>
 
-    <v-navigation-drawer permanent :width="curStep == 2 ? stepDetailwidth : 1" location="right">
+    <v-navigation-drawer permanent :style="{ width: stepDetailwidth + 'px' }" location="right">
         <v-sheet>
-            <PlanPickTripwithSearch v-if="curStep == 2" />
+            <PlanDetailTripwith />
         </v-sheet>
-    </v-navigation-drawer>
-    <v-navigation-drawer permanent :width="curStep == 3 ? stepDetailwidth - 50 : 1" location="right">
-        <PlanSearchPlace @open-detail="openDetail" @change-attr-list="changeAttrList" :mapMove="mapMove"
-            :attrList="attrList" />
     </v-navigation-drawer>
 </template>
 

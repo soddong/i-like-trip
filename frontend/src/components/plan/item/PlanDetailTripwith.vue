@@ -1,10 +1,13 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, watch } from 'vue';
 import { mdiMinus } from '@mdi/js';
 import { useTripwithStore } from '@/stores/tripwith';
-import default_profile from '@/assets/default_profile.png';
+
+import defaultProfile from '@/assets/default_profile.png';
+
 const tripwithStore = useTripwithStore()
 const tripwith = computed(() => tripwithStore.tripwith);
+
 </script>
 
 <template>
@@ -16,17 +19,11 @@ const tripwith = computed(() => tripwithStore.tripwith);
                 <v-card v-for="(person) in tripwith" :key="person.id" class="box">
                     <v-row align="center" no-gutters>
                         <v-col cols="4" class="d-flex justify-center">
-                            <img cover rounded class="profile-picture"
-                                :src="person.profilePicture ? person.profilePicture : default_profile">
+                            <img :src="person.profilePicture ? person.profilePicture : defaultProfile" alt="프로필 사진" class="profile-picture">
                         </v-col>
                         <v-col cols="4" class="d-flex flex-column align-start justify-center">
                             <span>{{ person.name }}</span>
                             <span class="small-id">{{ person.id }}</span>
-                        </v-col>
-                        <v-col cols="4" class="d-flex justify-end">
-                            <v-btn @click="tripwithStore.handleRemoveTripwith(person.id)" class="remove-btn" icon>
-                                <v-icon>{{ mdiMinus }}</v-icon>
-                            </v-btn>
                         </v-col>
                     </v-row>
                 </v-card>

@@ -98,8 +98,8 @@ onMounted(() => {
                         <v-col cols="8">
                             <v-sheet class="d-flex flex-column h-100 justify-space-between">
                                 <div class="pb-1 text-truncate " style="font-size: small;">
-                                    <v-chip size="x-small" :prepend-icon="attrTypes[place.attractionType].icon">{{
-                                        attrTypes[place.attractionType].title }}
+                                    <v-chip size="x-small" :prepend-icon="attrTypes[place.attractionType].icon">
+                                        {{attrTypes[place.attractionType].title }}
                                     </v-chip>
                                     {{ place.title }}
                                 </div>

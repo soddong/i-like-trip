@@ -9,11 +9,11 @@
             <v-row class="info-section">
               <v-col cols="12">
                   <small class="section-label">제목</small>
-                  <v-text-field v-model="title" placeholder="제목을 입력하세요." variant="underlined" width="280px"/>
+                  <span>{{title}}</span>
               </v-col>
               <v-col cols="12">
                   <small class="section-label">커멘트</small>
-                  <v-text-field v-model="comment" variant="underlined" placeholder="커멘트를 입력하세요." width="280px"/>
+                  <span>{{comment}}</span>
               </v-col>
               <v-col cols="12">
                 <small class="section-label">날짜</small>
@@ -25,7 +25,7 @@
               <v-card class="mx-auto place" width="310px" height="300px">
                 <v-card-content class="center">
                     <v-list 
-                        v-for="place in pickedPlace" 
+                        v-for="place in planStore.pickedPlace" 
                         :key="place.id" 
                         class="place-item"
                         @click="mapMove(place.lat, place.lng)"
@@ -38,8 +38,8 @@
             
             <v-row>
               <v-col>
-                    <input type="checkbox" v-model="isPublic"/>
-                    <span>  전체 공개</span>
+                    <span v-if="isPublic">  전체 공개</span>
+                    <span v-else>  동행 공개</span>
               </v-col>
             </v-row>
             <v-row class="generate-section">
@@ -47,7 +47,7 @@
                     <v-btn @click="canclePlan" variant="tonal" block>취소</v-btn>
                 </v-col>
                 <v-col>
-                    <v-btn color="primary" @click="handleRegisterPlan" variant="tonal" block>일정 생성</v-btn>
+                    <v-btn color="green" @click="modifyPlan" variant="tonal" block>수정</v-btn>
                 </v-col>
             </v-row>
           </v-col>
@@ -60,8 +60,6 @@
 <script setup>
 import { ref, onMounted, defineEmits, watch } from 'vue';
 import { usePlanStore } from '@/stores/plan';
-import { storeToRefs } from "pinia";
-
 import { dateFromString } from '@/util/time-utils';
 
 const title = ref('');
@@ -70,36 +68,25 @@ const comment = ref('');
 const isPublic = ref(true);
 
 const planStore = usePlanStore()
-const { pickedPlace } = storeToRefs(planStore)
 
-const emits = defineEmits(['registerPlan', 'update:plan', 'cancle:plan']);
+const emits = defineEmits(['modify:plan', 'cancle:plan']);
 
-const props = defineProps({
+defineProps({
     mapMove: Function,
-    attrList: Array,
-    makePathPolyline: Function,
-    plan: Object 
 });
 
-onMounted(() => {
+watch(() => planStore.planInfo, (newPlan) => {
     date.value = [
         dateFromString(planStore.getStartEnd()["start"]),
         dateFromString(planStore.getStartEnd()["end"])
     ];
-    title.value = planStore.planInfo.title;
-    comment.value = planStore.planInfo.comment;
-    isPublic.value = planStore.planInfo.visibility === 1? true:false;
+    title.value = newPlan.title;
+    comment.value = newPlan.comment;
+    isPublic.value = newPlan.visibility === 1? true:false;
 });
 
-function handleRegisterPlan() {
-  console.log("handle register")
-    emits('update:plan', {
-        ...props.plan,
-        title: title.value,
-        comment: comment.value,
-        visibility: isPublic.value === true? 1:2,
-    });
-    emits('registerPlan');
+function modifyPlan() {
+  emits('modify:plan');
 }
 
 function canclePlan() {

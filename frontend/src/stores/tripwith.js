@@ -36,11 +36,21 @@ export const useTripwithStore = defineStore("tripwithStore", () => {
     return tripwith.value.length > 0 ? false : true;
   }
 
+  const getTripwithSize = () => {
+    return tripwith.value.length;
+  }
+
+  const updateTripwith = (companions) => {
+    tripwith.value = companions;
+  };
+
   return {
     handleAddTripwith,
     handleRemoveTripwith,
     resetTripwith,
     isEmpty,
+    getTripwithSize,
+    updateTripwith,
     tripwith,
   };
 });
