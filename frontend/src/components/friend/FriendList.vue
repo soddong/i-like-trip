@@ -34,8 +34,8 @@
           </tr>
         </tbody>
       </table>
-      <div v-else class="mt-3">
-        목록이 없습니다.
+      <div v-else class="mt-3 no-data-message">
+        친구가 없습니다.
       </div>
     </template>
     <template v-else>
@@ -168,5 +168,10 @@ tr:not(:last-child) td {
 .friend-button.cancle {
   background-color: #f44336bd; /* 녹색 */
   color: white;
+}
+
+.no-data-message {
+  margin-top: 20px;
+  text-align: center;
 }
 </style>
