@@ -29,8 +29,35 @@ const props = defineProps({
   },
 });
 
+const count = {
+  chunchun: 3,
+  gyungsan: 1,
+  incheon: 1,
+  jeju: 8,
+  pusan: 7,
+  default: 7
+};
+
+const getRandomImagePath = (path, imageCount) => {
+  console.log(imageCount)
+  const randomIndex = Math.floor(Math.random() * imageCount) + 1; // Assuming you have 10 images in each directory
+  return `${path}/${randomIndex.toString().padStart(2, '0')}.jpg`;
+};
+
 const imagePath = computed(() => {
-  return `src/assets/random-images/0${props.plan.planId}.jpg`;
+  if (props.plan.title.includes('제주')) {
+    return getRandomImagePath('src/assets/random-images/jeju', count.jeju);
+  } else if (props.plan.title.includes('부산')) {
+    return getRandomImagePath('src/assets/random-images/pusan', count.pusan);
+  } else if (props.plan.title.includes('인천')) {
+    return getRandomImagePath('src/assets/random-images/incheon', count.incheon);
+  } else if (props.plan.title.includes('경산')) {
+    return getRandomImagePath('src/assets/random-images/gyungsan', count.gyungsan);
+  } else if (props.plan.title.includes('춘천')) {
+    return getRandomImagePath('src/assets/random-images/chunchun', count.chunchun);
+  } else {
+    return getRandomImagePath('src/assets/random-images', count.default);
+  }
 });
 </script>
 
