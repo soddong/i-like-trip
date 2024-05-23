@@ -61,10 +61,11 @@ const moveWrite = () => {
       </v-col>
       <v-col cols="12">
         <v-card class="common-card">
-          <div class="grid-container">
             <template v-if="articles.length > 0">
-              <div v-for="article in articles" :key="article.articleNo" class="grid-item">
-                <BoardListItem :article="article" :image="articleImages[article.articleNo]" />
+              <div class="grid-container">
+                <div v-for="article in articles" :key="article.articleNo" class="grid-item">
+                  <BoardListItem :article="article" :image="articleImages[article.articleNo]" />
+                </div>
               </div>
             </template>
             <template v-else-if="hasError">
@@ -73,7 +74,6 @@ const moveWrite = () => {
             <template v-else>
               <BoardListEmptyItem />
             </template>
-          </div>
         </v-card>
       </v-col>
     </v-row>
