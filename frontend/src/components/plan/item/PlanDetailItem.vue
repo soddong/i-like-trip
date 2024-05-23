@@ -58,7 +58,7 @@
   border-top: 1px solid rgb(204 226 232);">
                                 {{ stopOver.start ? stopOver.start.getHours() : 0 }}:00
                               </div>
-                              <div class="place-detail">
+                              <div class="place-detail" @click="mapMove(stopOver.lat, stopOver.lng)">
                                 <v-container class="pa-0 grid-stack-item" style="height: 100px;">
                                   <v-row class="ma-0 grid-stack-item-content " style="height: 100%;">
                                     <v-col cols="4" style="height: 100%;">
@@ -124,13 +124,11 @@
 </template>
 
 <script setup>
-import { ref, defineEmits, watch, onMounted } from 'vue';
+import { ref, defineEmits, watch } from 'vue';
 import { usePlanStore } from '@/stores/plan';
 import { dateFromString } from '@/util/time-utils';
 import { attrTypes } from '@/util/attraction-type';
 import { mdiEmoticonCryOutline, mdiCarSide } from '@mdi/js';
-import { useUserStore } from "@/stores/user";
-import { useTripwithStore } from "@/stores/tripwith";
 
 const title = ref('');
 const date = ref([]);
@@ -138,14 +136,12 @@ const comment = ref('');
 const isPublic = ref(true);
 const selectedDay = ref(0)
 const planStore = usePlanStore()
-const userStore = useUserStore()
-const tripwithStore = useTripwithStore()
 
 const emits = defineEmits(['modify:plan', 'cancle:plan']);
-const canModify = ref(false)
 
 defineProps({
   mapMove: Function,
+  canModify: Boolean,
 });
 
 watch(() => planStore.planInfo, (newPlan) => {
@@ -165,14 +161,6 @@ function modifyPlan() {
 function canclePlan() {
   emits('cancle:plan');
 }
-
-watch(() => tripwithStore.tripwith, () => {
-  if (tripwithStore.tripwith.find((e) => {
-    return e.id == userStore.userId
-  })) {
-    canModify.value = true
-  }
-})
 </script>
 
 <style scoped>

@@ -182,9 +182,6 @@ onBeforeRouteLeave(() => {
   <v-navigation-drawer permanent :width="drawerWidth">
     <v-list>
       <v-list-item title="조아요행" :to="{ name: 'Home' }">
-        <template v-slot:prepend>
-          <v-avatar tile image="src/assets/logo2.png" size="small"></v-avatar>
-        </template>
       </v-list-item>
     </v-list>
 
@@ -248,7 +245,7 @@ onBeforeRouteLeave(() => {
     <KakaoMap @on-load-kakao-map="onLoadKakaoMap" :lat="coordinate.lat" :lng="coordinate.lng" :draggable="true"
       height="100%" width="100%">
       <KakaoMapMarker v-for="item in attrList" :key="item.attractionId" :lat="item.lat" :lng="item.lng" :image="{
-        imageSrc: 'src/assets/marker/type12.png',
+        imageSrc: `src/assets/marker/type${item.attractionType}.png`,
         imageWidth: 25,
         imageHeight: 35,
         imageOption: {}
@@ -257,15 +254,13 @@ onBeforeRouteLeave(() => {
     </KakaoMap>
   </v-main>
 
-  <v-navigation-drawer permanent :width="curStep == 2 || curStep == 3 || curStep == 4 ? stepDetailwidth - 50 : 1" location="right">
+  <v-navigation-drawer permanent :width="curStep == 2 || curStep == 3 || curStep == 4 ? stepDetailwidth - 50 : 1"
+    location="right">
     <PlanPickTripwithSearch v-if="curStep == 2" />
-    <PlanSearchPlace v-if="curStep ==3" @open-detail="openDetail" @change-attr-list="changeAttrList" :mapMove="mapMove"
+    <PlanSearchPlace v-if="curStep == 3" @open-detail="openDetail" @change-attr-list="changeAttrList" :mapMove="mapMove"
       :attrList="attrList" />
-    <PlanDetailTripwith v-if="curStep == 4"/>
+    <PlanDetailTripwith v-if="curStep == 4" />
   </v-navigation-drawer>
-    <!-- <v-navigation-drawer permanent :width="curStep == 4 ? stepDetailwidth - 50 : 1" location="right">
-    <PlanDetailTripwith />
-  </v-navigation-drawer> -->
 </template>
 
 <style>
