@@ -3,6 +3,9 @@ import { KakaoMap, KakaoMapMarker, KakaoMapPolyline } from 'vue3-kakao-maps';
 import PlanPickDate from '@/components/plan/step/PlanPickDate.vue'
 import PlanPickTripwith from '@/components/plan/step/PlanPickTripwith.vue'
 import PlanPickTripwithSearch from '@/components/plan/step/item/PlanPickTripwithSearch.vue'
+import PlanDetailTripwith from '@/components/plan/item/PlanDetailTripwith.vue'
+
+
 import PlanPickPlace from '@/components/plan/step/PlanPickPlace.vue'
 import PlanSearchPlace from '@/components/plan/step/PlanSearchPlace.vue'
 import PlanPickResult from '@/components/plan/step/PlanPickResult.vue'
@@ -254,15 +257,15 @@ onBeforeRouteLeave(() => {
     </KakaoMap>
   </v-main>
 
-  <v-navigation-drawer permanent :width="curStep == 2 ? stepDetailwidth : 1" location="right">
-    <v-sheet>
-      <PlanPickTripwithSearch v-if="curStep == 2" />
-    </v-sheet>
-  </v-navigation-drawer>
-  <v-navigation-drawer permanent :width="curStep == 3 ? stepDetailwidth - 50 : 1" location="right">
-    <PlanSearchPlace @open-detail="openDetail" @change-attr-list="changeAttrList" :mapMove="mapMove"
+  <v-navigation-drawer permanent :width="curStep == 2 || curStep == 3 || curStep == 4 ? stepDetailwidth - 50 : 1" location="right">
+    <PlanPickTripwithSearch v-if="curStep == 2" />
+    <PlanSearchPlace v-if="curStep ==3" @open-detail="openDetail" @change-attr-list="changeAttrList" :mapMove="mapMove"
       :attrList="attrList" />
+    <PlanDetailTripwith v-if="curStep == 4"/>
   </v-navigation-drawer>
+    <!-- <v-navigation-drawer permanent :width="curStep == 4 ? stepDetailwidth - 50 : 1" location="right">
+    <PlanDetailTripwith />
+  </v-navigation-drawer> -->
 </template>
 
 <style>

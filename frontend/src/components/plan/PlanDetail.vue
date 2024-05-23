@@ -180,11 +180,11 @@ function moveModify() {
     </KakaoMap>
   </v-main>
 
-  <v-navigation-drawer permanent :style="{ width: stepDetailwidth + 'px' }" location="right">
+  <!-- <v-navigation-drawer permanent :style="{ width: stepDetailwidth + 'px' }" location="right">
     <v-sheet>
       <PlanDetailTripwith />
     </v-sheet>
-  </v-navigation-drawer>
+  </v-navigation-drawer> -->
 </template>
 
 <style>
