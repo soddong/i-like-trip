@@ -63,7 +63,7 @@
                                   <v-row class="ma-0 grid-stack-item-content " style="height: 100%;">
                                     <v-col cols="4" style="height: 100%;">
                                       <v-img cover rounded style="height: 100%; width: 100%;"
-                                        :src="'/src/assets/logo2.png'">
+                                        :src="stopOver.imgSmall">
                                       </v-img>
                                     </v-col>
                                     <v-col cols="8">

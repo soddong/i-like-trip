@@ -41,7 +41,17 @@ export const useTripwithStore = defineStore("tripwithStore", () => {
   }
 
   const updateTripwith = (companions) => {
-    tripwith.value = companions;
+    let newArr=[]
+    companions.forEach(element => {
+      newArr.push({
+        id:element.id,
+        name: element.name,
+        email:element.email,
+        profileNo : element.profileNo,
+        profileImg : element.profileImg
+      })
+    });
+    tripwith.value = newArr;
   };
 
   return {

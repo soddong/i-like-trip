@@ -51,12 +51,12 @@
                                 border-top: 1px solid rgb(204 226 232);">
                                 {{ stopOver.start ? stopOver.start.getHours() : 0 }}:00
                               </div>
-                              <div class="place-detail">
+                              <div class="place-detail" @click="mapMove(stopOver.lat, stopOver.lng)">
                                 <v-container class="pa-0 grid-stack-item" style="height: 100px;">
                                   <v-row class="ma-0 grid-stack-item-content " style="height: 100%;">
                                     <v-col cols="4" style="height: 100%;">
                                       <v-img cover rounded style="height: 100%; width: 100%;"
-                                        :src="'/src/assets/logo2.png'">
+                                        :src="stopOver.imgSmall">
                                       </v-img>
                                     </v-col>
                                     <v-col cols="8">

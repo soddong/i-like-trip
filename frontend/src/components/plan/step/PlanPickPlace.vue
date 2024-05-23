@@ -55,12 +55,15 @@ onMounted(() => {
 });
 
 onUnmounted(()=>{
-    grid.save().forEach((item) => {
+    if(pickedPlace.value.length>0){
+        grid.save().forEach((item) => {
             let idx = pickedPlace.value.findIndex((e) => item.id === e.id)
-            pickedPlace.value[idx].y = item.y
-            pickedPlace.value[idx].h = item.h
+            pickedPlace.value[idx].y = item.y?item.y:0
+            pickedPlace.value[idx].h = item.h?item.h:1
         });
         planStore.sortPickedPlace()
+    }
+
 })
 
 </script>

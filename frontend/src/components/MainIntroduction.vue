@@ -103,7 +103,7 @@ background: linear-gradient(0deg, rgba(220,247,255,1) 0%, rgba(255,255,255,1) 10
 
 <style scoped>
 .move {
-    transition-duration: 2s;
+    transition-duration: 1s;
 }
 
 .title {

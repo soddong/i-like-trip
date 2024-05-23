@@ -25,7 +25,7 @@ export const usePlanStore = defineStore("planStore", () => {
 
   const getPlaceStartEnd = (idx) => {
     let start = new Date(period.value[0].getTime() + 1000 * 60 * 60 * pickedPlace.value[idx].y);
-    let end = new Date(start.getTime() + 1000 * 60 * 60 * pickedPlace.value[idx].h - 1);
+    let end = new Date(start.getTime() + 1000 * 60 * 60 * pickedPlace.value[idx].h - 1000);
     return { start, end };
   };
 
@@ -36,6 +36,7 @@ export const usePlanStore = defineStore("planStore", () => {
   const resetPlan = () => {
     period.value = [new Date(new Date().toDateString())];
     pickedPlace.value = [];
+    planInfo.value=[];
   };
 
   const isEmpty = () => {
@@ -48,8 +49,8 @@ export const usePlanStore = defineStore("planStore", () => {
     console.log(baseTime);
     console.log(places);
     pickedPlace.value = places.map((place) => {
-      let placeStartTime = new Date(place.startTime);
-      let placeEndTime = new Date(place.endTime);
+      let placeStartTime = new Date(new Date(place.startTime).getTime()+32_400_000);
+      let placeEndTime = new Date(new Date(place.endTime).getTime()+32_400_000);
       return {
         attractionId: place.place.attractionId,
         attractionType: place.place.attractionType,
@@ -71,8 +72,8 @@ export const usePlanStore = defineStore("planStore", () => {
   };
 
   const updatePlanInfo = (plan) => {
-    let endTime = new Date(plan.endTime);
-    let iterTime = new Date(plan.startTime);
+    let endTime = new Date(new Date(plan.endTime).getTime()+32_400_000);
+    let iterTime = new Date(new Date(plan.startTime).getTime()+32_400_000);
     let newPeriod = [];
     while (iterTime < endTime) {
       newPeriod.push(new Date(iterTime));
@@ -93,7 +94,7 @@ export const usePlanStore = defineStore("planStore", () => {
     let curDayCount = 0;
     pickedPlace.value.forEach((e, idx) => {
       let { start, end } = getPlaceStartEnd(idx);
-      curDayCount = Math.ceil(e.y / 24) - 1;
+      curDayCount = e.y==0?0:Math.floor(e.y / 24);
       console.log(curDayCount, e.y, Math.ceil(e.y / 24));
       const timeDifference =
         new Date(`${end.getFullYear()}-${end.getMonth()}-${end.getDate()}`) -

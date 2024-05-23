@@ -82,7 +82,7 @@ const getPlan = () => {
     planno.value,
     ({ data }) => {
       planStore.updatePlanInfo(data.plan);
-      planStore.updatePickedPlace(data.places, new Date(data.plan.startTime));
+      planStore.updatePickedPlace(data.places, new Date(new Date(data.plan.startTime).getTime()+32_400_000));
       tripwithStore.updateTripwith(data.members);
     },
     (error) => {
@@ -175,7 +175,7 @@ function moveModify() {
       height="100%" width="100%">
       <KakaoMapMarker v-for="item in planStore.pickedPlace" :key="item.attractionId" :lat="item.lat" :lng="item.lng"
         :image="{
-          imageSrc: `src/assets/marker/type${item.attractionType}.png`,
+          imageSrc: `/src/assets/marker/type${item.attractionType}.png`,
           imageWidth: 25,
           imageHeight: 35,
           imageOption: {}
