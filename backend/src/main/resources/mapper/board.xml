@@ -38,12 +38,7 @@
 
 	<sql id="search">
 		<if test="word != null and word != ''">
-			<if test="key == 'subject'">
 				and subject like concat('%', #{word}, '%')
-			</if>
-			<if test="key != 'subject'">
-				and ${key} = #{word}
-			</if>
 		</if>
 	</sql>
 
@@ -61,9 +56,9 @@
 		board b
 		join member m on b.user_id = m.user_id
 		left join file_info fi on fi.file_no = m.profile_no
-		<include refid="search"></include>
-		order by b.article_no desc
-		limit #{start}, #{listsize}
+		<where>
+			b.subject like CONCAT('%', #{word}, '%')
+		</where>
 	</select>
 
 	<select id="getTotalArticleCount" parameterType="map" resultType="int">

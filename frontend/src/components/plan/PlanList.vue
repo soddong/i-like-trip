@@ -4,6 +4,7 @@ import { useRoute } from 'vue-router';
 import { listPlan } from '@/api/plan.js';
 import PlanListItem from '@/components/plan/item/PlanListItem.vue';
 import PlanListEmptyItem from '@/components/plan/item/PlanListEmptyItem.vue';
+import VSearchInputInPlan from '@/components/common/VSearchInputInPlan.vue'
 
 const route = useRoute();
 const plans = ref([]);
@@ -27,7 +28,6 @@ const loadPlans = (params) => {
         img: `@/assets/random-images/0${plan.planId}.jpg`
       };
       plans.value.push(planObject);
-      plans.value.push(planObject);
     });
     console.log("성공!!!!!!!!!");
     console.log(plans.value);
@@ -36,9 +36,9 @@ const loadPlans = (params) => {
   });
 };
 
-watch(() => route.query.keyword, (newKeyword) => {
-  if (newKeyword) {
-    loadPlans({ keyword: 'title', word: route.query.word });
+watch(() => route.query.word, (newWord) => {
+  if (newWord) {
+    loadPlans({ keyword: 'title', word: newWord });
   } else {
     loadPlans(param.value);
   }
@@ -51,6 +51,9 @@ watch(() => route.query.keyword, (newKeyword) => {
         <v-col cols="12" class="text-right">
           <v-btn rounded class="main-button" :to="{ name: 'plan-write' }" color="#F0BBB1"
             style=" width: 250px; font-size: 15px; color: white">게시글 작성하기</v-btn>
+        </v-col>
+        <v-col cols="12">
+            <VSearchInputInPlan />
         </v-col>
         <v-col cols="12">
           <v-card class="common-card">
