@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, nextTick } from 'vue';
+import { onMounted, nextTick, onUnmounted } from 'vue';
 import PlanCheckDate from "./item/PlanCheckDate.vue";
 import { GridStack } from 'gridstack';
 import { usePlanStore } from '@/stores/plan';
@@ -52,16 +52,16 @@ onMounted(() => {
             pickedPlace.value.splice(idx, 1)
         }
     });
+});
 
-    grid.on('change', function (event, items) {
-        items.forEach((item) => {
+onUnmounted(()=>{
+    grid.save().forEach((item) => {
             let idx = pickedPlace.value.findIndex((e) => item.id === e.id)
             pickedPlace.value[idx].y = item.y
             pickedPlace.value[idx].h = item.h
-            planStore.sortPickedPlace()
         });
-    });
-});
+        planStore.sortPickedPlace()
+})
 
 </script>
 
