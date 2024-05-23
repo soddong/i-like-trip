@@ -15,7 +15,8 @@ import { getPlanPath, createPlan, detailPlan } from "@/api/plan";
 import { usePlanStore } from "@/stores/plan";
 import { useTripwithStore } from "@/stores/tripwith";
 import { useUserStore } from "@/stores/user";
-import { useRoute, useRouter } from "vue-router"
+import { useRoute, useRouter, onBeforeRouteLeave } from "vue-router"
+
 
 const router = useRouter()
 const route = useRoute();
@@ -67,6 +68,11 @@ watch(() => planStore.pickedPlace, (newValue) => {
     makePathPolyline();
   }
 }, { immediate: true });
+
+onBeforeRouteLeave(() => {
+    planStore.resetPlan();
+    tripwithStore.resetTripwith();
+});
 
 const getPlan = () => {
   detailPlan(

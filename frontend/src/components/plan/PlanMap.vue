@@ -12,7 +12,7 @@ import { getPlanPath, createPlan } from "@/api/plan";
 import { usePlanStore } from "@/stores/plan";
 import { useTripwithStore } from "@/stores/tripwith";
 import { useUserStore } from "@/stores/user";
-import { useRouter } from "vue-router"
+import { useRouter, onBeforeRouteLeave } from "vue-router"
 
 const router = useRouter()
 const coordinate = {
@@ -169,6 +169,11 @@ function completeStep(step) {
 function updatePlan(updatedPlan) {
   plan.value = { ...plan.value, ...updatedPlan };
 }
+
+onBeforeRouteLeave(() => {
+    planStore.resetPlan();
+    tripwithStore.resetTripwith();
+});
 </script>
 
 <template>
