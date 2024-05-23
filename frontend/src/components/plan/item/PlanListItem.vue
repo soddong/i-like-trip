@@ -33,8 +33,9 @@ const count = {
   chunchun: 3,
   gyungsan: 1,
   incheon: 1,
-  jeju: 8,
+  jeju: 7,
   pusan: 7,
+  yesan: 1,
   default: 7
 };
 
@@ -53,6 +54,8 @@ const imagePath = computed(() => {
     return getRandomImagePath('src/assets/random-images/incheon', count.incheon);
   } else if (props.plan.title.includes('경산')) {
     return getRandomImagePath('src/assets/random-images/gyungsan', count.gyungsan);
+  } else if (props.plan.title.includes('예산')) {
+    return getRandomImagePath('src/assets/random-images/yesan', count.yesan);
   } else if (props.plan.title.includes('춘천')) {
     return getRandomImagePath('src/assets/random-images/chunchun', count.chunchun);
   } else {
