@@ -84,34 +84,18 @@ async function searchFriendsHandler() {
 <template>
   <v-container fluid class="fill-height d-flex flex-column align-center py-5">
     <h3 class="heading-with-underline">동행 추가</h3>
-    <v-row>
-      <v-col>
-        <v-text-field
-          v-model="searchQuery"
-          placeholder="ID 검색"
-          density="compact"
-          variant="solo"
-          hide-details
-          single-line
-          class="search-field"
-        >
-          <v-icon>{{ mdiMagnify }}</v-icon>
+      <v-sheet style="height: 150px; width: 300px">
+        <v-text-field class="mb-2" density="compact" variant="solo" placeholder="유저ID를 검색하세요" single-line
+            clearable v-model="searchQuery" :append-inner-icon="mdiMagnify"
+            @click:append-inner="searchFriendsHandler" @keyup.enter="searchFriendsHandler" hide-details>
         </v-text-field>
-      </v-col>
-      <v-col>
-        <v-btn @click="searchFriendsHandler" class="search-btn">검색</v-btn>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
         <v-checkbox
           v-model="showFriends"
           label="내 친구 보기"
           @change="loadFriends"
         />
-      </v-col>
-    </v-row>
-    <v-sheet class="friend-list" outlined v-if="isDataLoaded">
+      </v-sheet>
+    <div class="friend-list" outlined v-if="isDataLoaded">
       <v-row v-show="displayResults.length > 0" class="py-2 px-3">
         <v-col cols="12" v-for="friend in displayResults" :key="friend.id" class="box">
           <v-row align="center" no-gutters>
@@ -135,7 +119,7 @@ async function searchFriendsHandler() {
           <p class="text-center grey--text">친구가 없습니다.</p>
         </v-col>
       </v-row>
-    </v-sheet>
+    </div>
     <div v-else>
       <v-progress-circular indeterminate></v-progress-circular>
     </div>

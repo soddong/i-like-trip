@@ -104,7 +104,7 @@
                 <v-btn @click="canclePlan" variant="tonal" block>취소</v-btn>
               </v-col>
               <v-col>
-                <v-btn color="primary" @click="handleRegisterPlan" variant="tonal" block>일정 생성</v-btn>
+                <v-btn color="primary" @click="handleRegisterPlan" variant="tonal" block>완료</v-btn>
               </v-col>
             </v-row>
           </v-col>
