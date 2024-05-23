@@ -76,6 +76,9 @@ export const useUserStore = defineStore("userStore", () => {
         userSignIn({
           id: signUpData.id,
           password: signUpData.password,
+          name: signUpData.name,
+          email: signUpData.fullemail,
+          location: signUpData.location,
         });
         alert("회원가입에 성공했습니다")
       },
