@@ -45,7 +45,7 @@ watch(
   () => article.value.subject,
   (value) => {
     let len = value.length
-    if (len == 0 || len > 30) {
+    if (len == 0 || len > 50) {
       subjectErrMsg.value = "제목을 확인해 주세요!!!"
     } else subjectErrMsg.value = ""
   },
@@ -55,7 +55,7 @@ watch(
   () => article.value.content,
   (value) => {
     let len = value.length
-    if (len == 0 || len > 500) {
+    if (len == 0 || len > 1000) {
       contentErrMsg.value = "내용을 확인해 주세요!!!"
     } else contentErrMsg.value = ""
   },
