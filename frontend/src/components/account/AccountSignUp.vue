@@ -59,7 +59,7 @@ const signup = async () => {
 </script>
 
 <template>
-    <v-card class="mx-auto pa-12 pb-8 mt-6" elevation="8" max-width="448" rounded="lg">
+    <v-card class="mx-auto pa-12 pb-8" elevation="8" max-width="448" rounded="lg" style="margin-top: 150px">
         <div class="text-subtitle-1 text-medium-emphasis">ID</div>
         <v-text-field density="compact" placeholder="ID" :prepend-inner-icon="mdiEmailOutline" variant="outlined"
             v-model="signUpData.id"></v-text-field>
@@ -107,4 +107,6 @@ const signup = async () => {
     align-self: center;
     margin: 0 10px;
 }
+
+
 </style>
