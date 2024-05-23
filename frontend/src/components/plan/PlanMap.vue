@@ -100,9 +100,8 @@ function registerPlan() {
   if (!pickedPlace) {
     return;
   }
-  let { startTime, endTime } = planStore.getStartEnd()
   const newPlan = {
-    plan: { ...plan.value, startTime, endTime },
+    plan: { ...plan.value, startTime: planStore.period[0], endTime: planStore.period[planStore.period.length - 1] },
     places: pickedPlace.map((attr, index) => {
       const { start, end } = planStore.getPlaceStartEnd(index);
       return {
@@ -117,7 +116,7 @@ function registerPlan() {
         },
       };
     }),
-    members: tripwithStore.tripwith,
+    members: [{ id: userStore.userId }, ...tripwithStore.tripwith],
   };
 
   createPlan(newPlan, () => {
@@ -147,7 +146,7 @@ function moveList() {
 }
 
 function moveToStep4() {
-  if (tripwithStore.isEmpty() || planStore.isEmpty()) {
+  if (planStore.isEmpty()) {
     alert('STEP 1, 2, 3을 완료해야 합니다.');
     return;
   }

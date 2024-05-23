@@ -1,8 +1,8 @@
 <script setup>
 import { ref, computed, onMounted, defineProps, defineEmits } from 'vue';
 import { mdiMagnify, mdiPlus } from '@mdi/js';
-import { searchFriends } from '@/api/member.js'; 
-import { fetchFriends } from '@/api/friend.js'; 
+import { searchFriends } from '@/api/member.js';
+import { fetchFriends } from '@/api/friend.js';
 import { useUserStore } from '@/stores/user';
 import { useTripwithStore } from '@/stores/tripwith';
 import defaultProfile from '@/assets/default_profile.png';
@@ -25,7 +25,7 @@ const displayResults = computed(() => {
   if (showFriends.value) {
     results = friends.value.filter(friend =>
       friend.id.toLowerCase().includes(searchQuery.value.toLowerCase()) &&
-      friend.id !== userStore.userId 
+      friend.id !== userStore.userId
     );
   } else {
     results = searchResults.value.filter(member =>
@@ -41,7 +41,7 @@ onMounted(() => {
 
 function loadFriends() {
   isDataLoaded.value = false;
-  fetchFriends(userStore.userId, 
+  fetchFriends(userStore.userId,
     (data) => {
       friends.value = data.map(friend => ({
         id: friend.friendId,
@@ -75,7 +75,7 @@ async function searchFriendsHandler() {
     isDataLoaded.value = true;
   } catch (error) {
     console.error('회원 정보를 가져오는 중 오류 발생:', error);
-    isDataLoaded.value = true; 
+    isDataLoaded.value = true;
   }
 }
 </script>
@@ -86,15 +86,8 @@ async function searchFriendsHandler() {
     <h3 class="heading-with-underline">동행 추가</h3>
     <v-row>
       <v-col>
-        <v-text-field
-          v-model="searchQuery"
-          placeholder="ID 검색"
-          density="compact"
-          variant="solo"
-          hide-details
-          single-line
-          class="search-field"
-        >
+        <v-text-field v-model="searchQuery" placeholder="ID 검색" density="compact" variant="solo" hide-details
+          single-line class="search-field">
           <v-icon>{{ mdiMagnify }}</v-icon>
         </v-text-field>
       </v-col>
@@ -104,11 +97,7 @@ async function searchFriendsHandler() {
     </v-row>
     <v-row>
       <v-col>
-        <v-checkbox
-          v-model="showFriends"
-          label="내 친구 보기"
-          @change="loadFriends"
-        />
+        <v-checkbox v-model="showFriends" label="내 친구 보기" @change="loadFriends" />
       </v-col>
     </v-row>
     <v-sheet class="friend-list" outlined v-if="isDataLoaded">

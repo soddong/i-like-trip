@@ -1,10 +1,12 @@
 <script setup>
 import { computed } from 'vue';
-import { mdiMinus } from '@mdi/js';
+import { mdiMinus, mdiStarSettings } from '@mdi/js';
 import { useTripwithStore } from '@/stores/tripwith';
 import default_profile from '@/assets/default_profile.png';
+import { useUserStore } from "@/stores/user";
 const tripwithStore = useTripwithStore()
 const tripwith = computed(() => tripwithStore.tripwith);
+const userStore = useUserStore()
 </script>
 
 <template>
@@ -13,6 +15,21 @@ const tripwith = computed(() => tripwithStore.tripwith);
         <v-divider></v-divider>
         <v-row class="playground">
             <v-col class="col">
+                <v-card class="box">
+                    <v-row align="center" no-gutters>
+                        <v-col cols="4" class="d-flex justify-center">
+                            <img cover rounded class="profile-picture"
+                                :src="userStore.userInfo.profileImg ? userStore.userInfo.profileImg : default_profile">
+                        </v-col>
+                        <v-col cols="4" class="d-flex flex-column align-start justify-center">
+                            <span>{{ userStore.userInfo.name }}</span>
+                            <span class="small-id">{{ userStore.userId }}</span>
+                        </v-col>
+                        <v-col cols="4" class="d-flex justify-end">
+                            <v-icon :icon="mdiStarSettings"></v-icon>
+                        </v-col>
+                    </v-row>
+                </v-card>
                 <v-card v-for="(person) in tripwith" :key="person.id" class="box">
                     <v-row align="center" no-gutters>
                         <v-col cols="4" class="d-flex justify-center">
@@ -100,10 +117,12 @@ span {
     background-color: #f44336bd;
     color: white;
     border-radius: 50%;
-    width: 24px; /* 버튼 크기 조정 */
+    width: 24px;
+    /* 버튼 크기 조정 */
     height: 24px;
     min-width: 24px;
-    margin-right: 8px; /* 추가 마진 */
+    margin-right: 8px;
+    /* 추가 마진 */
     box-shadow: none;
 }
 </style>

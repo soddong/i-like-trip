@@ -1,20 +1,12 @@
 <script setup>
 import { KakaoMap, KakaoMapMarker, KakaoMapPolyline } from 'vue3-kakao-maps';
-import PlanPickDate from '@/components/plan/step/PlanPickDate.vue'
-import PlanPickTripwith from '@/components/plan/step/PlanPickTripwith.vue'
-import PlanPickTripwithSearch from '@/components/plan/step/item/PlanPickTripwithSearch.vue'
-import PlanPickPlace from '@/components/plan/step/PlanPickPlace.vue'
-import PlanSearchPlace from '@/components/plan/step/PlanSearchPlace.vue'
-import PlanPickResult from '@/components/plan/step/PlanPickResult.vue'
 import PlanDetailItem from '@/components/plan/item/PlanDetailItem.vue'
 import PlanDetailTripwith from '@/components/plan/item/PlanDetailTripwith.vue'
 
-import { mdiDotsVertical } from '@mdi/js';
-import { ref, computed, onMounted, watch } from 'vue';
-import { getPlanPath, createPlan, detailPlan } from "@/api/plan";
+import { ref, onMounted, watch } from 'vue';
+import { detailPlan } from "@/api/plan";
 import { usePlanStore } from "@/stores/plan";
 import { useTripwithStore } from "@/stores/tripwith";
-import { useUserStore } from "@/stores/user";
 import { useRoute, useRouter, onBeforeRouteLeave } from "vue-router"
 
 

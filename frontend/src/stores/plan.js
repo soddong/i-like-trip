@@ -93,6 +93,8 @@ export const usePlanStore = defineStore("planStore", () => {
     let curDayCount = 0;
     pickedPlace.value.forEach((e, idx) => {
       let { start, end } = getPlaceStartEnd(idx);
+      curDayCount = Math.ceil(e.y / 24) - 1;
+      console.log(curDayCount, e.y, Math.ceil(e.y / 24));
       const timeDifference =
         new Date(`${end.getFullYear()}-${end.getMonth()}-${end.getDate()}`) -
         new Date(`${start.getFullYear()}-${start.getMonth()}-${start.getDate()}`);
@@ -115,6 +117,8 @@ export const usePlanStore = defineStore("planStore", () => {
 
       if (end.getHours() == 23) curDayCount++;
     });
+
+    console.log(placePerDay);
     return placePerDay;
   };
 
