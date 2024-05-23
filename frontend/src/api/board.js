@@ -19,8 +19,8 @@ function modifyArticle(article, success, fail) {
   local.put(`/board`, JSON.stringify(article)).then(success).catch(fail);
 }
 
-function deleteArticle(articleno, success, fail) {
-  local.delete(`/board/${articleno}`).then(success).catch(fail);
+function deleteArticle(articleno, registUserId, success, fail) {
+  local.delete(`/board/${articleno}`, { data: { registUserId } }).then(success).catch(fail);
 }
 
 export { listArticle, detailArticle, registArticle, modifyArticle, deleteArticle };

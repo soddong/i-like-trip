@@ -78,10 +78,13 @@ function logout() {
         </v-btn-group>
 
         <!-- Sub menu -->
-        <v-btn-group v-show="mdAndUp" class="button-group" variant="text">
-            <v-btn v-for="menu in myMenuList" :key="menu.title" :to="menu.to" class="sub-button">
-                {{ menu.title }}</v-btn>
-        </v-btn-group>
+        <template v-if="userStore.isSignIn">
+            <v-btn-group v-show="mdAndUp" class="button-group" variant="text">
+                <v-btn v-for="menu in myMenuList" :key="menu.title" :to="menu.to" class="sub-button">
+                    {{ menu.title }}</v-btn>
+            </v-btn-group>
+        </template>
+
 
 
         <v-btn v-if="!userStore.isSignIn" :to="{ name: 'sign-in' }">로그인</v-btn>
@@ -89,7 +92,8 @@ function logout() {
             <template v-slot:activator="{ props }">
                 <v-btn icon v-bind="props">
                     <v-avatar color="brown">
-                        <img :src="userStore.userInfo? userProfile : defaultProfile" alt="Profile Image" class="cover-image">
+                        <img :src="userStore.userInfo ? userProfile : defaultProfile" alt="Profile Image"
+                            class="cover-image">
                     </v-avatar>
                 </v-btn>
             </template>
@@ -97,7 +101,8 @@ function logout() {
                 <v-card-text>
                     <div class="mx-auto text-center">
                         <v-avatar color="brown">
-                            <img :src="userStore.userInfo? userProfile : defaultProfile" alt="Profile Image" class="cover-image">
+                            <img :src="userStore.userInfo ? userProfile : defaultProfile" alt="Profile Image"
+                                class="cover-image">
                         </v-avatar>
                         <h3>{{ userStore.userInfo.name }}</h3>
                         <p class="text-caption mt-1">
@@ -119,7 +124,10 @@ function logout() {
     <v-navigation-drawer v-model="drawerOpen" location="right" disableResizeWatcher>
         <v-list two-line>
             <v-list-item v-for="menu in mainMenuList" :title="menu.title" :to="menu.to" :key="menu.title"></v-list-item>
-            <v-list-item v-for="menu in myMenuList" :title="menu.title" :to="menu.to" </v-list-item>
+            <template v-if="userStore.isSignIn">
+                <v-list-item v-for="menu in myMenuList" :title="menu.title" :to="menu.to"
+                    :key="menu.title"></v-list-item>
+            </template>
         </v-list>
     </v-navigation-drawer>
 </template>

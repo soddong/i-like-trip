@@ -30,6 +30,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 
 //@CrossOrigin(origins = { "*" }, methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.POST} , maxAge = 6000)
@@ -98,20 +99,27 @@ public class BoardController {
 
 	@Operation(summary = "게시판 글수정", description = "수정할 게시글 정보를 입력한다. 그리고 DB수정 성공여부에 따라 'success' 또는 'fail' 문자열을 반환한다.")
 	@PutMapping
-	public ResponseEntity<String> modifyArticle(
-			@RequestBody @Parameter(description = "수정할 글정보.", required = true) BoardDto boardDto) throws Exception {
+	public ResponseEntity<?> modifyArticle(
+			@RequestBody @Parameter(description = "수정할 글정보.", required = true) BoardDto boardDto, HttpServletRequest req) throws Exception {
 		log.info("modifyArticle - 호출 {}", boardDto);
-
-		boardService.modifyArticle(boardDto);
-		return ResponseEntity.ok().build();
+		if(req.getUserPrincipal().getName().equals(boardDto.getUserId())) {
+			boardService.modifyArticle(boardDto);
+			return ResponseEntity.ok().build();
+		}else {
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+		}
 	}
 	
 	@Operation(summary = "게시판 글삭제", description = "글번호에 해당하는 게시글의 정보를 삭제한다. 그리고 DB삭제 성공여부에 따라 'success' 또는 'fail' 문자열을 반환한다.")
 	@DeleteMapping("/{articleno}")
-	public ResponseEntity<String> deleteArticle(@PathVariable("articleno") @Parameter(name = "articleno", description = "살제할 글의 글번호.", required = true) int articleno) throws Exception {
+	public ResponseEntity<String> deleteArticle(@PathVariable("articleno") @Parameter(name = "articleno", description = "살제할 글의 글번호.", required = true) int articleno,@RequestBody Map<String,String> map, HttpServletRequest req) throws Exception {
 		log.info("deleteArticle - 호출");
-		boardService.deleteArticle(articleno);
-		return ResponseEntity.ok().build();
+		if(req.getUserPrincipal().getName().equals(map.get("registUserId"))) {
+			boardService.deleteArticle(articleno);
+			return ResponseEntity.ok().build();
+		}else {
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+		}
 
 	}
 
