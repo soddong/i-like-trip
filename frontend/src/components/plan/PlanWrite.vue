@@ -5,7 +5,9 @@ import PlanPickTripwith from '@/components/plan/step/PlanPickTripwith.vue'
 import PlanPickTripwithSearch from '@/components/plan/step/item/PlanPickTripwithSearch.vue'
 import PlanPickPlace from '@/components/plan/step/PlanPickPlace.vue'
 import PlanSearchPlace from '@/components/plan/step/PlanSearchPlace.vue'
-
+import { usePlanStore } from "@/stores/plan";
+import { useTripwithStore } from "@/stores/tripwith";
+import { onBeforeRouteLeave } from "vue-router"
 import createPlan from '@/api/plan.js'
 import { mdiDotsVertical } from '@mdi/js';
 import { ref } from 'vue';
@@ -14,6 +16,9 @@ const coordinate = {
     lat: 37.566826,
     lng: 126.9786567
 };
+
+const planStore = usePlanStore();
+const tripwithStore = useTripwithStore()
 
 const drawerWidth = 150
 const stepDetailwidth = 400
@@ -78,6 +83,11 @@ const handleCreatePlan = () => {
     }
   );
 };
+
+onBeforeRouteLeave(() => {
+    planStore.resetPlan();
+    tripwithStore.resetTripwith();
+});
 </script>
 
 <template>

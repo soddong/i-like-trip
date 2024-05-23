@@ -16,7 +16,7 @@ const imageUrl = computed(() => {
 </script>
 
 <template>
-  <v-card class="mx-auto my-5" width="500" height="420"> 
+  <v-card class="mx-auto my-5" width="400" height="420"> 
     <router-link
       :to="{ name: 'article-view', params: { articleno: article.articleNo } }"
     >
