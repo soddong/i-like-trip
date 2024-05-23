@@ -126,8 +126,6 @@ const makePathPolyline = () => {
 };
 
 function canclePlan() {
-  alert('계획이 취소되었습니다.');
-
   planStore.resetPlan();
   tripwithStore.resetTripwith();
 

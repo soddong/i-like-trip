@@ -110,9 +110,9 @@
             </v-row>
             <v-row class="generate-section">
               <v-col>
-                <v-btn @click="canclePlan" variant="tonal" block>취소</v-btn>
+                <v-btn @click="canclePlan" variant="tonal" block>뒤로가기</v-btn>
               </v-col>
-              <v-col>
+              <v-col v-if="canModify">
                 <v-btn color="green" @click="modifyPlan" variant="tonal" block>수정</v-btn>
               </v-col>
             </v-row>
@@ -124,11 +124,13 @@
 </template>
 
 <script setup>
-import { ref, onMounted, defineEmits, watch } from 'vue';
+import { ref, defineEmits, watch, onMounted } from 'vue';
 import { usePlanStore } from '@/stores/plan';
 import { dateFromString } from '@/util/time-utils';
 import { attrTypes } from '@/util/attraction-type';
-import { mdiDotsVertical, mdiEmoticonCryOutline, mdiCarSide, mdiWalk } from '@mdi/js';
+import { mdiEmoticonCryOutline, mdiCarSide } from '@mdi/js';
+import { useUserStore } from "@/stores/user";
+import { useTripwithStore } from "@/stores/tripwith";
 
 const title = ref('');
 const date = ref([]);
@@ -136,8 +138,11 @@ const comment = ref('');
 const isPublic = ref(true);
 const selectedDay = ref(0)
 const planStore = usePlanStore()
+const userStore = useUserStore()
+const tripwithStore = useTripwithStore()
 
 const emits = defineEmits(['modify:plan', 'cancle:plan']);
+const canModify = ref(false)
 
 defineProps({
   mapMove: Function,
@@ -160,6 +165,14 @@ function modifyPlan() {
 function canclePlan() {
   emits('cancle:plan');
 }
+
+watch(() => tripwithStore.tripwith, () => {
+  if (tripwithStore.tripwith.find((e) => {
+    return e.id == userStore.userId
+  })) {
+    canModify.value = true
+  }
+})
 </script>
 
 <style scoped>
