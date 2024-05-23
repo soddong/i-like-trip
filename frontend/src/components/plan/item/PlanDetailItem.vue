@@ -58,7 +58,7 @@
   border-top: 1px solid rgb(204 226 232);">
                                 {{ stopOver.start ? stopOver.start.getHours() : 0 }}:00
                               </div>
-                              <div class="place-detail">
+                              <div class="place-detail" @click="mapMove(stopOver.lat, stopOver.lng)">
                                 <v-container class="pa-0 grid-stack-item" style="height: 100px;">
                                   <v-row class="ma-0 grid-stack-item-content " style="height: 100%;">
                                     <v-col cols="4" style="height: 100%;">
@@ -110,9 +110,9 @@
             </v-row>
             <v-row class="generate-section">
               <v-col>
-                <v-btn @click="canclePlan" variant="tonal" block>취소</v-btn>
+                <v-btn @click="canclePlan" variant="tonal" block>뒤로가기</v-btn>
               </v-col>
-              <v-col>
+              <v-col v-if="canModify">
                 <v-btn color="green" @click="modifyPlan" variant="tonal" block>수정</v-btn>
               </v-col>
             </v-row>
@@ -124,11 +124,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted, defineEmits, watch } from 'vue';
+import { ref, defineEmits, watch } from 'vue';
 import { usePlanStore } from '@/stores/plan';
 import { dateFromString } from '@/util/time-utils';
 import { attrTypes } from '@/util/attraction-type';
-import { mdiDotsVertical, mdiEmoticonCryOutline, mdiCarSide, mdiWalk } from '@mdi/js';
+import { mdiEmoticonCryOutline, mdiCarSide } from '@mdi/js';
 
 const title = ref('');
 const date = ref([]);
@@ -141,6 +141,7 @@ const emits = defineEmits(['modify:plan', 'cancle:plan']);
 
 defineProps({
   mapMove: Function,
+  canModify: Boolean,
 });
 
 watch(() => planStore.planInfo, (newPlan) => {

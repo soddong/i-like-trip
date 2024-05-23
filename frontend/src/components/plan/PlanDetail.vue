@@ -7,7 +7,9 @@ import { ref, onMounted, watch } from 'vue';
 import { detailPlan } from "@/api/plan";
 import { usePlanStore } from "@/stores/plan";
 import { useTripwithStore } from "@/stores/tripwith";
+import { useUserStore } from "@/stores/user";
 import { useRoute, useRouter, onBeforeRouteLeave } from "vue-router"
+import { getPlanPath } from "@/api/plan";
 
 
 const router = useRouter()
@@ -22,7 +24,7 @@ const drawerWidth = 150
 const stepDetailwidth = 400
 const stepDetailFold = ref(true);
 const map = ref();
-const attrList = ref([]);
+const canModify = ref(false)
 const onLoadKakaoMap = (mapRef) => {
   map.value = mapRef;
 
@@ -41,13 +43,10 @@ const mapMove = (lat, lng) => {
 }
 
 const planStore = usePlanStore();
-const { pickedPlace } = planStore;
 const tripwithStore = useTripwithStore()
+const userStore = useUserStore()
 
 const latLngList = ref([
-  { lat: 33.45, lng: 126.571 },
-  { lat: 33.449, lng: 126.5705 },
-  { lat: 33.45, lng: 126.5725 }
 ]);
 
 onMounted(() => {
@@ -58,8 +57,17 @@ onMounted(() => {
 watch(() => planStore.pickedPlace, (newValue) => {
   if (newValue.length > 0) {
     makePathPolyline();
+    mapMove(newValue[0].lat, newValue[0].lng)
   }
 }, { immediate: true });
+
+watch(() => tripwithStore.tripwith, () => {
+  if (tripwithStore.tripwith.find((e) => {
+    return e.id == userStore.userId
+  })) {
+    canModify.value = true
+  }
+})
 
 onBeforeRouteLeave((to, from) => {
   if (to.name !== 'plan-modify') {
@@ -106,28 +114,26 @@ const makePathPolyline = () => {
     data.waypoints = waypoints;
   }
 
-  // getPlanPath(data, (res) => {
-  //   const path = [];
-  //   const result = res.data.routes[0];
-  //   if (result.result_code != 0) return;
+  getPlanPath(data, (res) => {
+    const path = [];
+    const result = res.data.routes[0];
+    if (result.result_code != 0) return;
 
-  //   result.sections.forEach(section => {
-  //     section.roads.forEach(road => {
-  //       for (let index = 0; index < road.vertexes.length; index += 2) {
-  //         path.push({
-  //           lat: road.vertexes[index + 1],
-  //           lng: road.vertexes[index]
-  //         });
-  //       }
-  //     });
-  //   });
-  //   latLngList.value = path;
-  // }, (e) => { console.log(e); });
+    result.sections.forEach(section => {
+      section.roads.forEach(road => {
+        for (let index = 0; index < road.vertexes.length; index += 2) {
+          path.push({
+            lat: road.vertexes[index + 1],
+            lng: road.vertexes[index]
+          });
+        }
+      });
+    });
+    latLngList.value = path;
+  }, (e) => { console.log(e); });
 };
 
 function canclePlan() {
-  alert('계획이 취소되었습니다.');
-
   planStore.resetPlan();
   tripwithStore.resetTripwith();
 
@@ -148,9 +154,6 @@ function moveModify() {
   <v-navigation-drawer permanent :width="drawerWidth">
     <v-list>
       <v-list-item title="조아요행" :to="{ name: 'Home' }">
-        <template v-slot:prepend>
-          <v-avatar tile image="src/assets/logo2.png" size="small"></v-avatar>
-        </template>
       </v-list-item>
     </v-list>
 
@@ -164,27 +167,28 @@ function moveModify() {
     width: stepDetailwidth + 'px'
   }">
     <v-container class="h-screen d-flex flex-column justify-center" :style="{ minWidth: stepDetailwidth + 'px' }">
-      <PlanDetailItem :mapMove="mapMove" @cancle:plan="canclePlan" @modify:plan="moveModify" />
+      <PlanDetailItem :mapMove="mapMove" @cancle:plan="canclePlan" @modify:plan="moveModify" :canModify="canModify" />
     </v-container>
   </v-sheet>
   <v-main>
     <KakaoMap @on-load-kakao-map="onLoadKakaoMap" :lat="coordinate.lat" :lng="coordinate.lng" :draggable="true"
       height="100%" width="100%">
-      <KakaoMapMarker v-for="item in attrList" :key="item.attractionId" :lat="item.lat" :lng="item.lng" :image="{
-        imageSrc: 'src/assets/marker/type12.png',
-        imageWidth: 25,
-        imageHeight: 35,
-        imageOption: {}
-      }"></KakaoMapMarker>
+      <KakaoMapMarker v-for="item in planStore.pickedPlace" :key="item.attractionId" :lat="item.lat" :lng="item.lng"
+        :image="{
+          imageSrc: `src/assets/marker/type${item.attractionType}.png`,
+          imageWidth: 25,
+          imageHeight: 35,
+          imageOption: {}
+        }"></KakaoMapMarker>
       <KakaoMapPolyline :latLngList="latLngList" />
     </KakaoMap>
   </v-main>
 
-  <!-- <v-navigation-drawer permanent :style="{ width: stepDetailwidth + 'px' }" location="right">
+  <v-navigation-drawer permanent :style="{ width: stepDetailwidth + 'px' }" location="right" v-if="canModify">
     <v-sheet>
       <PlanDetailTripwith />
     </v-sheet>
-  </v-navigation-drawer> -->
+  </v-navigation-drawer>
 </template>
 
 <style>

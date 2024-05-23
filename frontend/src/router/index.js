@@ -33,6 +33,13 @@ const router = createRouter({
           path: "/board",
           name: "article-write",
           component: () => import("@/components/board/BoardWrite.vue"),
+          beforeEnter: (to, from) => {
+            const userStore = useUserStore();
+            if (userStore.isSignIn) return true;
+            else {
+              return { name: "sign-in" };
+            }
+          },
         },
         {
           path: "/board/:articleno",
@@ -91,6 +98,13 @@ const router = createRouter({
       component: () => import("@/components/plan/PlanMap.vue"),
       meta: {
         noHeader: true,
+      },
+      beforeEnter: (to, from) => {
+        const userStore = useUserStore();
+        if (userStore.isSignIn) return true;
+        else {
+          return { name: "sign-in" };
+        }
       },
     },
     {
