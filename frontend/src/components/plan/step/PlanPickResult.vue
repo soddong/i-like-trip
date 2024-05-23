@@ -49,7 +49,7 @@
                           <template v-else>
                             <div class="stopover" v-for="stopOver in day" :key="stopOver.id">
                               <div class="hours start-hour">
-                                {{ stopOver.start.getHours() }}:00
+                                {{ stopOver.start ? stopOver.start.getHours() : 0 }}:00
                               </div>
                               <div class="place-detail">
                                 <v-container class="pa-0 grid-stack-item" style="height: 100px;">
@@ -76,7 +76,7 @@
                                 </v-container>
                               </div>
                               <div class="hours end-hour">
-                                {{ stopOver.end.getHours() + 1 }}:00
+                                {{ stopOver.end ? stopOver.end.getHours() + 1 : 24 }}:00
                               </div>
                               <div class="divider my-1">
                                 <v-icon :icon="mdiCarSide"></v-icon>

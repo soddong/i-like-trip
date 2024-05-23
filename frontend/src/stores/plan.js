@@ -98,10 +98,21 @@ export const usePlanStore = defineStore("planStore", () => {
         new Date(`${start.getFullYear()}-${start.getMonth()}-${start.getDate()}`);
       const millisecondsPerDay = 24 * 60 * 60 * 1000;
       let containDayCount = Math.ceil(timeDifference / millisecondsPerDay) + 1;
-      for (let i = 0; i < containDayCount; i++) {
-        if (i != 0) curDayCount++;
+      if (containDayCount == 1) {
         placePerDay[curDayCount].push({ ...e, start, end });
+      } else {
+        for (let i = 0; i < containDayCount; i++) {
+          if (i != 0) curDayCount++;
+          if (i === 0) {
+            placePerDay[curDayCount].push({ ...e, start });
+          } else if (i === containDayCount - 1) {
+            placePerDay[curDayCount].push({ ...e, end });
+          } else {
+            placePerDay[curDayCount].push({ ...e });
+          }
+        }
       }
+
       if (end.getHours() == 23) curDayCount++;
     });
     return placePerDay;
