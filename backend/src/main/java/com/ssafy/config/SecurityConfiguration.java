@@ -2,6 +2,7 @@ package com.ssafy.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -33,12 +34,12 @@ public class SecurityConfiguration {
 		http.formLogin(form -> form.disable());
 		http.httpBasic(AbstractHttpConfigurer::disable);
 
-		http.authorizeHttpRequests(auth ->
-				auth.requestMatchers("/member/sign-in", "/member/refresh", "/member/sign-up",
-								"/swagger-ui/**", "/v3/api-docs/**")
-						.permitAll()
-						.anyRequest().authenticated()
-		);
+		http.authorizeHttpRequests(auth -> auth
+				.requestMatchers("/swagger-ui/**","/v3/api-docs/**").permitAll()//스웨거
+				.requestMatchers("/member/sign-in", "/member/refresh", "/member/sign-up","/member/forget").permitAll()//인증 인가
+				.requestMatchers(HttpMethod.GET,"/board/**","/plans/**","/upload/**","/gpt","/attraction","/address/**").permitAll()
+				.anyRequest().authenticated()
+				);
 
 		http.addFilterBefore(new JwtRequestFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
 

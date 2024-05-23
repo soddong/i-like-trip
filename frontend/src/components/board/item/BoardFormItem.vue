@@ -1,8 +1,8 @@
 <script setup>
 import { ref, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
-import { registArticle, getModifyArticle, modifyArticle } from "@/api/board"
-import BoardEditorItem from '@/components/board/item/BoardEditorItem.vue'; 
+import { registArticle, detailArticle, modifyArticle } from "@/api/board"
+import BoardEditorItem from '@/components/board/item/BoardEditorItem.vue';
 import { useUserStore } from '@/stores/user';
 
 const userStore = useUserStore();
@@ -26,7 +26,7 @@ const article = ref({
 if (props.type === "modify") {
   let { articleno } = route.params
   console.log(articleno + "번글 얻어와서 수정할거야")
-  getModifyArticle(
+  detailArticle(
     articleno,
     ({ data }) => {
       article.value = data
@@ -110,18 +110,12 @@ function moveList() {
 
 <template>
   <v-form>
-   <v-container>
+    <v-container>
       <v-row>
         제목
       </v-row>
       <v-row>
-        <v-text-field
-          :counter="50"
-          variant="outlined"
-          required
-          v-model="article.subject"
-          maxlength="50"
-        ></v-text-field>
+        <v-text-field :counter="50" variant="outlined" required v-model="article.subject" maxlength="50"></v-text-field>
       </v-row>
       <v-row>
         내용
