@@ -42,7 +42,6 @@ onMounted(() => {
         grid.removeWidget(newWidget.id)
         nextTick(() => {
             grid.makeWidget(newId);
-            props.makePathPolyline();
         });
     });
 
@@ -51,7 +50,6 @@ onMounted(() => {
             let id = items[0].id
             let idx = pickedPlace.value.findIndex((e) => id === e.id)
             pickedPlace.value.splice(idx, 1)
-            props.makePathPolyline();
         }
     });
 
@@ -61,7 +59,6 @@ onMounted(() => {
             pickedPlace.value[idx].y = item.y
             pickedPlace.value[idx].h = item.h
             planStore.sortPickedPlace()
-            props.makePathPolyline();
         });
     });
 });
@@ -71,9 +68,8 @@ onMounted(() => {
 <template>
     <v-container fluid class="border fill-height d-flex">
         <PlanCheckDate />
-        <div>
-            <!-- <v-btn @click="makePathPolyline">btn</v-btn> -->
-        </div>
+        <v-btn style="width: 100%; height: 20px" @click="makePathPolyline" variant="tonal" :density="compact">경로
+            보기</v-btn>
         <v-sheet class="border overflow-y-auto overflow-x-hidden position-relative" id="grid2-wrap"
             style="height: 800px; width: 100%;">
             <div id="time-line" :style="{ height: planStore.getPeriodTime() * 24 * 100 + 'px' }">
@@ -99,7 +95,7 @@ onMounted(() => {
                             <v-sheet class="d-flex flex-column h-100 justify-space-between">
                                 <div class="pb-1 text-truncate " style="font-size: small;">
                                     <v-chip size="x-small" :prepend-icon="attrTypes[place.attractionType].icon">
-                                        {{attrTypes[place.attractionType].title }}
+                                        {{ attrTypes[place.attractionType].title }}
                                     </v-chip>
                                     {{ place.title }}
                                 </div>
@@ -114,7 +110,6 @@ onMounted(() => {
                 </v-container>
             </v-sheet>
         </v-sheet>
-
     </v-container>
 
 </template>

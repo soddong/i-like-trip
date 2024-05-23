@@ -16,6 +16,7 @@ import { usePlanStore } from "@/stores/plan";
 import { useTripwithStore } from "@/stores/tripwith";
 import { useUserStore } from "@/stores/user";
 import { useRouter, onBeforeRouteLeave } from "vue-router"
+import { mdiMapMarkerCheck } from '@mdi/js';
 
 const router = useRouter()
 const coordinate = {
@@ -61,9 +62,6 @@ const tripwithStore = useTripwithStore()
 const userStore = useUserStore()
 
 const latLngList = ref([
-  { lat: 33.45, lng: 126.571 },
-  { lat: 33.449, lng: 126.5705 },
-  { lat: 33.45, lng: 126.5725 }
 ]);
 
 const plan = ref({
@@ -74,29 +72,45 @@ const plan = ref({
 });
 
 function makePathPolyline() {
-  let data = {
-    "origin": {
-      "name": pickedPlace[0].title,
-      "x": pickedPlace[0].lng,
-      "y": pickedPlace[0].lat,
+  const data = {
+    origin: {
+      name: planStore.pickedPlace[0].title,
+      x: planStore.pickedPlace[0].lng,
+      y: planStore.pickedPlace[0].lat,
     },
-    "destination": {
-      "name": pickedPlace[pickedPlace.length - 1].title,
-      "x": pickedPlace[pickedPlace.length - 1].lng,
-      "y": pickedPlace[pickedPlace.length - 1].lat,
+    destination: {
+      name: planStore.pickedPlace[planStore.pickedPlace.length - 1].title,
+      x: planStore.pickedPlace[planStore.pickedPlace.length - 1].lng,
+      y: planStore.pickedPlace[planStore.pickedPlace.length - 1].lat,
     }
+  };
+
+  if (planStore.pickedPlace.length > 2) {
+    const waypoints = planStore.pickedPlace.slice(1, -1).map(place => ({
+      name: place.title,
+      x: place.lng,
+      y: place.lat,
+    }));
+    data.waypoints = waypoints;
   }
-  if (pickedPlace.length > 2) {
-    let waypoints = []
-    for (let index = 1; index < pickedPlace.length; index++) {
-      waypoints.push({
-        "name": pickedPlace[index].title,
-        "x": pickedPlace[index].lng,
-        "y": pickedPlace[index].lat,
-      })
-    }
-    data['waypoints'] = waypoints
-  }
+
+  getPlanPath(data, (res) => {
+    const path = [];
+    const result = res.data.routes[0];
+    if (result.result_code != 0) return;
+
+    result.sections.forEach(section => {
+      section.roads.forEach(road => {
+        for (let index = 0; index < road.vertexes.length; index += 2) {
+          path.push({
+            lat: road.vertexes[index + 1],
+            lng: road.vertexes[index]
+          });
+        }
+      });
+    });
+    latLngList.value = path;
+  }, (e) => { console.log(e); });
 }
 
 function registerPlan() {
@@ -153,7 +167,9 @@ function moveToStep4() {
     alert('STEP 1, 2, 3을 완료해야 합니다.');
     return;
   }
+  attrList.value = []
   curStep.value = 4;
+
 }
 
 function completeStep(step) {
@@ -250,8 +266,15 @@ onBeforeRouteLeave(() => {
         imageHeight: 35,
         imageOption: {}
       }"></KakaoMapMarker>
+      <KakaoMapMarker v-for="item in pickedPlace" :key="item.attractionId" :lat="item.lat" :lng="item.lng" :image="{
+        imageSrc: `src/assets/map-marker-check.png`,
+        imageWidth: 40,
+        imageHeight: 40,
+        imageOption: {}
+      }" :icon="mdiMapMarkerCheck"></KakaoMapMarker>
       <KakaoMapPolyline :latLngList="latLngList" />
     </KakaoMap>
+
   </v-main>
 
   <v-navigation-drawer permanent :width="curStep == 2 || curStep == 3 || curStep == 4 ? stepDetailwidth - 50 : 1"
