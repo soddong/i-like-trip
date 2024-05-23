@@ -26,7 +26,8 @@ const loadPlans = (params) => {
                 startTime :plan.startTime,
                 endTime :plan.endTime,
             };
-            if(new Date(plan.endTime)<Date.now()){
+            console.log(new Date(new Date(plan.endTime).getTime()+32_400_000))
+            if(new Date(new Date(plan.endTime).getTime()+32_400_000).getTime()>Date.now()){
                 plansss[0].push(planObject)
             }else{
                 plansss[1].push(planObject)

@@ -4,7 +4,7 @@ import { defineStore } from "pinia";
 export const usePlanStore = defineStore("planStore", () => {
   const period = ref([new Date(new Date().toDateString())]);
   const pickedPlace = ref([]);
-  const planInfo = ref([]);
+  const planInfo = ref(null);
   const content = ref([]);
 
   const getStartEnd = () => {
@@ -36,7 +36,7 @@ export const usePlanStore = defineStore("planStore", () => {
   const resetPlan = () => {
     period.value = [new Date(new Date().toDateString())];
     pickedPlace.value = [];
-    planInfo.value=[];
+    planInfo.value=null;
   };
 
   const isEmpty = () => {

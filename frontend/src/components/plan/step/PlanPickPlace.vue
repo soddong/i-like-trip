@@ -63,7 +63,6 @@ onUnmounted(()=>{
         });
         planStore.sortPickedPlace()
     }
-
 })
 
 </script>

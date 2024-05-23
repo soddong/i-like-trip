@@ -146,9 +146,11 @@ onMounted(() => {
     dateFromString(planStore.getStartEnd()["start"]),
     dateFromString(planStore.getStartEnd()["end"])
   ];
-  title.value = planStore.planInfo.title;
-  comment.value = planStore.planInfo.comment;
-  isPublic.value = planStore.planInfo.visibility === 1 ? true : false;
+  if(planStore.planInfo){
+    title.value = planStore.planInfo.title;
+    comment.value = planStore.planInfo.comment;
+    isPublic.value = planStore.planInfo.visibility === 1 ? true : false;
+  }
 });
 
 function handleRegisterPlan() {
