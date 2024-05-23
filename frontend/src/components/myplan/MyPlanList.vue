@@ -1,11 +1,11 @@
 <script setup>
 import PlanListItem from "@/components/plan/item/PlanListItem.vue"
 import { useRoute } from "vue-router";
-import { ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { listPlan } from '@/api/plan.js';
 import PlanListEmptyItem from "@/components/plan/item/PlanListEmptyItem.vue"
 const route = useRoute();
-const plans = ref([]);
+const plans = ref([[],[]]);
 const param = ref({
     keyword: "",
     word: "",
@@ -13,7 +13,7 @@ const param = ref({
 
 const loadPlans = (params) => {
     listPlan(params, ({ data }) => {
-        plans.value = [];
+        let plansss=[[],[]]
         data.forEach(plan => {
             const planObject = {
                 title: plan.title,
@@ -22,23 +22,27 @@ const loadPlans = (params) => {
                 registDate: plan.registDate,
                 visibility: plan.visibility,
                 comment: plan.comment,
-                img: `@/assets/random-images/0${plan.planId}.jpg`
+                img: `@/assets/random-images/0${plan.planId}.jpg`,
+                startTime :plan.startTime,
+                endTime :plan.endTime,
             };
-            plans.value.push(planObject);
+            if(new Date(plan.endTime)<Date.now()){
+                plansss[0].push(planObject)
+            }else{
+                plansss[1].push(planObject)
+            }
+           
         });
+        plans.value= plansss
         console.log("성공!!!!!!!!!");
         console.log(plans.value);
     }, error => {
         console.error(error);
     });
 };
-watch(() => route.query.keyword, (newKeyword) => {
-    if (newKeyword) {
-        loadPlans({ keyword: 'title', word: newKeyword, onlyMine: true });
-    } else {
-        loadPlans({ ...param.value, onlyMine: true });
-    }
-}, { immediate: true });
+onMounted(()=>{
+    loadPlans({onlyMine: true });
+})
 
 </script>
 
@@ -49,20 +53,30 @@ watch(() => route.query.keyword, (newKeyword) => {
                 예정된 일정
             </div>
             <v-row>
-                <template v-if="plans.length > 0">
-                    <template v-for="plan in plans" :key="plan.planId">
+                <template v-if="plans[0].length > 0">
+                    <template v-for="plan in plans[0]" :key="plan.planId">
                         <v-col>
                             <PlanListItem :plan="plan" />
                         </v-col>
                     </template>
                 </template>
                 <template v-else>
-                    <PlanListEmptyItem />
                 </template>
             </v-row>
             <div class="sub-seperate">
                 지난 일정
             </div>
+            <v-row>
+                <template v-if="plans[1].length > 0">
+                    <template v-for="plan in plans[1]" :key="plan.planId">
+                        <v-col>
+                            <PlanListItem :plan="plan" />
+                        </v-col>
+                    </template>
+                </template>
+                <template v-else>
+                </template>
+            </v-row>
         </v-container>
     </v-main>
 </template>

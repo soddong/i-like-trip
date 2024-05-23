@@ -150,8 +150,6 @@ function registerPlan() {
 }
 
 function canclePlan() {
-  alert('계획이 취소되었습니다.');
-
   planStore.resetPlan();
   tripwithStore.resetTripwith();
 
@@ -261,13 +259,13 @@ onBeforeRouteLeave(() => {
     <KakaoMap @on-load-kakao-map="onLoadKakaoMap" :lat="coordinate.lat" :lng="coordinate.lng" :draggable="true"
       height="100%" width="100%">
       <KakaoMapMarker v-for="item in attrList" :key="item.attractionId" :lat="item.lat" :lng="item.lng" :image="{
-        imageSrc: `src/assets/marker/type${item.attractionType}.png`,
+        imageSrc: `/src/assets/marker/type${item.attractionType}.png`,
         imageWidth: 25,
         imageHeight: 35,
         imageOption: {}
       }"></KakaoMapMarker>
       <KakaoMapMarker v-for="item in pickedPlace" :key="item.attractionId" :lat="item.lat" :lng="item.lng" :image="{
-        imageSrc: `src/assets/map-marker-check.png`,
+        imageSrc: `/src/assets/map-marker-check.png`,
         imageWidth: 40,
         imageHeight: 40,
         imageOption: {}

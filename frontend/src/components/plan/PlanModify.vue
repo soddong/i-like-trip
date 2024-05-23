@@ -13,7 +13,7 @@ import { usePlanStore } from "@/stores/plan";
 import { useTripwithStore } from "@/stores/tripwith";
 import { useUserStore } from "@/stores/user";
 import { useRouter, onBeforeRouteLeave } from "vue-router"
-
+import { getPlanPath } from '@/api/plan';
 
 const router = useRouter()
 const coordinate = {
@@ -58,11 +58,7 @@ const { pickedPlace, } = planStore
 const tripwithStore = useTripwithStore()
 const userStore = useUserStore()
 
-const latLngList = ref([
-  { lat: 33.45, lng: 126.571 },
-  { lat: 33.449, lng: 126.5705 },
-  { lat: 33.45, lng: 126.5725 }
-]);
+const latLngList = ref([]);
 
 const plan = ref({
   title: "",
@@ -84,17 +80,31 @@ function makePathPolyline() {
       "y": pickedPlace[pickedPlace.length - 1].lat,
     }
   }
-  if (pickedPlace.length > 2) {
-    let waypoints = []
-    for (let index = 1; index < pickedPlace.length; index++) {
-      waypoints.push({
-        "name": pickedPlace[index].title,
-        "x": pickedPlace[index].lng,
-        "y": pickedPlace[index].lat,
-      })
-    }
-    data['waypoints'] = waypoints
+  if (planStore.pickedPlace.length > 2) {
+    const waypoints = planStore.pickedPlace.slice(1, -1).map(place => ({
+      name: place.title,
+      x: place.lng,
+      y: place.lat,
+    }));
+    data.waypoints = waypoints;
   }
+  getPlanPath(data, (res) => {
+    const path = [];
+    const result = res.data.routes[0];
+    if (result.result_code != 0) return;
+
+    result.sections.forEach(section => {
+      section.roads.forEach(road => {
+        for (let index = 0; index < road.vertexes.length; index += 2) {
+          path.push({
+            lat: road.vertexes[index + 1],
+            lng: road.vertexes[index]
+          });
+        }
+      });
+    });
+    latLngList.value = path;
+  }, (e) => { console.log(e); });
 }
 
 function registerPlan() {
@@ -103,7 +113,7 @@ function registerPlan() {
   }
 
   const newPlan = {
-    plan: { ...plan.value },
+    plan: { ...plan.value, startTime: planStore.period[0], endTime: planStore.period[planStore.period.length - 1] },
     places: pickedPlace.map((attr, index) => {
       const { start, end } = planStore.getPlaceStartEnd(index);
       return {
@@ -135,8 +145,6 @@ function registerPlan() {
 }
 
 function canclePlan() {
-  alert('계획이 취소되었습니다.');
-
   planStore.resetPlan();
   tripwithStore.resetTripwith();
 
@@ -148,10 +156,11 @@ function moveList() {
 }
 
 function moveToStep4() {
-  if (tripwithStore.isEmpty() || planStore.isEmpty()) {
+  if (planStore.isEmpty()) {
     alert('STEP 1, 2, 3을 완료해야 합니다.');
     return;
   }
+  attrList.value = []
   curStep.value = 4;
 }
 
@@ -246,11 +255,17 @@ onBeforeRouteLeave(() => {
     <KakaoMap @on-load-kakao-map="onLoadKakaoMap" :lat="coordinate.lat" :lng="coordinate.lng" :draggable="true"
       height="100%" width="100%">
       <KakaoMapMarker v-for="item in attrList" :key="item.attractionId" :lat="item.lat" :lng="item.lng" :image="{
-        imageSrc: `src/assets/marker/type${item.attractionType}.png`,
+        imageSrc: `/src/assets/marker/type${item.attractionType}.png`,
         imageWidth: 25,
         imageHeight: 35,
         imageOption: {}
       }"></KakaoMapMarker>
+            <KakaoMapMarker v-for="item in pickedPlace" :key="item.attractionId" :lat="item.lat" :lng="item.lng" :image="{
+        imageSrc: `/src/assets/map-marker-check.png`,
+        imageWidth: 40,
+        imageHeight: 40,
+        imageOption: {}
+      }" :icon="mdiMapMarkerCheck"></KakaoMapMarker>
       <KakaoMapPolyline :latLngList="latLngList" />
     </KakaoMap>
   </v-main>
