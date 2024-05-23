@@ -96,15 +96,6 @@ public class BoardController {
 		return new ResponseEntity<BoardDto>(boardService.getArticle(articleno), HttpStatus.OK);
 	}
 
-	@Operation(summary = "수정 할 글 얻기", description = "글번호에 해당하는 게시글의 정보를 반환한다.")
-	@GetMapping("/modify/{articleno}")
-	public ResponseEntity<BoardDto> getModifyArticle(
-			@PathVariable("articleno") @Parameter(name = "articleno", description = "얻어올 글의 글번호.", required = true) int articleno)
-			throws Exception {
-		log.info("getModifyArticle - 호출 : " + articleno);
-		return new ResponseEntity<BoardDto>(boardService.getArticle(articleno), HttpStatus.OK);
-	}
-
 	@Operation(summary = "게시판 글수정", description = "수정할 게시글 정보를 입력한다. 그리고 DB수정 성공여부에 따라 'success' 또는 'fail' 문자열을 반환한다.")
 	@PutMapping
 	public ResponseEntity<String> modifyArticle(
