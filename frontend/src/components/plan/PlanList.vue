@@ -85,7 +85,7 @@ export default {
 
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   /* 한 줄에 네 개의 항목 */
   gap: 16px;
   /* 각 항목 사이의 간격 */

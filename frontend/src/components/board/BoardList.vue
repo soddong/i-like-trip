@@ -86,29 +86,31 @@ const moveWrite = () => {
 </script>
 
 <template>
-    <v-container>
-      <v-row justify="center">
-        <v-col cols="12" class="text-right">
-            <v-btn rounded class="main-button" @click="moveWrite" color="#F0BBB1"
-            style=" width: 250px; font-size: 15px; color: white">게시글 작성하기</v-btn>
-        </v-col>
-        <v-col cols="12" style="overflow-x: scroll">
-            <v-card class="common-card">
-              <template v-if="articles.length > 0">
-                <v-col v-for="article in articles" :key="article.articleNo" class="py-2">
-                  <BoardListItem :article="article" :image="articleImages[article.articleNo]" />
-                </v-col>
-              </template>
-              <template v-else-if="hasError">
-                <BoardListEmptyItem/>
-              </template>
-              <template v-else>
-                <BoardListEmptyItem/>
-              </template>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-container>
+  <v-container>
+    <v-row justify="center">
+      <v-col cols="12" class="text-right">
+        <v-btn rounded class="main-button" @click="moveWrite" color="#F0BBB1"
+               style="width: 250px; font-size: 15px; color: white">게시글 작성하기</v-btn>
+      </v-col>
+      <v-col cols="12">
+        <v-card class="common-card">
+          <div class="grid-container">
+            <template v-if="articles.length > 0">
+              <div v-for="article in articles" :key="article.articleNo" class="grid-item">
+                <BoardListItem :article="article" :image="articleImages[article.articleNo]" />
+              </div>
+            </template>
+            <template v-else-if="hasError">
+              <BoardListEmptyItem />
+            </template>
+            <template v-else>
+              <BoardListEmptyItem />
+            </template>
+          </div>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <style scoped>
@@ -117,9 +119,10 @@ const moveWrite = () => {
   box-shadow: none;
 }
 
+
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   /* 한 줄에 네 개의 항목 */
   gap: 16px;
   /* 각 항목 사이의 간격 */
