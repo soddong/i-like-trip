@@ -100,9 +100,9 @@ function registerPlan() {
   if (!pickedPlace) {
     return;
   }
-
+  let { startTime, endTime } = planStore.getStartEnd()
   const newPlan = {
-    plan: { ...plan.value },
+    plan: { ...plan.value, startTime, endTime },
     places: pickedPlace.map((attr, index) => {
       const { start, end } = planStore.getPlaceStartEnd(index);
       return {
@@ -171,8 +171,8 @@ function updatePlan(updatedPlan) {
 }
 
 onBeforeRouteLeave(() => {
-    planStore.resetPlan();
-    tripwithStore.resetTripwith();
+  planStore.resetPlan();
+  tripwithStore.resetTripwith();
 });
 </script>
 

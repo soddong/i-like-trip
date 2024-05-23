@@ -22,8 +22,8 @@ const router = useRouter()
 const route = useRoute();
 const planno = ref(null);
 
-const coordinate = { 
-    lat: 33.45, lng: 126.571
+const coordinate = {
+  lat: 33.45, lng: 126.571
 };
 
 const drawerWidth = 150
@@ -32,20 +32,20 @@ const stepDetailFold = ref(true);
 const map = ref();
 const attrList = ref([]);
 const onLoadKakaoMap = (mapRef) => {
-    map.value = mapRef;
+  map.value = mapRef;
 
-    kakao.maps.event.addListener(map.value, 'click', function (mouseEvent) {
-        stepDetailFold.value = true;
-    });
-    kakao.maps.event.addListener(map.value, 'dragstart', function (mouseEvent) {
-        stepDetailFold.value = true;
-    });
+  kakao.maps.event.addListener(map.value, 'click', function (mouseEvent) {
+    stepDetailFold.value = true;
+  });
+  kakao.maps.event.addListener(map.value, 'dragstart', function (mouseEvent) {
+    stepDetailFold.value = true;
+  });
 };
 
 const mapMove = (lat, lng) => {
-    if (map.value) {
-        map.value.panTo(new kakao.maps.LatLng(lat, lng));
-    }
+  if (map.value) {
+    map.value.panTo(new kakao.maps.LatLng(lat, lng));
+  }
 }
 
 const planStore = usePlanStore();
@@ -53,9 +53,9 @@ const { pickedPlace } = planStore;
 const tripwithStore = useTripwithStore()
 
 const latLngList = ref([
-    { lat: 33.45, lng: 126.571 },
-    { lat: 33.449, lng: 126.5705 },
-    { lat: 33.45, lng: 126.5725 }
+  { lat: 33.45, lng: 126.571 },
+  { lat: 33.449, lng: 126.5705 },
+  { lat: 33.45, lng: 126.5725 }
 ]);
 
 onMounted(() => {
@@ -69,17 +69,20 @@ watch(() => planStore.pickedPlace, (newValue) => {
   }
 }, { immediate: true });
 
-onBeforeRouteLeave(() => {
+onBeforeRouteLeave((to, from) => {
+  if (to.name !== 'plan-modify') {
     planStore.resetPlan();
     tripwithStore.resetTripwith();
+  }
+
 });
 
 const getPlan = () => {
   detailPlan(
     planno.value,
     ({ data }) => {
-      planStore.updatePickedPlace(data.places);
       planStore.updatePlanInfo(data.plan);
+      planStore.updatePickedPlace(data.places, new Date(data.plan.startTime));
       tripwithStore.updateTripwith(data.members);
     },
     (error) => {
@@ -129,51 +132,14 @@ const makePathPolyline = () => {
   //   latLngList.value = path;
   // }, (e) => { console.log(e); });
 };
-function registerPlan() {
-  if (!pickedPlace) {
-    return;
-  }
-
-  const newPlan = {
-    plan: { ...plan.value },
-    places: pickedPlace.map((attr, index) => {
-      const { start, end } = planStore.getPlaceStartEnd(index);
-      return {
-        order: index + 1,
-        startTime: start,
-        endTime: end,
-        comment: '',
-        place: {
-          attractionId: attr.attractionId,
-          lat: attr.lat,
-          lng: attr.lng,
-          title: attr.title
-        },
-      };
-    }),
-    members: tripwithStore.tripwith,
-  };
-
-  createPlan(newPlan, () => {
-    alert('계획을 등록하였습니다.');
-
-    planStore.resetPlan();
-    tripwithStore.resetTripwith();
-
-    moveList();
-  }, (error) => {
-    console.error(error);
-    alert('등록에 실패했습니다.');
-  });
-}
 
 function canclePlan() {
-    alert('계획이 취소되었습니다.');
+  alert('계획이 취소되었습니다.');
 
-    planStore.resetPlan();
-    tripwithStore.resetTripwith();
+  planStore.resetPlan();
+  tripwithStore.resetTripwith();
 
-    moveList();
+  moveList();
 }
 
 function moveList() {
@@ -187,50 +153,50 @@ function moveModify() {
 </script>
 
 <template>
-    <v-navigation-drawer permanent :width="drawerWidth">
-      <v-list>
-        <v-list-item title="조아요행" :to="{ name: 'Home' }">
-          <template v-slot:prepend>
-            <v-avatar tile image="src/assets/logo2.png" size="small"></v-avatar>
-          </template>
-        </v-list-item>
-      </v-list>
-  
-      <v-divider></v-divider>
+  <v-navigation-drawer permanent :width="drawerWidth">
+    <v-list>
+      <v-list-item title="조아요행" :to="{ name: 'Home' }">
+        <template v-slot:prepend>
+          <v-avatar tile image="src/assets/logo2.png" size="small"></v-avatar>
+        </template>
+      </v-list-item>
+    </v-list>
 
-    </v-navigation-drawer>
-  
-    <v-sheet class="position-absolute border-e fill-height overflow-hidden" :style="{
-               zIndex: 1004, left: drawerWidth + 'px', transitionProperty: 'width',
-               transitionDuration: '0.2s', transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
-               width: stepDetailwidth + 'px'
-             }">
-      <v-container class="h-screen d-flex flex-column justify-center" :style="{ minWidth: stepDetailwidth + 'px' }">
-        <PlanDetailItem :mapMove="mapMove" @cancle:plan="canclePlan" @modify:plan="moveModify"/>
-      </v-container>
+    <v-divider></v-divider>
+
+  </v-navigation-drawer>
+
+  <v-sheet class="position-absolute border-e fill-height overflow-hidden" :style="{
+    zIndex: 1004, left: drawerWidth + 'px', transitionProperty: 'width',
+    transitionDuration: '0.2s', transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
+    width: stepDetailwidth + 'px'
+  }">
+    <v-container class="h-screen d-flex flex-column justify-center" :style="{ minWidth: stepDetailwidth + 'px' }">
+      <PlanDetailItem :mapMove="mapMove" @cancle:plan="canclePlan" @modify:plan="moveModify" />
+    </v-container>
+  </v-sheet>
+  <v-main>
+    <KakaoMap @on-load-kakao-map="onLoadKakaoMap" :lat="coordinate.lat" :lng="coordinate.lng" :draggable="true"
+      height="100%" width="100%">
+      <KakaoMapMarker v-for="item in attrList" :key="item.attractionId" :lat="item.lat" :lng="item.lng" :image="{
+        imageSrc: 'src/assets/marker/type12.png',
+        imageWidth: 25,
+        imageHeight: 35,
+        imageOption: {}
+      }"></KakaoMapMarker>
+      <KakaoMapPolyline :latLngList="latLngList" />
+    </KakaoMap>
+  </v-main>
+
+  <v-navigation-drawer permanent :style="{ width: stepDetailwidth + 'px' }" location="right">
+    <v-sheet>
+      <PlanDetailTripwith />
     </v-sheet>
-    <v-main>
-        <KakaoMap @on-load-kakao-map="onLoadKakaoMap" :lat="coordinate.lat" :lng="coordinate.lng" :draggable="true"
-            height="100%" width="100%">
-            <KakaoMapMarker v-for="item in attrList" :key="item.attractionId" :lat="item.lat" :lng="item.lng" :image="{
-                imageSrc: 'src/assets/marker/type12.png',
-                imageWidth: 25,
-                imageHeight: 35,
-                imageOption: {}
-            }"></KakaoMapMarker>
-            <KakaoMapPolyline :latLngList="latLngList" />
-        </KakaoMap>
-    </v-main>
-
-    <v-navigation-drawer permanent :style="{ width: stepDetailwidth + 'px' }" location="right">
-        <v-sheet>
-            <PlanDetailTripwith />
-        </v-sheet>
-    </v-navigation-drawer>
+  </v-navigation-drawer>
 </template>
 
 <style>
 html {
-    overflow: auto;
+  overflow: auto;
 }
 </style>
