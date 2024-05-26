@@ -20,23 +20,52 @@
 |<img src='https://avatars.githubusercontent.com/u/122004333?v=4' width='200px' height='200px'/>|<img src='https://avatars.githubusercontent.com/u/80380576?v=4' width='200px' height='200px'/>|
 |[soddong](https://github.com/soddong)|[styughjvbn](https://github.com/styughjvbn)|
 
-## 시스템 구조
-- Skills
+## 아키텍쳐
 ![image](https://github.com/soddong/I-Like-Trip/assets/64201367/a2af13a1-ff9e-49b4-9035-11f3844e8331)
 
-- Usecase Diagram  
-![image](https://github.com/soddong/I-Like-Trip/assets/64201367/b782f8a1-9d54-4927-94aa-b5671f6c4087)
-
 ## 기능
-홈
+### 1) 홈
+|메인페이지|
+|:---:|
+|<img src='https://github.com/soddong/i-like-trip/assets/64201367/48be9289-037e-4b5a-b769-4f78c3336d3e'/>|
+|<img src='https://github.com/soddong/i-like-trip/assets/64201367/ecdd9228-4296-4f83-9af9-633de5f702a1'/>|
 
-유저
+### 2) 유저 
+|회원가입|로그인|
+|:---:|:---:|
+|<img src='https://github.com/soddong/i-like-trip/assets/64201367/9ac5f71a-c737-4cb5-bc77-54b2f71dab8b'/>|<img src='https://github.com/soddong/i-like-trip/assets/64201367/00525b00-4636-419b-b075-eff2ba8bd977'/>|
 
-친구
+|마이페이지|
+|:---:|
+|<img src='https://github.com/soddong/i-like-trip/assets/64201367/4dcc2d9f-01f5-4bb1-9721-497e8c5dad02'/>|
 
-일정계획
+### 3) 친구
+|친구리스트|
+|:---:|
+|<img src='https://github.com/soddong/i-like-trip/assets/64201367/c7649fdf-1cde-424e-a178-34bff36fc24f'/>|
 
-일정공유
+### 4) 리뷰게시판
+|리뷰 작성|
+|:---:|
+|<img src='https://github.com/soddong/i-like-trip/assets/64201367/b4335b37-4155-4d4b-8ffb-2b7e5d8801fa'/>|
+|리뷰 조회|
+|<img src='https://github.com/soddong/i-like-trip/assets/64201367/e06498fc-0a47-49de-b79e-671ff638bbcc'/>|
+|리뷰 리스트 |
+|<img src='https://github.com/soddong/i-like-trip/assets/64201367/166a6376-032f-49b0-896e-2431c443a6a7'/>|
 
-리뷰게시판
+
+### 5) 일정계획 (일정 등록)
+|날짜 선택|
+|:---:|
+|<img src='https://github.com/soddong/i-like-trip/assets/64201367/52a9a021-658e-4281-ae4c-8e85962b9588'/>|
+|동행 선택|
+|<img src='https://github.com/soddong/i-like-trip/assets/64201367/6029dfa2-6fc6-4ea7-a5c4-a35c7fe6cdaa'/>|
+|장소 선택 |
+|<img src='https://github.com/soddong/i-like-trip/assets/64201367/385be26c-561f-4147-8cc7-68337b182ab6'/>|
+|최종 확인 |
+|<img src='https://github.com/soddong/i-like-trip/assets/64201367/4879a8f7-4949-4d75-8b54-89c09aa6579a'/>|
+
+
+### 6) 일정공유
+
 
