@@ -1,39 +1,42 @@
-# ✈️ Enjoy Trip (조아요행)
+# ✈️ I Like Trip (조아요행)
+<p align="center">
+  <img src="https://github.com/soddong/I-Like-Trip/assets/64201367/8e9800b6-9160-4bac-a1d9-4270fc6fee71" /> 
+
+</p>
 
 ## 프로젝트 소개
+친구들과 함께 여행가기를 즐기시나요?   
 
-- 국내 여행자를 위해 지역별, 키워드별로 관광지 정보를 제공하는 서비스 입니다.
-- 관광지 정보를 지도 기반으로 제공하여 사용자가 직관적으로 사용할 수 있습니다.
+친구와 계획짜기가 번거로우신 분들을 위해 조아요행이 도와드립니다.   
+친구를 동행으로 등록하여 함께 여행지를 고르고 경로를 계획해보세요!   
+다른사람들은 어떻게 계획을 짰는지, 여행지는 어땠는지. 일정공유/리뷰게시판을 둘러보고 편안한 여행 되시길 바랍니다. 😊
+
+## 개발 기간
+> 2024.04 ~ 2024.05
 
 ## 팀원 소개
+|최소현|서종원|
+|:---:|:---:|
+|<img src='https://avatars.githubusercontent.com/u/122004333?v=4' width='200px' height='200px'/>|<img src='https://avatars.githubusercontent.com/u/80380576?v=4' width='200px' height='200px'/>|
+|[soddong](https://github.com/soddong)|[styughjvbn](https://github.com/styughjvbn)|
 
-- 서종원
-- 최소현
+## 시스템 구조
+- Skills
+![image](https://github.com/soddong/I-Like-Trip/assets/64201367/a2af13a1-ff9e-49b4-9035-11f3844e8331)
 
-## 요구사항
-Front-End 부분을 Vue로 변경하여 구현
- 
-## 프로젝트 구조
 - Usecase Diagram  
-  <img src="/uploads/949405d9ae59a8dff737c91ffe2cab86/유저케이스.png" width="600">
+![image](https://github.com/soddong/I-Like-Trip/assets/64201367/b782f8a1-9d54-4927-94aa-b5671f6c4087)
 
-## 프로젝트 결과
-### 게시판 기능 
-#### 1-1. 게시글 목록 (웹페이지 & 서버)
-<img src="/uploads/d5b974ee0ff31233a8b1be10c5cd7a6d/게시글_목록.gif" width="1100">
+## 기능
+홈
 
-#### 1-2. 게시글 등록 (웹페이지 & 서버)
-<img src="/uploads/690deb931754d906b6cd3bd02166e21a/게시글_작성.gif" width="1100">
+유저
 
-#### 1-3. 게시글 수정/삭제 (웹페이지 & 서버)
-<img src="/uploads/cdca31650886b489c79f2bd792f49642/게시글_수정삭제.gif" width="1100">
+친구
 
-#### 1-4. 게시글 검색 (웹페이지 & 서버)
-<img src="/uploads/d40c9d77bfd2805d2d047fb9c22f8093/게시글_검색.gif" width="1100">
+일정계획
 
-### 회원 관리 기능
-#### 2-1. 로그인 (웹페이지)
-<img src="/uploads/f031d3d5bcdb84461ab1ca1de9287489/로그인.jpg" width="1100">   
+일정공유
 
-#### 2-2. 회원가입 (웹페이지)
-<img src="/uploads/9c7b000d4442addda22aa77ae5161fa2/회원가입.jpg" width="1100">
+리뷰게시판
+
