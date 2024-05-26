@@ -1,7 +1,6 @@
 # ✈️ I Like Trip (조아요행)
 <p align="center">
   <img src="https://github.com/soddong/I-Like-Trip/assets/64201367/8e9800b6-9160-4bac-a1d9-4270fc6fee71" /> 
-
 </p>
 
 ## 프로젝트 소개
@@ -23,7 +22,27 @@
 ## 아키텍쳐
 ![image](https://github.com/soddong/I-Like-Trip/assets/64201367/a2af13a1-ff9e-49b4-9035-11f3844e8331)
 
-## 기능
+## 주요 기능
+### 여행 일정 계획
+* 여행지 검색
+* 동행 설정
+* 계획 게시글 CRUD (전체공개 / 동행공개)
+
+### 유저
+* 회원가입 및 회원정보 수정
+* 로그인 (Spring security, JWT 사용)
+
+### 친구
+* 다른 유저를 친구로 등록 및 삭제
+
+### 리뷰 게시판
+* 에디터로 게시글 작성 (Markdown 형식 제공)
+* 썸네일 기능
+
+### 여행지 추천
+* 생성형 AI로부터 최근 3개월간 인기있는 국내 여행지 추천받음
+
+## 기능별 페이지
 ### 1) 홈
 |메인페이지|
 |:---:|
