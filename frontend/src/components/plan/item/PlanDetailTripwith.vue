@@ -2,6 +2,8 @@
 import { computed, watch } from 'vue';
 import { mdiMinus } from '@mdi/js';
 import { useTripwithStore } from '@/stores/tripwith';
+import PlanDetailChat from '@/components/plan/item/PlanDetailChat.vue';
+
 
 import defaultProfile from '@/assets/default_profile.png';
 
@@ -29,6 +31,10 @@ const tripwith = computed(() => tripwithStore.tripwith);
                 </v-card>
             </v-col>
         </v-row>
+        <h3 class="heading-with-underline">채팅</h3>
+        <v-divider></v-divider>
+        <PlanDetailChat></PlanDetailChat>
+
     </v-container>
 </template>
 
@@ -39,6 +45,7 @@ const tripwith = computed(() => tripwithStore.tripwith);
     align-items: center;
     width: 100%;
     margin-top: 20px;
+
 }
 
 .col {

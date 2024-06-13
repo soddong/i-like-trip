@@ -35,6 +35,8 @@ public class SecurityConfiguration {
 		http.httpBasic(AbstractHttpConfigurer::disable);
 
 		http.authorizeHttpRequests(auth -> auth
+				.requestMatchers("/ws/chat/**").permitAll()
+				.requestMatchers("/chat/**").permitAll()
 				.requestMatchers("/swagger-ui/**","/v3/api-docs/**").permitAll()//스웨거
 				.requestMatchers("/member/sign-in", "/member/refresh", "/member/sign-up","/member/forget").permitAll()//인증 인가
 				.requestMatchers(HttpMethod.GET,"/board/**","/plans/**","/upload/**","/gpt","/attraction","/address/**").permitAll()

@@ -2,6 +2,7 @@ package com.ssafy.plan.controller;
 
 import java.util.List;
 
+import com.ssafy.chat.service.ChatService;
 import com.ssafy.plan.model.PlanReponseDto;
 import com.ssafy.plan.model.PlanSearchDto;
 
@@ -19,9 +20,11 @@ import jakarta.servlet.http.HttpServletRequest;
 public class PlanController {
 
 	private final PlanService planService;
+	private final ChatService chatService;
 
-	public PlanController(PlanService planService) {
+	public PlanController(PlanService planService, ChatService chatService) {
 		this.planService = planService;
+		this.chatService = chatService;
 	}
 
 	private ResponseEntity<String> exceptionHandling(Exception e) {
@@ -80,6 +83,7 @@ public class PlanController {
 	public ResponseEntity<?> registPlan(@RequestBody PlanReponseDto newPlan) {
 		try {
 			planService.registPlan(newPlan);
+			chatService.createRoom(newPlan.getPlan().getPlanId());
 			return new ResponseEntity<Void>(HttpStatus.CREATED);
 		} catch (Exception e) {
 			return exceptionHandling(e);
