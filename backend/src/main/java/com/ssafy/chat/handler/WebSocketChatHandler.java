@@ -13,6 +13,7 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 @Slf4j
@@ -33,11 +34,11 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
         log.info("Received message: {}", chatMessage);
 
         ChatRoom room = chatService.findByPlanId(chatMessage.getPlanId());
+        room.setSessions(new HashSet<>(sessionMap.values()));
         chatMessage.setRoomId(room.getRoomId());
         log.info("Found room: {}", room);
 
-        room.handleAction(session, chatMessage, chatService);
-        chatService.sendMessageToRoom(chatMessage);
+        chatService.sendMessageToRoom(chatMessage, room);
         chatService.saveMessage(chatMessage);
     }
 
@@ -56,8 +57,8 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
             sessionMap.remove(session.getId());
             log.info("WebSocket connection closed normally with session ID: {}", session.getId());
         } else {
-            log.warn("WebSocket connection closed abnormally with session ID: {}", session.getId());
-            // Optionally, you could re-open the session or take other actions here
+            log.warn("WebSocket connection closed abnormally with session ID: {}. Status: {}", session.getId(), status);
+            sessionMap.remove(session.getId());
         }
     }
 }
