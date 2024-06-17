@@ -48,13 +48,9 @@ public class ChatService {
         }
     }
 
-    public void sendMessageToRoom(ChatMessageDto chatMessage) {
-        Set<WebSocketSession> sessions = chatRoomSessions.get(chatMessage.getPlanId());
-        if (sessions != null) {
-            for (WebSocketSession session : sessions) {
-                sendMessage(session, chatMessage);
-            }
-        }
+    public void sendMessageToRoom(ChatMessageDto chatMessage, ChatRoom room) {
+        Set<WebSocketSession> sessions = room.getSessions();
+        sessions.parallelStream().forEach(session -> sendMessage(session, chatMessage));
     }
 
     public void registerSession(int roomId, WebSocketSession session) {
