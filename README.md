@@ -3,6 +3,8 @@
   <img src="https://github.com/soddong/I-Like-Trip/assets/64201367/8e9800b6-9160-4bac-a1d9-4270fc6fee71" /> 
 </p>
 
+### [Wiki 바로가기](https://github.com/soddong/i-like-trip/wiki)
+
 ## 프로젝트 소개
 친구들과 함께 여행가기를 즐기시나요?   
 
@@ -23,23 +25,27 @@
 ![image](https://github.com/soddong/I-Like-Trip/assets/64201367/a2af13a1-ff9e-49b4-9035-11f3844e8331)
 
 ## 주요 기능
-### ⭐ 여행 일정 계획
+### 🚩 여행 일정 계획
 * 여행지 검색
 * 동행 설정
 * 계획 게시글 CRUD (전체공개 / 동행공개)
 
-### ⭐ 유저
+### 🚩 [채팅](https://github.com/soddong/i-like-trip/wiki/%EB%A1%9C%EA%B7%B83.-%EC%B1%84%ED%8C%85-%EA%B8%B0%EB%8A%A5)
+* 동행들과 함께 채팅 (WebSocket)
+
+### 🚩 [유저](https://github.com/soddong/i-like-trip/wiki/%EB%A1%9C%EA%B7%B81.-%ED%9A%8C%EC%9B%90%EA%B0%80%EC%9E%85-%EB%B0%8F-%EB%A1%9C%EA%B7%B8%EC%9D%B8)
 * 회원가입 및 회원정보 수정
 * 로그인 (Spring security, JWT 사용)
 
-### ⭐ 친구
+### 🚩 [친구 / 동행](https://github.com/soddong/i-like-trip/wiki/%EB%A1%9C%EA%B7%B82.-%EC%B9%9C%EA%B5%AC-%EA%B8%B0%EB%8A%A5)
 * 다른 유저를 친구로 등록 및 삭제
+* 친구 혹은 전체 유저 중 동행설정
 
-### ⭐ 리뷰 게시판
+### 🚩 리뷰 게시판
 * 에디터로 게시글 작성 (Markdown 형식 제공)
 * 썸네일 기능
 
-### ⭐ 여행지 추천
+### 🚩 여행지 추천
 * 생성형 AI로부터 최근 3개월간 인기있는 국내 여행지 추천받음
 
 ## 기능별 페이지
