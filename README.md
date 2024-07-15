@@ -90,7 +90,3 @@
 |최종 확인 |
 |<img src='https://github.com/soddong/i-like-trip/assets/64201367/4879a8f7-4949-4d75-8b54-89c09aa6579a'/>|
 
-
-### 6) 일정공유
-
-
